@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shehabsaad71.github.io/emoji/sitemap.xml
