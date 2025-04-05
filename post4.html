@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji & Symbols Library - Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar {
+            background-color: #222;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 50px;
+            margin: 10px auto;
+            max-width: 90%;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .blog-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .blog-post {
+            background: white;
+            color: black;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .blog-post img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .blog-post h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .blog-post p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .toggle-theme {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .hamburger-menu {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .navbar-links {
+                display: none;
+                width: 100%;
+                text-align: center;
+                background-color: #222;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                padding: 10px 0;
+            }
+
+            .navbar-links a {
+                display: block;
+                padding: 12px 0;
+                border-bottom: 1px solid #444;
+            }
+
+            .hamburger-menu {
+                display: block;
+                cursor: pointer;
+            }
+
+            .navbar-links.show {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button id="theme-toggle" class="toggle-theme" onclick="toggleTheme()">
+                <span class="material-icons" id="theme-icon">light_mode</span>
+            </button>
+        </div>
+        <div class="hamburger-menu" onclick="toggleNavbar()">
+            <span class="material-icons">menu</span>
+        </div>
+        <div class="navbar-links">
+            <a href="index.html">Home</a>
+            <a href="blog.html">Blog</a>
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="about-us.html">About us</a>
+            <a href="contact-us.html">Contact us</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+        </div>
+        <div class="navbar-right">
+            <a href="index.html">
+                <img src="images/logo.png" alt="Logo" style="height: 40px;">
+            </a>
+        </div>
+    </nav>
+
+    <div class="blog-container">
+        <div class="blog-post">
+            <h2>How to Use Emojis in Professional Communication</h2>
+            <p>Emojis are no longer just for fun texts and social media. In today’s modern workplace, they’ve found their way into emails, Slack messages, and even corporate announcements. But using emojis in a professional setting comes with some unspoken rules. In this article, we'll explore how to use emojis effectively in professional communication while maintaining clarity and professionalism.</p>
+            
+            <img src="images/professional-emoji1.png" alt="Business Communication with Emojis">
+
+            <p><strong>Understanding the Role of Emojis</strong><br>
+            Emojis can enhance communication by adding emotion, tone, and nuance to plain text. A simple 😊 can make your message more friendly, while a 👏 can show appreciation. However, in professional communication, the goal is to use them sparingly and meaningfully.</p>
+
+            <p><strong>When to Use Emojis</strong><br>
+            Emojis are great when you want to soften the tone, build rapport, or inject personality into your messages. For example:
+            <ul>
+                <li><strong>Slack messages:</strong> Using 👍 to acknowledge a message or ✅ to indicate completion is very common.</li>
+                <li><strong>Internal emails:</strong> Light emojis like 😊 or 👏 can be used to make messages feel more human and less robotic.</li>
+                <li><strong>Team celebrations:</strong> 🎉 and 🥳 are great for congratulating colleagues or celebrating milestones.</li>
+            </ul>
+            </p>
+
+            <img src="images/professional-emoji2.png" alt="Friendly Tone with Emojis">
+
+            <p><strong>When Not to Use Emojis</strong><br>
+            While emojis can help express tone, they can also lead to misinterpretation. Avoid using them:
+            <ul>
+                <li>In formal reports or proposals</li>
+                <li>When emailing clients for the first time</li>
+                <li>When discussing serious or sensitive topics</li>
+            </ul>
+            Emojis like 😂, 🙃, or 😜 might be funny in casual chats, but they can feel unprofessional or unclear in the wrong context.</p>
+
+            <p><strong>Know Your Audience</strong><br>
+            Not all workplaces are the same. In tech startups or creative industries, emojis might be welcomed. In law firms or financial institutions, they may be frowned upon. When in doubt, mirror the tone of your colleagues or managers.</p>
+
+            <img src="images/professional-emoji3.png" alt="Emoji Miscommunication Example">
+
+            <p><strong>Top Emojis for Professional Use</strong><br>
+            Here are some universally accepted emojis that you can use in a work environment:
+            <ul>
+                <li>👍 – Approval or acknowledgment</li>
+                <li>✅ – Task completion</li>
+                <li>👏 – Applause or appreciation</li>
+                <li>😊 – Friendly tone</li>
+                <li>🎉 – Celebration</li>
+                <li>💡 – Idea or suggestion</li>
+            </ul>
+            Stick to simple and positive emojis that are easy to interpret.</p>
+
+            <p><strong>Tips for Using Emojis Professionally</strong>
+            <ul>
+                <li>Use emojis to clarify tone, not to replace words.</li>
+                <li>Use them sparingly — one or two per message is often enough.</li>
+                <li>Be culturally aware — some emojis have different meanings in different countries.</li>
+            </ul>
+            </p>
+
+            <p>In conclusion, emojis can enhance workplace communication when used appropriately. They help bridge the gap between written and spoken tone, making conversations more engaging and human. By understanding your audience, using emojis mindfully, and keeping professionalism in mind, you can make the most of this modern communication tool.</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.querySelector("#theme-icon");
+
+            if (body.style.backgroundColor === "black") {
+                body.style.backgroundColor = "white";
+                body.style.color = "black";
+                icon.textContent = "dark_mode";
+            } else {
+                body.style.backgroundColor = "black";
+                body.style.color = "white";
+                icon.textContent = "light_mode";
+            }
+        }
+
+        function toggleNavbar() {
+            const navbarLinks = document.querySelector(".navbar-links");
+            navbarLinks.classList.toggle("show");
+        }
+    </script>
+</body>
+</html>
