@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>terms of service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar {
+            background-color: #222;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 50px;
+            margin: 10px auto;
+            max-width: 90%;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto; /* يجعل اللوجو في أقصى اليمين */
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .emoji-card {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+            cursor: pointer;
+        }
+
+        .emoji {
+            font-size: 90px;
+        }
+
+        .copy-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(100, 100, 100, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            display: none;
+        }
+
+        .search-box {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            color: black;
+            background: white;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .show-more-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* التعديلات */
+        h2 {
+            text-align: left;
+            width: 100%;
+        }
+        .header-container .show-more-btn {
+            order: 2; /* وضع الزرار على اليمين */
+        }
+
+        /* زر الشمس في الشريط العلوي */
+        .toggle-theme {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* ستايل خاص للقائمة برجر */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+        }
+
+        /* عند تصغير الشاشة تظهر القائمة برجر */
+        @media (max-width: 1px) {
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #222;
+                flex-direction: column;
+                padding: 10px;
+                max-height: 80vh; /* تحديد أقصى ارتفاع */
+                overflow-y: auto; /* تمكين التمرير */
+            }
+
+            .navbar-links.active {
+                display: flex;
+            }
+
+            .hamburger-menu {
+                display: flex;
+            }
+        }
+
+        /* تخصيص شكل شريط التمرير للقائمة */
+        .navbar-links::-webkit-scrollbar {
+            width: 8px; /* عرض شريط التمرير */
+        }
+
+        .navbar-links::-webkit-scrollbar-track {
+            background: #333; /* لون الخلفية */
+            border-radius: 4px;
+        }
+
+        .navbar-links::-webkit-scrollbar-thumb {
+            background: #666; /* لون الشريط */
+            border-radius: 4px;
+        }
+
+        .navbar-links::-webkit-scrollbar-thumb:hover {
+            background: #888; /* لون أغمق عند التمرير */
+        }
+
+        /* دعم فايرفوكس */
+        .navbar-links {
+            scrollbar-color: #666 #333;
+            scrollbar-width: thin;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #007bff;
+        }
+
+</style>
+
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button id="theme-toggle" class="toggle-theme" onclick="toggleTheme()">
+                <span class="material-icons">light_mode</span>
+            </button>
+        </div>
+        
+        <div class="navbar-right">
+            <a href="index.html">
+                <img src="images/logo.png" alt="Logo" style="height: 40px;">
+            </a>
+        </div>
+        <div class="hamburger-menu" id="hamburger-menu">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav>
+    
+    
+
+    <div id="copy-message" class="copy-message">Copied</div>
+    <div class="container">
+        <h1>Terms of Service</h1>
+    
+        <h2>1. Introduction</h2>
+        <p>Welcome to EmoGo! By using our website, you agree to comply with these Terms of Service.</p>
+
+        <h2>2. Use of the Website</h2>
+        <p>This website provides a collection of emojis for easy access and copying. You may not use the site for illegal, abusive, or unauthorized purposes.</p>
+
+        <h2>3. Intellectual Property</h2>
+        <p>All emojis displayed on this website may be subject to copyright by their respective providers (such as Unicode, Apple, Google). We do not claim ownership of these emojis.</p>
+
+        <h2>4. Disclaimer</h2>
+        <p>The website is provided "as is" without any warranties. We are not responsible for any direct or indirect damages resulting from its use.</p>
+
+        <h2>5. Advertisements & Cookies</h2>
+        <p>We may display advertisements (such as Google AdSense) to keep the service free. We also use cookies for analytics and improved functionality.</p>
+
+        <h2>6. Changes to the Terms</h2>
+        <p>We reserve the right to modify these terms at any time. Users will be notified of any updates.</p>
+
+        <h2>7. Contact Us</h2>
+        <p>If you have any questions, feel free to contact us at fuuytf1@gmail.com.</p>
+
+    </div>
+
+    
+
+</body>
+</html>

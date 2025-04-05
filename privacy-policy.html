@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar {
+            background-color: #222;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 50px;
+            margin: 10px auto;
+            max-width: 90%;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto; /* يجعل اللوجو في أقصى اليمين */
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .emoji-card {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+            cursor: pointer;
+        }
+
+        .emoji {
+            font-size: 90px;
+        }
+
+        .copy-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(100, 100, 100, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            display: none;
+        }
+
+        .search-box {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            color: black;
+            background: white;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .show-more-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* التعديلات */
+        h2 {
+            text-align: left;
+            width: 100%;
+        }
+        .header-container .show-more-btn {
+            order: 2; /* وضع الزرار على اليمين */
+        }
+
+        /* زر الشمس في الشريط العلوي */
+        .toggle-theme {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* ستايل خاص للقائمة برجر */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+        }
+
+        /* عند تصغير الشاشة تظهر القائمة برجر */
+        @media (max-width: 1px) {
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #222;
+                flex-direction: column;
+                padding: 10px;
+                max-height: 80vh; /* تحديد أقصى ارتفاع */
+                overflow-y: auto; /* تمكين التمرير */
+            }
+
+            .navbar-links.active {
+                display: flex;
+            }
+
+            .hamburger-menu {
+                display: flex;
+            }
+        }
+
+        /* تخصيص شكل شريط التمرير للقائمة */
+        .navbar-links::-webkit-scrollbar {
+            width: 8px; /* عرض شريط التمرير */
+        }
+
+        .navbar-links::-webkit-scrollbar-track {
+            background: #333; /* لون الخلفية */
+            border-radius: 4px;
+        }
+
+        .navbar-links::-webkit-scrollbar-thumb {
+            background: #666; /* لون الشريط */
+            border-radius: 4px;
+        }
+
+        .navbar-links::-webkit-scrollbar-thumb:hover {
+            background: #888; /* لون أغمق عند التمرير */
+        }
+
+        /* دعم فايرفوكس */
+        .navbar-links {
+            scrollbar-color: #666 #333;
+            scrollbar-width: thin;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #007bff;
+        }
+
+</style>
+
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button id="theme-toggle" class="toggle-theme" onclick="toggleTheme()">
+                <span class="material-icons">light_mode</span>
+            </button>
+        </div>
+        
+        <div class="navbar-right">
+            <a href="index.html">
+                <img src="images/logo.png" alt="Logo" style="height: 40px;">
+            </a>
+        </div>
+        <div class="hamburger-menu" id="hamburger-menu">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav>
+    
+    
+
+    <div id="copy-message" class="copy-message">Copied</div>
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        
+        <h2>1. Introduction</h2>
+        <p>Welcome to <strong>[Your Website Name]</strong>. We value your privacy and are committed to protecting your personal data. This policy explains how we collect, use, and safeguard your information when you visit our website.</p>
+    
+        <h2>2. Information We Collect</h2>
+        <ul>
+            <li><strong>Device and Browser Information</strong> (such as device type, operating system, browser type, IP address).</li>
+            <li><strong>Usage Data</strong> (such as the pages you visit and the time you spend on the site).</li>
+            <li><strong>Cookies</strong> to enhance user experience and serve personalized ads.</li>
+        </ul>
+    
+        <h2>3. How We Use Your Information</h2>
+        <ul>
+            <li>Improving user experience and providing personalized content.</li>
+            <li>Analyzing site performance and enhancing our services.</li>
+            <li>Displaying personalized ads through <strong>Google AdSense</strong> and other ad networks.</li>
+        </ul>
+    
+        <h2>4. Ads and Cookies</h2>
+        <p>- Our website uses cookies to personalize ads and display relevant content.</p>
+        <p>- <strong>Google AdSense</strong> uses cookies to collect data about user behavior and serve ads based on interests.</p>
+        <p>- You can disable cookies through your browser settings.</p>
+        <p>For more details on how Google uses data, please visit <a href="https://policies.google.com/privacy?hl=en" target="_blank">Google’s Privacy Policy</a>.</p>
+    
+        <h2>5. Data Sharing</h2>
+        <p>We do not sell or rent your personal data to third parties. However, we may share usage data with service providers such as Google Analytics for analysis purposes only.</p>
+    
+        <h2>6. Security</h2>
+        <p>We take security measures to protect your data from unauthorized access or unlawful use. However, no online data transmission can be 100% secure.</p>
+    
+        <h2>7. Your Rights</h2>
+        <p>You have the right to request the deletion or modification of your personal data. If you wish to do so, you can contact us via email at <strong>[Your Support Email]</strong>.</p>
+    
+        <h2>8. Policy Updates</h2>
+        <p>We may update this policy from time to time. Any changes will be published here, so we recommend reviewing it periodically.</p>
+    
+        <h2>9. Contact Us</h2>
+        <p>If you have any questions about this privacy policy, please contact us via email: <strong>[Your Support Email]</strong>.</p>
+    </div>
+
+    
+
+</body>
+</html>
