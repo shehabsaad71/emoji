@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>contact us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            transition: background 0.3s, color 0.3s;
+        }
+        .navbar {
+            background-color: #222;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-radius: 50px;
+            margin: 10px auto;
+            max-width: 90%;
+        }
+        .navbar-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto; /* يجعل اللوجو في أقصى اليمين */
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .emoji-card {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 120px;
+            cursor: pointer;
+        }
+
+        .emoji {
+            font-size: 90px;
+        }
+
+        .copy-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(100, 100, 100, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            display: none;
+        }
+
+        .search-box {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            color: black;
+            background: white;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .show-more-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* التعديلات */
+        h2 {
+            text-align: left;
+            width: 100%;
+        }
+        .header-container .show-more-btn {
+            order: 2; /* وضع الزرار على اليمين */
+        }
+
+        /* زر الشمس في الشريط العلوي */
+        .toggle-theme {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* ستايل خاص للقائمة برجر */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+        }
+
+        /* عند تصغير الشاشة تظهر القائمة برجر */
+        @media (max-width: 1px) {
+            .navbar-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: #222;
+                flex-direction: column;
+                padding: 10px;
+                max-height: 80vh; /* تحديد أقصى ارتفاع */
+                overflow-y: auto; /* تمكين التمرير */
+            }
+
+            .navbar-links.active {
+                display: flex;
+            }
+
+            .hamburger-menu {
+                display: flex;
+            }
+        }
+
+        /* تخصيص شكل شريط التمرير للقائمة */
+        .navbar-links::-webkit-scrollbar {
+            width: 8px; /* عرض شريط التمرير */
+        }
+
+        .navbar-links::-webkit-scrollbar-track {
+            background: #333; /* لون الخلفية */
+            border-radius: 4px;
+        }
+
+        .navbar-links::-webkit-scrollbar-thumb {
+            background: #666; /* لون الشريط */
+            border-radius: 4px;
+        }
+
+        .navbar-links::-webkit-scrollbar-thumb:hover {
+            background: #888; /* لون أغمق عند التمرير */
+        }
+
+        /* دعم فايرفوكس */
+        .navbar-links {
+            scrollbar-color: #666 #333;
+            scrollbar-width: thin;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #007bff;
+        }
+        body {
+    margin: 0;
+    padding: 0;
+    background-color: #0b0b0b;
+    color: #eee;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.container {
+    padding: 50px 20px;
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+p {
+    max-width: 700px;
+    margin: 0 auto 40px;
+    line-height: 1.8;
+    color: #bbb;
+    
+}
+
+.icons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.icons a img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    transition: transform 1s linear;
+    filter: drop-shadow(0 0 6px #555);
+}
+
+.icons a img:hover {
+    transform: rotate(360deg);
+    filter: drop-shadow(0 0 12px #fff);
+}
+
+.footer {
+    margin-top: 60px;
+    font-size: 0.9em;
+    color: #666;
+}
+</style>
+
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button id="theme-toggle" class="toggle-theme" onclick="toggleTheme()">
+                <span class="material-icons">light_mode</span>
+            </button>
+        </div>
+        
+        <div class="navbar-right">
+            <a href="index.html">
+                <img src="images/logo.png" alt="Logo" style="height: 40px;">
+            </a>
+        </div>
+        <div class="hamburger-menu" id="hamburger-menu">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav>
+    
+    
+
+    <div class="container">
+        <h1>Contact Us</h1>
+        
+        <p style="max-width: 800px; margin: 40px auto; text-align: center;">
+            At EmoGo, we believe that communication is the bridge that connects creativity with innovation. 
+            Whether you have a business inquiry, partnership proposal, or simply want to say hello, our team is always 
+            ready to listen. Feel free to reach out through any of the channels below — and yes, we actually do read our messages!
+        </p>
+    
+        <p style="max-width: 800px; margin: 40px auto; text-align: center;">
+            We're here to answer questions, discuss new ideas, and collaborate with passionate people from all around the world.
+            Your feedback, thoughts, and suggestions are what drive us forward. So don’t hesitate — let’s connect!
+        </p>
+    
+        <div class="icons">
+            <a href="mailto:fuuytf1@gmail.com" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="Email">
+            </a>
+            <a href="https://x.com/shehab_dev" target="_blank">
+                <img src="images/x-icon.png" alt="X (Twitter)">
+            </a>
+            <a href="https://youtube.com/@shehab_dev_7" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube">
+            </a>
+            <a href="https://tiktok.com/@shehab_saad" target="_blank">
+                <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok">
+            </a>
+            <a href="https://shehab-dev-7.itch.io" target="_blank">
+                <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="itch.io" style="background:white; padding:10px;">
+            </a>
+        </div>
+    
+        <div class="footer">
+            &copy; 2025 EmoGo. All rights reserved.
+        </div>
+
+    
+
+</body>
+</html>
