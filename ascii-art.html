@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCII Art Generator</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #282828;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .output {
+            font-size: 20px;
+            white-space: pre;
+            background-color: #333;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            border: 2px solid #444;
+            min-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ASCII Art Generator</h1>
+    <p>Enter letters or numbers to see the ASCII art (e.g. A, B, 1, 2, etc.)</p>
+    <input type="text" id="ascii-input" placeholder="Enter letters or numbers" />
+    <button onclick="showAsciiArt()">Show Art</button>
+
+    <div class="output" id="ascii-output"></div>
+
+    <script>
+        const asciiArt = {
+            'A': `     **        
+    ****       
+   **//**      
+  **  //**     
+ **********    
+/**//////**    
+/**     /**    
+//      //`,
+            'B': `    ******        
+/*////**       
+/*   /**       
+/******        
+/*//// **      
+/*    /**      
+/*******       
+///////        `,
+            'C': `   ******      
+  **////**     
+ **    //      
+/**            
+/**            
+//**    **     
+ //******      
+  //////       `,
+            'D': ` *******       
+/**////**      
+/**    /**     
+/**    /**     
+/**    **      
+/*******       
+///////        `,
+            'E': ` ********      
+/**/////       
+/**            
+/*******       
+/**////        
+/**            
+/********      
+////////       `,
+            'F': ` ********      
+/**/////       
+/**            
+/*******       
+/**////        
+/**            
+/**            
+//             `,
+            'G': `   ********    
+  **//////**   
+ **      //    
+/**            
+/**    *****   
+//**  ////**   
+ //********    
+  ////////     `,
+            'H': ` **      **    
+/**     /**    
+/**     /**    
+/**********    
+/**//////**    
+/**     /**    
+/**     /**    
+//      //     `,
+            'I': ` **            
+/**            
+/**            
+/**            
+/**            
+/**            
+/**            
+//             `,
+            'J': `      **       
+     /**       
+     /**       
+     /**       
+     /**       
+ **  /**       
+//*****        
+ /////         `,
+            'K': ` **     **    
+ **   **
+/**  ** 
+/** **  
+/****   
+/**/**  
+/**//** 
+/** //**
+//   //       `,
+            'L': `  **            
+ **      
+/**      
+/**      
+/**      
+/**      
+/**      
+/********
+////////    `,
+            'M': `    **    **   
+ ****     ****
+/**/**   **/**
+/**//** ** /**
+/** //***  /**
+/**  //*   /**
+/**   /    /**
+/**        /**
+//         // `,
+            'N': ` **       **  
+ ****     **
+/**/**   /**
+/**//**  /**
+/** //** /**
+/**  //**/**
+/**   //****
+/**    //***
+//      ///   `,
+            'O': ` **     **    
+   *******  
+  **/////** 
+ **     //**
+/**      /**
+/**      /**
+//**     ** 
+ //*******  
+  ///////      `,
+            'P': ` **    **     
+ ******* 
+/**////**
+/**   /**
+/******* 
+/**////  
+/**      
+/**      
+//          `,
+            'Q': `   *******     
+   *******   
+  **/////**  
+ **     //** 
+/**      /** 
+/**    **/** 
+//**  // **  
+ //******* **
+  /////// //       `,
+            'R': ` *******       
+/**////**      
+/**   /**      
+/*******       
+/**///**       
+/**  //**      
+/**   //**     
+//     //      `,
+            'S': `  ********     
+ **//////      
+ /**            
+/*********     
+////////**     
+       /**     
+ ********      
+////////       `,
+            'T': ` **********    
+/////**///     
+    /**        
+    /**        
+    /**        
+    /**        
+    /**        
+    //         `,
+            'U': ` **     **     
+/**    /**     
+/**    /**     
+/**    /**     
+/**    /**     
+/**    /**     
+//*******      
+ ///////       `,
+            'V': ` **      **    
+/**     /**    
+/**     /**    
+//**    **     
+ //**  **      
+  //****       
+   //**        
+    //         `,
+            'W': ` **       **   
+/**      /**   
+/**   *  /**   
+/**  *** /**   
+/** **/**/**   
+/**** //****   
+/**/   ///**   
+//       //    `,
+            'X': ` **     **     
+//**   **      
+ //** **       
+  //***        
+   **/**       
+  ** //**      
+ **   //**     
+//     //      `,
+            'Y': ` **     **    
+/**    /**    
+/**    /**    
+//**   **     
+ //****       
+  //**        
+   //         `,
+            'Z': ` **********    
+ ********
+//////** 
+     **  
+    **   
+   **    
+  **     
+ ********
+////////   `,
+        };
+
+        function showAsciiArt() {
+            const input = document.getElementById("ascii-input").value.toUpperCase();
+            const output = document.getElementById("ascii-output");
+
+            let result = '';
+            for (let i = 0; i < input.length; i++) {
+                const char = input[i];
+                if (asciiArt[char]) {
+                    result += asciiArt[char] + '\n\n'; // Add space between different ASCII art
+                } else {
+                    result += `Invalid character: ${char}\n\n`;
+                }
+            }
+
+            output.textContent = result || "Please enter a valid letter (A-Z).";
+        }
+    </script>
+</body>
+</html>
