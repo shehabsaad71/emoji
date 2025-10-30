@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMOGO, Emojis library</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header id="site-header">
+    <a class="logo" href="index.html">EMOGO 😀</a>
+
+    <a class="ascii-link" href="ascii-maker.html">ASCII Maker</a>
+
+    <div class="header-controls">
+        <button id="theme-toggle" aria-label="Toggle dark/light theme">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+        </button>
+        <button id="menu-toggle" class="mobile-only" aria-label="Open menu">
+            <span>&#9776;</span>
+        </button>
+    </div>
+</header>
+
+    <main>
+        <div class="search-container">
+            <input type="text" id="emoji-search" placeholder="🔍 Search for emoji...">
+            <button id="clear-search" title="Clear Search">✖️</button>
+            <span id="emoji-counter">0 Emojis Displayed</span>
+        </div>
+
+        <nav id="category-nav">
+        </nav>
+    <div id="loader" class="loader">
+      <div class="spinner"></div>
+      Loading Emojis...
+    </div>
+        <section id="emoji-grid-container">
+        </section>
+    </main>
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="about-us.html">About Us</a>
+            <a href="blog.html">Blog</a>
+        </div>
+        <p class="copyright">© 2025 Emogo — All Rights Reserved.</p>
+    </footer>
+
+    <script>
+// Data (equivalent to data.js)
+const EMOJI_COLLECTION = [
+    // Flags
+    { emoji: '🏳️', name: 'White Flag', category: 'Flags' },
+    { emoji: '🏴', name: 'Black Flag', category: 'Flags' },
+    { emoji: '🏴‍☠️', name: 'Pirate Flag', category: 'Flags' },
+    { emoji: '🏁', name: 'Chequered Flag', category: 'Flags' },
+    { emoji: '🚩', name: 'Triangular Flag', category: 'Flags' },
+    { emoji: '🇦🇬', name: 'Antigua & Barbuda', category: 'Flags' },
+    { emoji: '🇦🇫', name: 'Afghanistan', category: 'Flags' },
+    { emoji: '🇦🇽', name: 'Åland Islands', category: 'Flags' },
+    { emoji: '🇦🇱', name: 'Albania', category: 'Flags' },
+    { emoji: '🇩🇿', name: 'Algeria', category: 'Flags' },
+    { emoji: '🇦🇸', name: 'American Samoa', category: 'Flags' },
+    { emoji: '🇦🇩', name: 'Andorra', category: 'Flags' },
+    { emoji: '🇦🇴', name: 'Angola', category: 'Flags' },
+    { emoji: '🇦🇮', name: 'Anguilla', category: 'Flags' },
+    { emoji: '🇦🇶', name: 'Antarctica', category: 'Flags' },
+    { emoji: '🇦🇷', name: 'Argentina', category: 'Flags' },
+    { emoji: '🇦🇲', name: 'Armenia', category: 'Flags' },
+    { emoji: '🇦🇼', name: 'Aruba', category: 'Flags' },
+    { emoji: '🇦🇺', name: 'Australia', category: 'Flags' },
+    { emoji: '🇦🇹', name: 'Austria', category: 'Flags' },
+    { emoji: '🇦🇿', name: 'Azerbaijan', category: 'Flags' },
+    { emoji: '🇧🇸', name: 'Bahamas', category: 'Flags' },
+    { emoji: '🇧🇭', name: 'Bahrain', category: 'Flags' },
+    { emoji: '🇧🇩', name: 'Bangladesh', category: 'Flags' },
+    { emoji: '🇧🇧', name: 'Barbados', category: 'Flags' },
+    { emoji: '🇧🇾', name: 'Belarus', category: 'Flags' },
+    { emoji: '🇧🇪', name: 'Belgium', category: 'Flags' },
+    { emoji: '🇧🇿', name: 'Belize', category: 'Flags' },
+    { emoji: '🇧🇯', name: 'Benin', category: 'Flags' },
+    { emoji: '🇧🇲', name: 'Bermuda', category: 'Flags' },
+    { emoji: '🇧🇹', name: 'Bhutan', category: 'Flags' },
+    { emoji: '🇧🇴', name: 'Bolivia', category: 'Flags' },
+    { emoji: '🇧🇦', name: 'Bosnia & Herzegovina', category: 'Flags' },
+    { emoji: '🇧🇼', name: 'Botswana', category: 'Flags' },
+    { emoji: '🇧🇷', name: 'Brazil', category: 'Flags' },
+    { emoji: '🇻🇬', name: 'British Virgin Islands', category: 'Flags' },
+    { emoji: '🇧🇳', name: 'Brunei', category: 'Flags' },
+    { emoji: '🇧🇬', name: 'Bulgaria', category: 'Flags' },
+    { emoji: '🇧🇫', name: 'Burkina Faso', category: 'Flags' },
+    { emoji: '🇧🇮', name: 'Burundi', category: 'Flags' },
+    { emoji: '🇰🇭', name: 'Cambodia', category: 'Flags' },
+    { emoji: '🇨🇲', name: 'Cameroon', category: 'Flags' },
+    { emoji: '🇨🇦', name: 'Canada', category: 'Flags' },
+    { emoji: '🇮🇨', name: 'Canary Islands', category: 'Flags' },
+    { emoji: '🇨🇻', name: 'Cape Verde', category: 'Flags' },
+    { emoji: '🇧🇶', name: 'Caribbean Netherlands', category: 'Flags' },
+    { emoji: '🇰🇾', name: 'Cayman Islands', category: 'Flags' },
+    { emoji: '🇨🇫', name: 'Central African Republic', category: 'Flags' },
+    { emoji: '🇹🇩', name: 'Chad', category: 'Flags' },
+    { emoji: '🇮🇴', name: 'British Indian Ocean Territory', category: 'Flags' },
+    { emoji: '🇨🇱', name: 'Chile', category: 'Flags' },
+    { emoji: '🇨🇳', name: 'China', category: 'Flags' },
+    { emoji: '🇨🇽', name: 'Christmas Island', category: 'Flags' },
+    { emoji: '🇨🇨', name: 'Cocos (Keeling) Islands', category: 'Flags' },
+    { emoji: '🇨🇴', name: 'Colombia', category: 'Flags' },
+    { emoji: '🇰🇲', name: 'Comoros', category: 'Flags' },
+    { emoji: '🇨🇬', name: 'Congo - Brazzaville', category: 'Flags' },
+    { emoji: '🇨🇩', name: 'Congo - Kinshasa', category: 'Flags' },
+    { emoji: '🇨🇰', name: 'Cook Islands', category: 'Flags' },
+    { emoji: '🇨🇷', name: 'Costa Rica', category: 'Flags' },
+    { emoji: '🇨🇮', name: 'Côte d’Ivoire', category: 'Flags' },
+    { emoji: '🇭🇷', name: 'Croatia', category: 'Flags' },
+    { emoji: '🇨🇺', name: 'Cuba', category: 'Flags' },
+    { emoji: '🇨🇼', name: 'Curaçao', category: 'Flags' },
+    { emoji: '🇨🇾', name: 'Cyprus', category: 'Flags' },
+    { emoji: '🇨🇿', name: 'Czechia', category: 'Flags' },
+    { emoji: '🇩🇰', name: 'Denmark', category: 'Flags' },
+    { emoji: '🇩🇯', name: 'Djibouti', category: 'Flags' },
+    { emoji: '🇩🇲', name: 'Dominica', category: 'Flags' },
+    { emoji: '🇩🇴', name: 'Dominican Republic', category: 'Flags' },
+    { emoji: '🇪🇨', name: 'Ecuador', category: 'Flags' },
+    { emoji: '🇪🇬', name: 'Egypt', category: 'Flags' },
+    { emoji: '🇸🇻', name: 'El Salvador', category: 'Flags' },
+    { emoji: '🇬🇶', name: 'Equatorial Guinea', category: 'Flags' },
+    { emoji: '🇪🇷', name: 'Eritrea', category: 'Flags' },
+    { emoji: '🇪🇪', name: 'Estonia', category: 'Flags' },
+    { emoji: '🇸🇿', name: 'Eswatini', category: 'Flags' },
+    { emoji: '🇪🇹', name: 'Ethiopia', category: 'Flags' },
+    { emoji: '🇪🇺', name: 'European Union', category: 'Flags' },
+    { emoji: '🇫🇰', name: 'Falkland Islands', category: 'Flags' },
+    { emoji: '🇫🇴', name: 'Faroe Islands', category: 'Flags' },
+    { emoji: '🇫🇯', name: 'Fiji', category: 'Flags' },
+    { emoji: '🇫🇮', name: 'Finland', category: 'Flags' },
+    { emoji: '🇫🇷', name: 'France', category: 'Flags' },
+    { emoji: '🇬🇫', name: 'French Guiana', category: 'Flags' },
+    { emoji: '🇵🇫', name: 'French Polynesia', category: 'Flags' },
+    { emoji: '🇹🇫', name: 'French Southern Territories', category: 'Flags' },
+    { emoji: '🇬🇦', name: 'Gabon', category: 'Flags' },
+    { emoji: '🇬🇲', name: 'Gambia', category: 'Flags' },
+    { emoji: '🇬🇪', name: 'Georgia', category: 'Flags' },
+    { emoji: '🇩🇪', name: 'Germany', category: 'Flags' },
+    { emoji: '🇬🇭', name: 'Ghana', category: 'Flags' },
+    { emoji: '🇬🇮', name: 'Gibraltar', category: 'Flags' },
+    { emoji: '🇬🇷', name: 'Greece', category: 'Flags' },
+    { emoji: '🇬🇱', name: 'Greenland', category: 'Flags' },
+    { emoji: '🇬🇩', name: 'Grenada', category: 'Flags' },
+    { emoji: '🇬🇵', name: 'Guadeloupe', category: 'Flags' },
+    { emoji: '🇬🇺', name: 'Guam', category: 'Flags' },
+    { emoji: '🇬🇹', name: 'Guatemala', category: 'Flags' },
+    { emoji: '🇬🇬', name: 'Guernsey', category: 'Flags' },
+    { emoji: '🇬🇳', name: 'Guinea', category: 'Flags' },
+    { emoji: '🇬🇼', name: 'Guinea-Bissau', category: 'Flags' },
+    { emoji: '🇬🇾', name: 'Guyana', category: 'Flags' },
+    { emoji: '🇭🇹', name: 'Haiti', category: 'Flags' },
+    { emoji: '🇭🇳', name: 'Honduras', category: 'Flags' },
+    { emoji: '🇭🇰', name: 'Hong Kong', category: 'Flags' },
+    { emoji: '🇭🇺', name: 'Hungary', category: 'Flags' },
+    { emoji: '🇮🇸', name: 'Iceland', category: 'Flags' },
+    { emoji: '🇮🇳', name: 'India', category: 'Flags' },
+    { emoji: '🇮🇩', name: 'Indonesia', category: 'Flags' },
+    { emoji: '🇮🇷', name: 'Iran', category: 'Flags' },
+    { emoji: '🇮🇶', name: 'Iraq', category: 'Flags' },
+    { emoji: '🇮🇪', name: 'Ireland', category: 'Flags' },
+    { emoji: '🇮🇲', name: 'Isle of Man', category: 'Flags' },
+    { emoji: '🇮🇱', name: 'Israel', category: 'Flags' },
+    { emoji: '🇮🇹', name: 'Italy', category: 'Flags' },
+    { emoji: '🇯🇲', name: 'Jamaica', category: 'Flags' },
+    { emoji: '🇯🇵', name: 'Japan', category: 'Flags' },
+    { emoji: '🎌', name: 'Japanese Flags', category: 'Flags' },
+    { emoji: '🇯🇪', name: 'Jersey', category: 'Flags' },
+    { emoji: '🇯🇴', name: 'Jordan', category: 'Flags' },
+    { emoji: '🇰🇿', name: 'Kazakhstan', category: 'Flags' },
+    { emoji: '🇰🇪', name: 'Kenya', category: 'Flags' },
+    { emoji: '🇰🇮', name: 'Kiribati', category: 'Flags' },
+    { emoji: '🇽🇰', name: 'Kosovo', category: 'Flags' },
+    { emoji: '🇰🇰', name: 'Unknown', category: 'Flags' },
+    { emoji: '🇰🇼', name: 'Kuwait', category: 'Flags' },
+    { emoji: '🇰🇬', name: 'Kyrgyzstan', category: 'Flags' },
+    { emoji: '🇱🇦', name: 'Laos', category: 'Flags' },
+    { emoji: '🇱🇻', name: 'Latvia', category: 'Flags' },
+    { emoji: '🇱🇧', name: 'Lebanon', category: 'Flags' },
+    { emoji: '🇱🇸', name: 'Lesotho', category: 'Flags' },
+    { emoji: '🇱🇷', name: 'Liberia', category: 'Flags' },
+    { emoji: '🇱🇾', name: 'Libya', category: 'Flags' },
+    { emoji: '🇹🇷', name: 'Turkey', category: 'Flags' },
+    { emoji: '🇹🇨', name: 'Turks and Caicos Islands', category: 'Flags' },
+    { emoji: '🇹🇲', name: 'Turkmenistan', category: 'Flags' },
+    { emoji: '🇹🇻', name: 'Tuvalu', category: 'Flags' },
+    { emoji: '🇻🇮', name: 'U.S. Virgin Islands', category: 'Flags' },
+    { emoji: '🇺🇬', name: 'Uganda', category: 'Flags' },
+    { emoji: '🇺🇦', name: 'Ukraine', category: 'Flags' },
+    { emoji: '🇦🇪', name: 'United Arab Emirates', category: 'Flags' },
+    { emoji: '🇬🇧', name: 'United Kingdom', category: 'Flags' },
+    { emoji: '🏴', name: 'England', category: 'Flags' },
+    { emoji: '🏴', name: 'Scotland', category: 'Flags' },
+    { emoji: '🏴', name: 'Wales', category: 'Flags' },
+    { emoji: '🇺🇸', name: 'United States', category: 'Flags' },
+    { emoji: '🏴', name: 'Cornwall', category: 'Flags' },
+    { emoji: '🇺🇾', name: 'Uruguay', category: 'Flags' },
+    { emoji: '🇺🇿', name: 'Uzbekistan', category: 'Flags' },
+    { emoji: '🇻🇺', name: 'Vanuatu', category: 'Flags' },
+    { emoji: '🇻🇦', name: 'Vatican City', category: 'Flags' },
+    { emoji: '🇻🇪', name: 'Venezuela', category: 'Flags' },
+    { emoji: '🇻🇳', name: 'Vietnam', category: 'Flags' },
+    { emoji: '🇼🇫', name: 'Wallis and Futuna', category: 'Flags' },
+    { emoji: '🇪🇭', name: 'Western Sahara', category: 'Flags' },
+    { emoji: '🇾🇪', name: 'Yemen', category: 'Flags' },
+    { emoji: '🇿🇲', name: 'Zambia', category: 'Flags' },
+    { emoji: '🇿🇼', name: 'Zimbabwe', category: 'Flags' },
+];
+
+const CATEGORY_ICONS = {
+    'Favorites': '❤️'
+};
+
+let favoriteEmojis = JSON.parse(localStorage.getItem('favorites')) || [];
+
+const ALL_CATEGORIES = Object.keys(CATEGORY_ICONS);
+
+
+// Main Script (equivalent to script.js)
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+    const searchInput = document.getElementById('emoji-search');
+    const emojiGrid = document.getElementById('emoji-grid-container');
+    const categoryNav = document.getElementById('category-nav');
+    const menuToggle = document.getElementById('menu-toggle');
+    const emojiCounter = document.getElementById('emoji-counter');
+
+    let currentCategory = 'All';
+
+    // --- Theme Toggle Logic ---
+    function toggleTheme() {
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            body.classList.add('dark-theme');
+        }
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    initializeTheme();
+
+    // --- Category Logic ---
+    function renderCategories() {
+        const allBtn = document.createElement('button');
+        allBtn.textContent = 'All Emojis';
+        allBtn.className = 'category-btn active';
+        allBtn.dataset.category = 'All';
+        categoryNav.appendChild(allBtn);
+
+        ALL_CATEGORIES.forEach(category => {
+            const btn = document.createElement('button');
+            const icon = CATEGORY_ICONS[category] || '';
+            btn.textContent = `${icon} ${category}`;
+            btn.className = 'category-btn';
+            btn.dataset.category = category;
+            categoryNav.appendChild(btn);
+        });
+        
+        categoryNav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.category-btn');
+            if (btn) {
+                const category = btn.dataset.category;
+                currentCategory = category;
+                
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Close menu on mobile
+                if (window.innerWidth <= 768) {
+                    categoryNav.classList.remove('open');
+                    menuToggle.innerHTML = '&#9776;';
+                }
+
+                filterAndRenderGrid();
+            }
+        });
+    }
+
+   function createEmojiCard(item) {
+    const card = document.createElement('div');
+    card.className = 'emoji-card';
+
+    // زر القلب
+    const heartBtn = document.createElement('button');
+    heartBtn.className = 'heart-btn';
+    const isFavorite = favoriteEmojis.some(fav => fav.emoji === item.emoji);
+    heartBtn.textContent = isFavorite ? '❤️' : '♡';
+    if (isFavorite) heartBtn.classList.add('active');
+
+    heartBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        heartBtn.classList.toggle('active');
+
+        if (heartBtn.classList.contains('active')) {
+            heartBtn.textContent = '❤️';
+            if (!favoriteEmojis.some(fav => fav.emoji === item.emoji)) {
+                favoriteEmojis.push(item);
+                localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+            }
+        } else {
+            heartBtn.textContent = '♡';
+            favoriteEmojis = favoriteEmojis.filter(fav => fav.emoji !== item.emoji);
+            localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+        }
+
+        // تحديث قسم المفضلة لو هو مفتوح حاليًا
+        if (currentCategory === 'Favorites') filterAndRenderGrid();
+    });
+
+    // باقي الكارد
+    const emojiDiv = document.createElement('div');
+    emojiDiv.className = 'emoji';
+    emojiDiv.textContent = item.emoji;
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'emoji-name';
+    nameDiv.textContent = item.name;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        try {
+            await navigator.clipboard.writeText(item.emoji);
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        } catch (err) {
+            copyBtn.textContent = '❌ Error';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        }
+    });
+
+    card.append(heartBtn, emojiDiv, nameDiv, copyBtn);
+    setTimeout(() => card.classList.add('fade-in'), 10);
+
+    return card;
+}
+
+
+    function filterAndRenderGrid() {
+    const searchTerm = searchInput.value.toLowerCase();
+    emojiGrid.innerHTML = '';
+
+    let filteredEmojis;
+
+    if (currentCategory === 'Favorites') {
+        // البحث في المفضلة فقط
+        filteredEmojis = favoriteEmojis.filter(item =>
+            item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+        );
+    } else if (searchTerm) {
+        // لو في قسم All → البحث في كل الإيموجيز
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+            );
+        } else {
+            // البحث بس في القسم الحالي
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.category === currentCategory &&
+                (item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm))
+            );
+        }
+    } else {
+        // بدون بحث
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.slice(0, 1714);
+        } else {
+            filteredEmojis = EMOJI_COLLECTION.filter(item => item.category === currentCategory);
+        }
+    }
+
+    // إنشاء الكروت
+    filteredEmojis.forEach(item => emojiGrid.appendChild(createEmojiCard(item)));
+
+    // عداد الإيموجيز الظاهرة
+    emojiCounter.textContent = `${filteredEmojis.length} Emojis Displayed`;
+
+    // زر show more
+    const showMoreBtn = document.getElementById("show-more-btn");
+    if (currentCategory !== 'Favorites' && !searchTerm) {
+        showMoreBtn.style.display = 'block';
+        showMoreBtn.onclick = function() {
+            const link = String(currentCategory).toLowerCase().replace(/ /g, '-') + '.html';
+            window.location.href = link;
+        };
+    } else {
+        showMoreBtn.style.display = 'none';
+    }
+}
+
+
+    searchInput.addEventListener('input', filterAndRenderGrid);
+
+    // --- Mobile Menu Toggle ---
+    menuToggle.addEventListener('click', () => {
+        const isOpen = categoryNav.classList.toggle('open');
+        menuToggle.innerHTML = isOpen ? '&times;' : '&#9776;';
+    });
+
+
+    // Initialize
+    renderCategories();
+    filterAndRenderGrid();
+});
+
+// بعد ما تعمل render لكل الإيموجيز
+const loader = document.getElementById('loader');
+
+loader.style.transition = 'opacity 0.5s';
+loader.style.opacity = '0';
+
+setTimeout(() => {
+    loader.style.display = 'none';
+}, 500); // 500ms بعد انتهاء الـ fade-out
+
+const showMoreBtn = document.getElementById("show-more-btn");
+
+showMoreBtn.onclick = function() {
+  window.location.href = "https://example.com/more-emojis"; // ضع هنا الرابط المطلوب
+};
+
+const clearBtn = document.getElementById('clear-search');
+
+// إظهار/إخفاء زر X أثناء الكتابة
+searchInput.addEventListener('input', () => {
+    if (searchInput.value.length > 0) {
+        clearBtn.style.display = 'block';
+    } else {
+        clearBtn.style.display = 'none';
+    }
+    filterAndRenderGrid();
+});
+
+// مسح النص عند الضغط على X
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    clearBtn.style.display = 'none';
+    filterAndRenderGrid();
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("heart-btn")) {
+    e.target.classList.toggle("active");
+    e.target.textContent = e.target.classList.contains("active") ? "❤️" : "♡";
+  }
+});
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,438 @@
+/* ✴️ Font: Cairo for modern Arabic/Latin text - NOTE: Import this font link in sandbox settings or HTML head */
+body {
+    font-family: 'Cairo', sans-serif;
+    margin: 0;
+    padding-top: 60px; /* Space for fixed header */
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+@keyframes fadeUp {
+  from {opacity: 0; transform: translateY(20px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+.emoji-card {
+  animation: fadeUp 0.5s ease forwards;
+}
+
+/* --- Theme Variables and Defaults (Light Theme) --- */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f0f0f0; 
+    --text-primary: #1a1a1a;
+    --text-secondary: #555555;
+    --accent-color: #007bff; /* Sky Blue */
+    --hover-color: #e0f7ff;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Theme */
+body.dark-theme {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2c2c2c;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --accent-color: #9333ea; /* Dark Purple/Blue */
+    --hover-color: #3e284f;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Apply variables */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+::selection{
+  background: var(--accent-color);
+  color: var(--text-primary);
+}
+
+#site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 60px;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--text-secondary);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.logo {
+  color: var(--accent-color);
+  text-decoration: none;
+  display: inline-block;
+  font-size: 2rem;
+  font-weight: bold;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateX(-100px);
+  animation: slideIn 1s ease-out forwards;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* تأثير السحب */
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.logo:hover {
+  transform: scale(1.15);
+  text-shadow: 0 0 15px #d4af37, 0 0 25px #00c6a7;
+}
+
+.header-controls {
+    display: flex;
+    gap: 10px;
+}
+
+#site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.ascii-link {
+    margin-left: 20px;
+    font-weight: bold;
+    color: var(--accent-color); /* أو أي لون يناسب ثيمك */
+    text-decoration: none;
+}
+
+.ascii-link:hover {
+    color: #d4af37;
+}
+
+#theme-toggle {
+    background: none;
+    border: 1px solid var(--text-secondary);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+#theme-toggle:hover {
+    background-color: var(--hover-color);
+    border-color: var(--accent-color);
+}
+
+body:not(.dark-theme) .icon-sun { display: none; }
+body.dark-theme .icon-moon { display: none; }
+.mobile-only { display: none; }
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 0;
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--bg-secondary);
+}
+
+#emoji-search {
+    width: 90%;
+    max-width: 600px;
+    padding: 10px 15px;
+    border: 2px solid var(--text-secondary);
+    border-radius: 25px;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: border-color 0.3s;
+}
+
+#emoji-search:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+.search-container {
+    position: relative; /* مهم جدًا عشان زر ✖️ */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 0;
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--bg-secondary);
+}
+
+#emoji-search {
+    width: 90%;
+    max-width: 600px;
+    padding: 10px 40px 10px 15px; /* خلي مساحة كافية للزر */
+    border: 2px solid var(--text-secondary);
+    border-radius: 25px;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    transition: border-color 0.3s;
+}
+
+#emoji-search:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+#clear-search {
+    position: absolute;
+    top: 50%;
+    right: 20px; /* بعيد عن الحافة */
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none; /* يظهر فقط أثناء الكتابة */
+    color: var(--text-secondary);
+    transition: color 0.3s;
+}
+
+#clear-search:hover {
+    color: var(--accent-color);
+}
+
+#emoji-counter {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+#category-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px;
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--text-secondary);
+}
+
+.category-btn {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--text-secondary);
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    white-space: nowrap;
+}
+
+.category-btn:hover, .category-btn.active {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+    border-color: var(--accent-color);
+}
+
+#emoji-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.emoji-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: transform 0.3s ease-out, opacity 0.5s ease-in, background-color 0.3s;
+    cursor: pointer;
+    opacity: 0;
+}
+
+.emoji-card.fade-in {
+    opacity: 1;
+}
+
+.emoji-card:hover {
+    transform: scale(1.05);
+    background-color: var(--hover-color);
+}
+
+.emoji-card .emoji {
+    font-size: 3rem;
+    margin-bottom: 5px;
+}
+
+.emoji-name {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    height: 30px;
+    overflow: hidden;
+}
+
+.copy-btn {
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 0.8rem;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    pointer-events: none;
+}
+
+.emoji-card:hover .copy-btn {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+.heart-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: #888;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+  z-index: 2;
+}
+
+.heart-btn:hover {
+  transform: scale(1.2);
+}
+
+.heart-btn.active {
+  color: #e63946;
+  transform: scale(1.2);
+  text-shadow: 0 0 15px rgba(230, 57, 70, 0.8);
+  animation: pulse 0.4s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+#show-more-btn {
+  display: block;
+  margin: 30px auto;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, var(--hover-color), var(--accent-color));
+  color: var(--text-primary);
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#show-more-btn:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 0 2px var(--accent-color),      /* الإطار الأساسي */
+    0 0 10px var(--accent-color),        /* توهج داخلي */
+    0 0 20px var(--accent-color),        /* توهج خارجي */
+    0 0 30px var(--accent-color);        /* توهج بعيد أكبر */
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    border-top: 1px solid var(--text-secondary);
+    background-color: var(--bg-secondary);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    margin: 0 10px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--accent-color);
+}
+
+.copyright {
+    margin-top: 10px;
+}
+
+/* الشاشة الكاملة */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color, white); /* يتغير حسب الثيم */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* سبينر بسيط */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #ccc;
+  border-top-color: #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+.contact-icons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.contact-icons a {
+    color: var(--accent-color, #0077cc);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.contact-icons a:hover {
+    transform: scale(1.2);
+    color: #ff9900; /* لون عند المرور */
+}

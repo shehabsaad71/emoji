@@ -3,220 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emoji & Symbols Library</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>EMOGO, Emojis library</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            transition: background 0.3s, color 0.3s;
-        }
-        .header h1 {
-            font-size: 50px;
-            background-clip: text;
-            background: linear-gradient(to right, #4285f4, #d96570);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .emoji-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-            gap: 10px;
-            padding: 10px;
-        }
-        .emoji-box {
-            padding: 10px;
-            background: white;
-            color: black;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .emoji-box:hover {
-            background: gray;
-        }
-        .toggle-theme {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 30px;
-        }
-        .search-bar {
-            margin: 20px auto;
-            display: flex;
-            justify-content: center;
-        }
-        .search-bar input {
-            width: 80%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid gray;
-            font-size: 16px;
-        }
-    </style>
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <button id="theme-toggle" class="toggle-theme">
-        <span class="material-icons">light_mode</span>
-    </button>
 
-    <div class="container mx-auto p-4">
-        <div class="header text-center">
-            <h1>Discover & Copy The Best Activities Emojis & Symbols Easily</h1>
-            <P>Explore a collection of the best Activities Emojis & Symbols ready for instant copy and share on social media or chats.</P>
-        </div>
-        
-        <!-- شريط البحث -->
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="Search emojis..." class="w-full p-2 mb-4 border rounded" style="color: black; background-color: white;">
-        </div>
+    <header id="site-header">
+    <a class="logo" href="index.html">EMOGO 😀</a>
 
-        <h2 class="text-xl font-bold mt-4">Activities</h2>
-        <div id="persons-container" class="emoji-container"></div>
+    <a class="ascii-link" href="ascii-maker.html">ASCII Maker</a>
 
-        <!-- الرموز التعبيرية -->
-        <div id="emojis-container" class="emoji-container"></div>
+    <div class="header-controls">
+        <button id="theme-toggle" aria-label="Toggle dark/light theme">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+        </button>
+        <button id="menu-toggle" class="mobile-only" aria-label="Open menu">
+            <span>&#9776;</span>
+        </button>
     </div>
+</header>
+
+    <main>
+        <div class="search-container">
+            <input type="text" id="emoji-search" placeholder="🔍 Search for emoji...">
+            <button id="clear-search" title="Clear Search">✖️</button>
+            <span id="emoji-counter">0 Emojis Displayed</span>
+        </div>
+
+        <nav id="category-nav">
+        </nav>
+    <div id="loader" class="loader">
+      <div class="spinner"></div>
+      Loading Emojis...
+    </div>
+        <section id="emoji-grid-container">
+        </section>
+    </main>
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="about-us.html">About Us</a>
+            <a href="blog.html">Blog</a>
+        </div>
+        <p class="copyright">© 2025 Emogo — All Rights Reserved.</p>
+    </footer>
 
     <script>
-        const emojis = [
-        { symbol: "🎃", name: "Jack-O-Lantern" },
-    { symbol: "🎄", name: "Christmas Tree" },
-    { symbol: "🎆", name: "Fireworks" },
-    { symbol: "🎇", name: "Sparkler" },
-    { symbol: "🧨", name: "Firecracker" },
-    { symbol: "✨", name: "Sparkles" },
-    { symbol: "🎈", name: "Balloon" },
-    { symbol: "🎉", name: "Party Popper" },
-    { symbol: "🎊", name: "Confetti Ball" },
-    { symbol: "🎋", name: "Tanabata Tree" },
-    { symbol: "🎍", name: "Pine Decoration" },
-    { symbol: "🎎", name: "Japanese Dolls" },
-    { symbol: "🏅", name: "Sports Medal" },
-    { symbol: "🏆", name: "Trophy" },
-    { symbol: "🎖", name: "Military Medal" },
-    { symbol: "🎫", name: "Ticket" },
-    { symbol: "🎟", name: "Admission Tickets" },
-    { symbol: "🎗", name: "Reminder Ribbon" },
-    { symbol: "🎁", name: "Wrapped Gift" },
-    { symbol: "🎀", name: "Ribbon" },
-    { symbol: "🧧", name: "Red Envelope" },
-    { symbol: "🎑", name: "Moon Viewing Ceremony" },
-    { symbol: "🎐", name: "Wind Chime" },
-    { symbol: "🎏", name: "Carp Streamer" },
-    { symbol: "🥇", name: "1st Place Medal" },
-    { symbol: "🥈", name: "2nd Place Medal" },
-    { symbol: "🥉", name: "3rd Place Medal" },
-    { symbol: "⚽", name: "Soccer Ball" },
-    { symbol: "⚾", name: "Baseball" },
-    { symbol: "🥎", name: "Softball" },
-    { symbol: "🏀", name: "Basketball" },
-    { symbol: "🏐", name: "Volleyball" },
-    { symbol: "🏈", name: "American Football" },
-    { symbol: "🏉", name: "Rugby Football" },
-    { symbol: "🎾", name: "Tennis" },
-    { symbol: "🥏", name: "Flying Disc" },
-    { symbol: "⛸", name: "Ice Skate" },
-    { symbol: "⛳", name: "Flag in Hole" },
-    { symbol: "🥅", name: "Goal Net" },
-    { symbol: "🥋", name: "Martial Arts Uniform" },
-    { symbol: "🥊", name: "Boxing Glove" },
-    { symbol: "🏸", name: "Badminton" },
-    { symbol: "🏓", name: "Ping Pong" },
-    { symbol: "🥍", name: "Lacrosse" },
-    { symbol: "🏒", name: "Ice Hockey" },
-    { symbol: "🏑", name: "Field Hockey" },
-    { symbol: "🏏", name: "Cricket" },
-    { symbol: "🎳", name: "Bowling" },
-    { symbol: "🪄", name: "Magic Wand" },
-    { symbol: "🔮", name: "Crystal Ball" },
-    { symbol: "🎱", name: "8 Ball" },
-    { symbol: "🪁", name: "Kite" },
-    { symbol: "🪀", name: "Yo-Yo" },
-    { symbol: "🎯", name: "Direct Hit" },
-    { symbol: "🥌", name: "Curling Stone" },
-    { symbol: "🛷", name: "Sled" },
-    { symbol: "🎿", name: "Skis" },
-    { symbol: "🎽", name: "Running Shirt" },
-    { symbol: "🤿", name: "Diving Mask" },
-    { symbol: "🎣", name: "Fishing Pole" },
-    { symbol: "🧿", name: "Nazar Amulet" },
-    { symbol: "🎮", name: "Video Game" },
-    { symbol: "🕹", name: "Joystick" },
-    { symbol: "🎰", name: "Slot Machine" },
-    { symbol: "🎲", name: "Game Die" },
-    { symbol: "🧩", name: "Puzzle Piece" },
-    { symbol: "🧸", name: "Teddy Bear" },
-    { symbol: "🪅", name: "Piñata" },
-    { symbol: "🪆", name: "Nesting Dolls" },
-    { symbol: "♠", name: "Spade Suit" },
-    { symbol: "♥", name: "Heart Suit" },
-    { symbol: "♦", name: "Diamond Suit" },
-    { symbol: "🪢", name: "Knot" },
-    { symbol: "🧶", name: "Yarn" },
-    { symbol: "🪡", name: "Sewing Needle" },
-    { symbol: "🧵", name: "Thread" },
-    { symbol: "🎨", name: "Artist Palette" },
-    { symbol: "🖼", name: "Framed Picture" },
-    { symbol: "🎭", name: "Performing Arts" },
-    { symbol: "🎴", name: "Flower Playing Cards" },
-    { symbol: "🀄", name: "Mahjong Red Dragon" },
-    { symbol: "🃏", name: "Joker" },
-    { symbol: "♟", name: "Chess Pawn" },
-    { symbol: "♣", name: "Club Suit" }
+// Data (equivalent to data.js)
+const EMOJI_COLLECTION = [
+    // Activities
+    { emoji: '⚽', name: 'Soccer Ball', category: 'Sports' },
+    { emoji: '🏀', name: 'Basketball', category: 'Sports' },
+    { emoji: '🏈', name: 'American Football', category: 'Sports' },
+    { emoji: '⚾', name: 'Baseball', category: 'Sports' },
+    { emoji: '🥎', name: 'Softball', category: 'Sports' },
+    { emoji: '🎾', name: 'Tennis', category: 'Sports' },
+    { emoji: '🏐', name: 'Volleyball', category: 'Sports' },
+    { emoji: '🏉', name: 'Rugby Football', category: 'Sports' },
+    { emoji: '🥏', name: 'Flying Disc', category: 'Sports' },
+    { emoji: '🎱', name: 'Pool 8 Ball', category: 'Sports' },
+    { emoji: '🪀', name: 'Yo-Yo', category: 'Sports' },
+    { emoji: '🏓', name: 'Ping Pong', category: 'Sports' },
+    { emoji: '🏸', name: 'Badminton', category: 'Sports' },
+    { emoji: '🏒', name: 'Ice Hockey', category: 'Sports' },
+    { emoji: '🏑', name: 'Field Hockey', category: 'Sports' },
+    { emoji: '🥍', name: 'Lacrosse', category: 'Sports' },
+    { emoji: '🏏', name: 'Cricket', category: 'Sports' },
+    { emoji: '🪃', name: 'Boomerang', category: 'Sports' },
+    { emoji: '🥅', name: 'Goal Net', category: 'Sports' },
+    { emoji: '⛳', name: 'Flag in Hole', category: 'Sports' },
+    { emoji: '🪁', name: 'Kite', category: 'Sports' },
+    { emoji: '🛝', name: 'Playground Slide', category: 'Sports' },
+    { emoji: '🏹', name: 'Bow and Arrow', category: 'Sports' },
+    { emoji: '🎣', name: 'Fishing Pole', category: 'Sports' },
+    { emoji: '🤿', name: 'Diving Mask', category: 'Sports' },
+    { emoji: '🥊', name: 'Boxing Glove', category: 'Sports' },
+    { emoji: '🥋', name: 'Martial Arts Uniform', category: 'Sports' },
+    { emoji: '🎽', name: 'Running Shirt', category: 'Sports' },
+    { emoji: '🛹', name: 'Skateboard', category: 'Sports' },
+    { emoji: '🛼', name: 'Roller Skate', category: 'Sports' },
+    { emoji: '🛷', name: 'Sled', category: 'Sports' },
+    { emoji: '⛸️', name: 'Ice Skate', category: 'Sports' },
+    { emoji: '🥌', name: 'Curling Stone', category: 'Sports' },
+    { emoji: '🎿', name: 'Skis', category: 'Sports' },
+    { emoji: '⛷️', name: 'Skier', category: 'Sports' },
+    { emoji: '🏂', name: 'Snowboarder', category: 'Sports' },
+    { emoji: '🪂', name: 'Parachute', category: 'Sports' },
+    { emoji: '🏋️‍♀️', name: 'Woman Lifting Weights', category: 'Sports' },
+    { emoji: '🏋️‍♂️', name: 'Man Lifting Weights', category: 'Sports' },
+    { emoji: '🤼‍♀️', name: 'Women Wrestling', category: 'Sports' },
+    { emoji: '🤼', name: 'Wrestling', category: 'Sports' },
+    { emoji: '🤼‍♂️', name: 'Men Wrestling', category: 'Sports' },
+    { emoji: '🤸‍♀️', name: 'Woman Cartwheeling', category: 'Sports' },
+    { emoji: '🤸', name: 'Person Cartwheeling', category: 'Sports' },
+    { emoji: '🤸‍♂️', name: 'Man Cartwheeling', category: 'Sports' },
+    { emoji: '⛹️‍♀️', name: 'Woman Bouncing Ball', category: 'Sports' },
+    { emoji: '⛹️', name: 'Person Bouncing Ball', category: 'Sports' },
+    { emoji: '⛹️‍♂️', name: 'Man Bouncing Ball', category: 'Sports' },
+    { emoji: '🤺', name: 'Fencer', category: 'Sports' },
+    { emoji: '🤾‍♀️', name: 'Woman Playing Handball', category: 'Sports' },
+    { emoji: '🤾', name: 'Person Playing Handball', category: 'Sports' },
+    { emoji: '🤾‍♂️', name: 'Man Playing Handball', category: 'Sports' },
+    { emoji: '🏌️‍♀️', name: 'Woman Golfing', category: 'Sports' },
+    { emoji: '🏌️', name: 'Person Golfing', category: 'Sports' },
+    { emoji: '🏌️‍♂️', name: 'Man Golfing', category: 'Sports' },
+    { emoji: '🏇', name: 'Horse Racing', category: 'Sports' },
+    { emoji: '🧘‍♀️', name: 'Woman in Lotus Position', category: 'Sports' },
+    { emoji: '🧘', name: 'Person in Lotus Position', category: 'Sports' },
+    { emoji: '🧘‍♂️', name: 'Man in Lotus Position', category: 'Sports' },
+    { emoji: '🏄‍♀️', name: 'Woman Surfing', category: 'Sports' },
+    { emoji: '🏄', name: 'Person Surfing', category: 'Sports' },
+    { emoji: '🏄‍♂️', name: 'Man Surfing', category: 'Sports' },
+    { emoji: '🏊‍♀️', name: 'Woman Swimming', category: 'Sports' },
+    { emoji: '🏊', name: 'Person Swimming', category: 'Sports' },
+    { emoji: '🏊‍♂️', name: 'Man Swimming', category: 'Sports' },
+    { emoji: '🤽‍♀️', name: 'Woman Playing Water Polo', category: 'Sports' },
+    { emoji: '🤽', name: 'Person Playing Water Polo', category: 'Sports' },
+    { emoji: '🤽‍♂️', name: 'Man Playing Water Polo', category: 'Sports' },
+    { emoji: '🚣‍♀️', name: 'Woman Rowing Boat', category: 'Sports' },
+    { emoji: '🚣', name: 'Person Rowing Boat', category: 'Sports' },
+    { emoji: '🚣‍♂️', name: 'Man Rowing Boat', category: 'Sports' },
+    { emoji: '🧗‍♀️', name: 'Woman Climbing', category: 'Sports' },
+    { emoji: '🧗', name: 'Person Climbing', category: 'Sports' },
+    { emoji: '🧗‍♂️', name: 'Man Climbing', category: 'Sports' },
+    { emoji: '🚵‍♀️', name: 'Woman Mountain Biking', category: 'Sports' },
+    { emoji: '🚵', name: 'Person Mountain Biking', category: 'Sports' },
+    { emoji: '🚵‍♂️', name: 'Man Mountain Biking', category: 'Sports' },
+    { emoji: '🚴‍♀️', name: 'Woman Biking', category: 'Entertainment' },
+    { emoji: '🚴', name: 'Person Biking', category: 'Entertainment' },
+    { emoji: '🚴‍♂️', name: 'Man Biking', category: 'Entertainment' },
+    { emoji: '🏆', name: 'Trophy', category: 'Entertainment' },
+    { emoji: '🥇', name: '1st Place Medal', category: 'Entertainment' },
+    { emoji: '🥈', name: '2nd Place Medal', category: 'Entertainment' },
+    { emoji: '🥉', name: '3rd Place Medal', category: 'Entertainment' },
+    { emoji: '🏅', name: 'Sports Medal', category: 'Entertainment' },
+    { emoji: '🎖️', name: 'Military Medal', category: 'Entertainment' },
+    { emoji: '🏵️', name: 'Rosette', category: 'Entertainment' },
+    { emoji: '🎗️', name: 'Reminder Ribbon', category: 'Entertainment' },
+    { emoji: '🎫', name: 'Ticket', category: 'Entertainment' },
+    { emoji: '🎟️', name: 'Admission Tickets', category: 'Entertainment' },
+    { emoji: '🎪', name: 'Circus Tent', category: 'Entertainment' },
+    { emoji: '🤹‍♀️', name: 'Woman Juggling', category: 'Entertainment' },
+    { emoji: '🤹‍♂️', name: 'Man Juggling', category: 'Entertainment' },
+    { emoji: '🎭', name: 'Performing Arts', category: 'Entertainment' },
+    { emoji: '🩰', name: 'Ballet Shoes', category: 'Entertainment' },
+    { emoji: '🎨', name: 'Artist Palette', category: 'Entertainment' },
+    { emoji: '🎬', name: 'Clapper Board', category: 'Entertainment' },
+    { emoji: '🎤', name: 'Microphone', category: 'Entertainment' },
+    { emoji: '🎧', name: 'Headphone', category: 'Entertainment' },
+    { emoji: '🎼', name: 'Musical Score', category: 'Entertainment' },
+    { emoji: '🎹', name: 'Musical Keyboard', category: 'Entertainment' },
+    { emoji: '🪇', name: 'Maracas', category: 'Entertainment' },
+    { emoji: '🪘', name: 'Long Drum', category: 'Entertainment' },
+    { emoji: '🥁', name: 'Drum', category: 'Entertainment' },
+    { emoji: '🎷', name: 'Saxophone', category: 'Entertainment' },
+    { emoji: '🎺', name: 'Trumpet', category: 'Entertainment' },
+    { emoji: '🪗', name: 'Accordion', category: 'Entertainment' },
+    { emoji: '🎸', name: 'Guitar', category: 'Entertainment' },
+    { emoji: '🪕', name: 'Banjo', category: 'Entertainment' },
+    { emoji: '🎻', name: 'Violin', category: 'Entertainment' },
+    { emoji: '🪈', name: 'Flute', category: 'Entertainment' },
+    { emoji: '🎲', name: 'Game Die', category: 'Entertainment' },
+    { emoji: '♟️', name: 'Chess Pawn', category: 'Entertainment' },
+    { emoji: '🎯', name: 'Direct Hit', category: 'Entertainment' },
+    { emoji: '🎳', name: 'Bowling', category: 'Entertainment' },
+    { emoji: '🎮', name: 'Video Game', category: 'Entertainment' },
+    { emoji: '🎰', name: 'Slot Machine', category: 'Entertainment' },
+    { emoji: '🧩', name: 'Puzzle Piece', category: 'Entertainment' },
+];
+
+const CATEGORY_ICONS = {
+    'Favorites': '❤️'
+};
+
+let favoriteEmojis = JSON.parse(localStorage.getItem('favorites')) || [];
+
+const ALL_CATEGORIES = Object.keys(CATEGORY_ICONS);
 
 
+// Main Script (equivalent to script.js)
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+    const searchInput = document.getElementById('emoji-search');
+    const emojiGrid = document.getElementById('emoji-grid-container');
+    const categoryNav = document.getElementById('category-nav');
+    const menuToggle = document.getElementById('menu-toggle');
+    const emojiCounter = document.getElementById('emoji-counter');
 
-        ];
+    let currentCategory = 'All';
 
-        function displayEmojis(emojiList, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = "";
-            emojiList.forEach(emoji => {
-                const div = document.createElement("div");
-                div.className = "emoji-box";
-                div.innerHTML = `<span class="text-2xl">${emoji.symbol}</span><br><small>${emoji.name}</small>`;
-                div.onclick = () => copyToClipboard(emoji.symbol);
-                container.appendChild(div);
-            });
+    // --- Theme Toggle Logic ---
+    function toggleTheme() {
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
         }
+    }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            alert("Copied: " + text);
+    function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            body.classList.add('dark-theme');
         }
+    }
 
-        function toggleTheme() {
-            const body = document.body;
-            const themeButton = document.getElementById("theme-toggle");
-            if (body.style.backgroundColor === "black") {
-                body.style.backgroundColor = "white";
-                body.style.color = "black";
-                themeButton.innerHTML = '<span class="material-icons">dark_mode</span>';
-            } else {
-                body.style.backgroundColor = "black";
-                body.style.color = "white";
-                themeButton.innerHTML = '<span class="material-icons">light_mode</span>';
-            }
-        }
+    themeToggle.addEventListener('click', toggleTheme);
+    initializeTheme();
 
-        document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
+    // --- Category Logic ---
+    function renderCategories() {
+        const allBtn = document.createElement('button');
+        allBtn.textContent = 'All Emojis';
+        allBtn.className = 'category-btn active';
+        allBtn.dataset.category = 'All';
+        categoryNav.appendChild(allBtn);
 
-        displayEmojis(emojis, "emojis-container");
-
-        // إضافة محرك البحث
-        document.getElementById("search").addEventListener("input", function() {
-            const searchTerm = this.value.toLowerCase();
-            const filteredEmojis = emojis.filter(emoji => emoji.name.toLowerCase().includes(searchTerm));
-            displayEmojis(filteredEmojis, "emojis-container");
+        ALL_CATEGORIES.forEach(category => {
+            const btn = document.createElement('button');
+            const icon = CATEGORY_ICONS[category] || '';
+            btn.textContent = `${icon} ${category}`;
+            btn.className = 'category-btn';
+            btn.dataset.category = category;
+            categoryNav.appendChild(btn);
         });
+        
+        categoryNav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.category-btn');
+            if (btn) {
+                const category = btn.dataset.category;
+                currentCategory = category;
+                
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Close menu on mobile
+                if (window.innerWidth <= 768) {
+                    categoryNav.classList.remove('open');
+                    menuToggle.innerHTML = '&#9776;';
+                }
+
+                filterAndRenderGrid();
+            }
+        });
+    }
+
+   function createEmojiCard(item) {
+    const card = document.createElement('div');
+    card.className = 'emoji-card';
+
+    // زر القلب
+    const heartBtn = document.createElement('button');
+    heartBtn.className = 'heart-btn';
+    const isFavorite = favoriteEmojis.some(fav => fav.emoji === item.emoji);
+    heartBtn.textContent = isFavorite ? '❤️' : '♡';
+    if (isFavorite) heartBtn.classList.add('active');
+
+    heartBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        heartBtn.classList.toggle('active');
+
+        if (heartBtn.classList.contains('active')) {
+            heartBtn.textContent = '❤️';
+            if (!favoriteEmojis.some(fav => fav.emoji === item.emoji)) {
+                favoriteEmojis.push(item);
+                localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+            }
+        } else {
+            heartBtn.textContent = '♡';
+            favoriteEmojis = favoriteEmojis.filter(fav => fav.emoji !== item.emoji);
+            localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+        }
+
+        // تحديث قسم المفضلة لو هو مفتوح حاليًا
+        if (currentCategory === 'Favorites') filterAndRenderGrid();
+    });
+
+    // باقي الكارد
+    const emojiDiv = document.createElement('div');
+    emojiDiv.className = 'emoji';
+    emojiDiv.textContent = item.emoji;
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'emoji-name';
+    nameDiv.textContent = item.name;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        try {
+            await navigator.clipboard.writeText(item.emoji);
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        } catch (err) {
+            copyBtn.textContent = '❌ Error';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        }
+    });
+
+    card.append(heartBtn, emojiDiv, nameDiv, copyBtn);
+    setTimeout(() => card.classList.add('fade-in'), 10);
+
+    return card;
+}
+
+
+    function filterAndRenderGrid() {
+    const searchTerm = searchInput.value.toLowerCase();
+    emojiGrid.innerHTML = '';
+
+    let filteredEmojis;
+
+    if (currentCategory === 'Favorites') {
+        // البحث في المفضلة فقط
+        filteredEmojis = favoriteEmojis.filter(item =>
+            item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+        );
+    } else if (searchTerm) {
+        // لو في قسم All → البحث في كل الإيموجيز
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+            );
+        } else {
+            // البحث بس في القسم الحالي
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.category === currentCategory &&
+                (item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm))
+            );
+        }
+    } else {
+        // بدون بحث
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.slice(0, 1714);
+        } else {
+            filteredEmojis = EMOJI_COLLECTION.filter(item => item.category === currentCategory);
+        }
+    }
+
+    // إنشاء الكروت
+    filteredEmojis.forEach(item => emojiGrid.appendChild(createEmojiCard(item)));
+
+    // عداد الإيموجيز الظاهرة
+    emojiCounter.textContent = `${filteredEmojis.length} Emojis Displayed`;
+
+    // زر show more
+    const showMoreBtn = document.getElementById("show-more-btn");
+    if (currentCategory !== 'Favorites' && !searchTerm) {
+        showMoreBtn.style.display = 'block';
+        showMoreBtn.onclick = function() {
+            const link = String(currentCategory).toLowerCase().replace(/ /g, '-') + '.html';
+            window.location.href = link;
+        };
+    } else {
+        showMoreBtn.style.display = 'none';
+    }
+}
+
+
+    searchInput.addEventListener('input', filterAndRenderGrid);
+
+    // --- Mobile Menu Toggle ---
+    menuToggle.addEventListener('click', () => {
+        const isOpen = categoryNav.classList.toggle('open');
+        menuToggle.innerHTML = isOpen ? '&times;' : '&#9776;';
+    });
+
+
+    // Initialize
+    renderCategories();
+    filterAndRenderGrid();
+});
+
+// بعد ما تعمل render لكل الإيموجيز
+const loader = document.getElementById('loader');
+
+loader.style.transition = 'opacity 0.5s';
+loader.style.opacity = '0';
+
+setTimeout(() => {
+    loader.style.display = 'none';
+}, 500); // 500ms بعد انتهاء الـ fade-out
+
+const showMoreBtn = document.getElementById("show-more-btn");
+
+showMoreBtn.onclick = function() {
+  window.location.href = "https://example.com/more-emojis"; // ضع هنا الرابط المطلوب
+};
+
+const clearBtn = document.getElementById('clear-search');
+
+// إظهار/إخفاء زر X أثناء الكتابة
+searchInput.addEventListener('input', () => {
+    if (searchInput.value.length > 0) {
+        clearBtn.style.display = 'block';
+    } else {
+        clearBtn.style.display = 'none';
+    }
+    filterAndRenderGrid();
+});
+
+// مسح النص عند الضغط على X
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    clearBtn.style.display = 'none';
+    filterAndRenderGrid();
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("heart-btn")) {
+    e.target.classList.toggle("active");
+    e.target.textContent = e.target.classList.contains("active") ? "❤️" : "♡";
+  }
+});
+
     </script>
 </body>
 </html>

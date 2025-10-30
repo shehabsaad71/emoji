@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMOGO, Emojis library</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header id="site-header">
+    <a class="logo" href="index.html">EMOGO 😀</a>
+
+    <a class="ascii-link" href="ascii-maker.html">ASCII Maker</a>
+
+    <div class="header-controls">
+        <button id="theme-toggle" aria-label="Toggle dark/light theme">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+        </button>
+        <button id="menu-toggle" class="mobile-only" aria-label="Open menu">
+            <span>&#9776;</span>
+        </button>
+    </div>
+</header>
+
+    <main>
+        <div class="search-container">
+            <input type="text" id="emoji-search" placeholder="🔍 Search for emoji...">
+            <button id="clear-search" title="Clear Search">✖️</button>
+            <span id="emoji-counter">0 Emojis Displayed</span>
+        </div>
+
+        <nav id="category-nav">
+        </nav>
+    <div id="loader" class="loader">
+      <div class="spinner"></div>
+      Loading Emojis...
+    </div>
+        <section id="emoji-grid-container">
+        </section>
+    </main>
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="about-us.html">About Us</a>
+            <a href="blog.html">Blog</a>
+        </div>
+        <p class="copyright">© 2025 Emogo — All Rights Reserved.</p>
+    </footer>
+
+    <script>
+// Data (equivalent to data.js)
+const EMOJI_COLLECTION = [
+    // Food and Drink
+    { emoji: '🍏', name: 'Green Apple', category: 'Food' },
+    { emoji: '🍎', name: 'Red Apple', category: 'Food' },
+    { emoji: '🍐', name: 'Pear', category: 'Food' },
+    { emoji: '🍊', name: 'Tangerine', category: 'Food' },
+    { emoji: '🍋', name: 'Lemon', category: 'Food' },
+    { emoji: '🍋‍🟩', name: 'Lime', category: 'Food' },
+    { emoji: '🍌', name: 'Banana', category: 'Food' },
+    { emoji: '🍉', name: 'Watermelon', category: 'Food' },
+    { emoji: '🍇', name: 'Grapes', category: 'Food' },
+    { emoji: '🍓', name: 'Strawberry', category: 'Food' },
+    { emoji: '🫐', name: 'Blueberries', category: 'Food' },
+    { emoji: '🍈', name: 'Melon', category: 'Food' },
+    { emoji: '🍒', name: 'Cherries', category: 'Food' },
+    { emoji: '🍑', name: 'Peach', category: 'Food' },
+    { emoji: '🥭', name: 'Mango', category: 'Food' },
+    { emoji: '🍍', name: 'Pineapple', category: 'Food' },
+    { emoji: '🥥', name: 'Coconut', category: 'Food' },
+    { emoji: '🥝', name: 'Kiwi', category: 'Food' },
+    { emoji: '🍅', name: 'Tomato', category: 'Food' },
+    { emoji: '🍆', name: 'Eggplant', category: 'Food' },
+    { emoji: '🥑', name: 'Avocado', category: 'Food' },
+    { emoji: '🫛', name: 'Peas', category: 'Food' },
+    { emoji: '🥦', name: 'Broccoli', category: 'Food' },
+    { emoji: '🥬', name: 'Leafy Green', category: 'Food' },
+    { emoji: '🥒', name: 'Cucumber', category: 'Food' },
+    { emoji: '🌶️', name: 'Hot Pepper', category: 'Food' },
+    { emoji: '🫑', name: 'Bell Pepper', category: 'Food' },
+    { emoji: '🌽', name: 'Corn', category: 'Food' },
+    { emoji: '🥕', name: 'Carrot', category: 'Food' },
+    { emoji: '🫒', name: 'Olive', category: 'Food' },
+    { emoji: '🧄', name: 'Garlic', category: 'Food' },
+    { emoji: '🧅', name: 'Onion', category: 'Food' },
+    { emoji: '🥔', name: 'Potato', category: 'Food' },
+    { emoji: '🍠', name: 'Sweet Potato', category: 'Food' },
+    { emoji: '🥐', name: 'Croissant', category: 'Food' },
+    { emoji: '🫚', name: 'Ginger', category: 'Food' },
+    { emoji: '🥯', name: 'Bagel', category: 'Food' },
+    { emoji: '🍞', name: 'Bread', category: 'Food' },
+    { emoji: '🥖', name: 'Baguette', category: 'Food' },
+    { emoji: '🥨', name: 'Pretzel', category: 'Food' },
+    { emoji: '🧀', name: 'Cheese', category: 'Food' },
+    { emoji: '🥚', name: 'Egg', category: 'Food' },
+    { emoji: '🍳', name: 'Cooking Egg', category: 'Food' },
+    { emoji: '🧈', name: 'Butter', category: 'Food' },
+    { emoji: '🥞', name: 'Pancakes', category: 'Food' },
+    { emoji: '🧇', name: 'Waffle', category: 'Food' },
+    { emoji: '🥓', name: 'Bacon', category: 'Food' },
+    { emoji: '🥩', name: 'Cut of Meat', category: 'Food' },
+    { emoji: '🍗', name: 'Poultry Leg', category: 'Food' },
+    { emoji: '🍖', name: 'Meat on Bone', category: 'Food' },
+    { emoji: '🦴', name: 'Bone', category: 'Food' },
+    { emoji: '🌭', name: 'Hot Dog', category: 'Food' },
+    { emoji: '🍔', name: 'Burger', category: 'Food' },
+    { emoji: '🍟', name: 'Fries', category: 'Food' },
+    { emoji: '🍕', name: 'Pizza', category: 'Food' },
+    { emoji: '🫓', name: 'Flatbread', category: 'Food' },
+    { emoji: '🥙', name: 'Stuffed Flatbread', category: 'Food' },
+    { emoji: '🥪', name: 'Sandwich', category: 'Food' },
+    { emoji: '🧆', name: 'Falafel', category: 'Food' },
+    { emoji: '🌮', name: 'Taco', category: 'Food' },
+    { emoji: '🌯', name: 'Burrito', category: 'Food' },
+    { emoji: '🫔', name: 'Tamale', category: 'Food' },
+    { emoji: '🥗', name: 'Salad', category: 'Food' },
+    { emoji: '🥘', name: 'Shallow Pan of Food', category: 'Food' },
+    { emoji: '🫕', name: 'Fondue', category: 'Food' },
+    { emoji: '🥫', name: 'Canned Food', category: 'Food' },
+    { emoji: '🫙', name: 'Jar', category: 'Food' },
+    { emoji: '🍝', name: 'Spaghetti', category: 'Food' },
+    { emoji: '🍜', name: 'Steaming Bowl', category: 'Food' },
+    { emoji: '🍲', name: 'Pot of Food', category: 'Food' },
+    { emoji: '🍛', name: 'Curry Rice', category: 'Food' },
+    { emoji: '🍣', name: 'Sushi', category: 'Food' },
+    { emoji: '🍱', name: 'Bento Box', category: 'Food' },
+    { emoji: '🥟', name: 'Dumpling', category: 'Food' },
+    { emoji: '🦪', name: 'Oyster', category: 'Food' },
+    { emoji: '🍤', name: 'Fried Shrimp', category: 'Food' },
+    { emoji: '🍙', name: 'Rice Ball', category: 'Food' },
+    { emoji: '🍚', name: 'Cooked Rice', category: 'Food' },
+    { emoji: '🍘', name: 'Rice Cracker', category: 'Food' },
+    { emoji: '🍥', name: 'Fish Cake with Swirl', category: 'Food' },
+    { emoji: '🥠', name: 'Fortune Cookie', category: 'Food' },
+    { emoji: '🥮', name: 'Moon Cake', category: 'Food' },
+    { emoji: '🍢', name: 'Oden', category: 'Food' },
+    { emoji: '🍡', name: 'Dango', category: 'Food' },
+    { emoji: '🍧', name: 'Shaved Ice', category: 'Food' },
+    { emoji: '🍨', name: 'Ice Cream', category: 'Food' },
+    { emoji: '🍦', name: 'Soft Ice Cream', category: 'Food' },
+    { emoji: '🥧', name: 'Pie', category: 'Food' },
+    { emoji: '🧁', name: 'Cupcake', category: 'Food' },
+    { emoji: '🍰', name: 'Cake', category: 'Food' },
+    { emoji: '🎂', name: 'Birthday Cake', category: 'Food' },
+    { emoji: '🍮', name: 'Custard', category: 'Food' },
+    { emoji: '🍭', name: 'Lollipop', category: 'Food' },
+    { emoji: '🍬', name: 'Candy', category: 'Food' },
+    { emoji: '🍫', name: 'Chocolate Bar', category: 'Food' },
+    { emoji: '🍿', name: 'Popcorn', category: 'Food' },
+    { emoji: '🍩', name: 'Doughnut', category: 'Food' },
+    { emoji: '🍪', name: 'Cookie', category: 'Food' },
+    { emoji: '🌰', name: 'Chestnut', category: 'Food' },
+    { emoji: '🥜', name: 'Peanuts', category: 'Food' },
+    { emoji: '🫘', name: 'Beans', category: 'Food' },
+    { emoji: '🍯', name: 'Honey', category: 'Food' },
+    { emoji: '🥛', name: 'Glass of Milk', category: 'Food' },
+    { emoji: '🫗', name: 'Pouring Liquid', category: 'Food' },
+    { emoji: '🍼', name: 'Baby Bottle', category: 'Food' },
+    { emoji: '🫖', name: 'Teapot', category: 'Food' },
+    { emoji: '☕', name: 'Hot Beverage', category: 'Food' },
+    { emoji: '🍵', name: 'Teacup Without Handle', category: 'Food' },
+    { emoji: '🧃', name: 'Beverage Box', category: 'Food' },
+    { emoji: '🥤', name: 'Cup with Straw', category: 'Food' },
+    { emoji: '🧋', name: 'Bubble Tea', category: 'Food' },
+    { emoji: '🍶', name: 'Sake', category: 'Food' },
+    { emoji: '🍷', name: 'Wine Glass', category: 'Food' },
+    { emoji: '🥃', name: 'Tumbler Glass', category: 'Food' },
+    { emoji: '🍸', name: 'Cocktail Glass', category: 'Food' },
+    { emoji: '🥂', name: 'Clinking Glasses', category: 'Food' },
+    { emoji: '🍹', name: 'Tropical Drink', category: 'Food' },
+    { emoji: '🧉', name: 'Mate', category: 'Food' },
+    { emoji: '🍾', name: 'Bottle with Popping Cork', category: 'Food' },
+    { emoji: '🧊', name: 'Ice', category: 'Food' },
+    { emoji: '🥄', name: 'Spoon', category: 'Food' },
+    { emoji: '🍴', name: 'Fork', category: 'Food' },
+    { emoji: '🍽️', name: 'Fork and Knife with Plate', category: 'Food' },
+    { emoji: '🥣', name: 'Bowl with Spoon', category: 'Food' },
+    { emoji: '🥡', name: 'Takeout Box', category: 'Food' },
+    { emoji: '🥢', name: 'Chopsticks', category: 'Food' },
+    { emoji: '🧂', name: 'Salt', category: 'Food' },
+];
+
+const CATEGORY_ICONS = {
+    'Favorites': '❤️'
+};
+
+let favoriteEmojis = JSON.parse(localStorage.getItem('favorites')) || [];
+
+const ALL_CATEGORIES = Object.keys(CATEGORY_ICONS);
+
+
+// Main Script (equivalent to script.js)
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+    const searchInput = document.getElementById('emoji-search');
+    const emojiGrid = document.getElementById('emoji-grid-container');
+    const categoryNav = document.getElementById('category-nav');
+    const menuToggle = document.getElementById('menu-toggle');
+    const emojiCounter = document.getElementById('emoji-counter');
+
+    let currentCategory = 'All';
+
+    // --- Theme Toggle Logic ---
+    function toggleTheme() {
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            body.classList.add('dark-theme');
+        }
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    initializeTheme();
+
+    // --- Category Logic ---
+    function renderCategories() {
+        const allBtn = document.createElement('button');
+        allBtn.textContent = 'All Emojis';
+        allBtn.className = 'category-btn active';
+        allBtn.dataset.category = 'All';
+        categoryNav.appendChild(allBtn);
+
+        ALL_CATEGORIES.forEach(category => {
+            const btn = document.createElement('button');
+            const icon = CATEGORY_ICONS[category] || '';
+            btn.textContent = `${icon} ${category}`;
+            btn.className = 'category-btn';
+            btn.dataset.category = category;
+            categoryNav.appendChild(btn);
+        });
+        
+        categoryNav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.category-btn');
+            if (btn) {
+                const category = btn.dataset.category;
+                currentCategory = category;
+                
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Close menu on mobile
+                if (window.innerWidth <= 768) {
+                    categoryNav.classList.remove('open');
+                    menuToggle.innerHTML = '&#9776;';
+                }
+
+                filterAndRenderGrid();
+            }
+        });
+    }
+
+   function createEmojiCard(item) {
+    const card = document.createElement('div');
+    card.className = 'emoji-card';
+
+    // زر القلب
+    const heartBtn = document.createElement('button');
+    heartBtn.className = 'heart-btn';
+    const isFavorite = favoriteEmojis.some(fav => fav.emoji === item.emoji);
+    heartBtn.textContent = isFavorite ? '❤️' : '♡';
+    if (isFavorite) heartBtn.classList.add('active');
+
+    heartBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        heartBtn.classList.toggle('active');
+
+        if (heartBtn.classList.contains('active')) {
+            heartBtn.textContent = '❤️';
+            if (!favoriteEmojis.some(fav => fav.emoji === item.emoji)) {
+                favoriteEmojis.push(item);
+                localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+            }
+        } else {
+            heartBtn.textContent = '♡';
+            favoriteEmojis = favoriteEmojis.filter(fav => fav.emoji !== item.emoji);
+            localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+        }
+
+        // تحديث قسم المفضلة لو هو مفتوح حاليًا
+        if (currentCategory === 'Favorites') filterAndRenderGrid();
+    });
+
+    // باقي الكارد
+    const emojiDiv = document.createElement('div');
+    emojiDiv.className = 'emoji';
+    emojiDiv.textContent = item.emoji;
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'emoji-name';
+    nameDiv.textContent = item.name;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        try {
+            await navigator.clipboard.writeText(item.emoji);
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        } catch (err) {
+            copyBtn.textContent = '❌ Error';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        }
+    });
+
+    card.append(heartBtn, emojiDiv, nameDiv, copyBtn);
+    setTimeout(() => card.classList.add('fade-in'), 10);
+
+    return card;
+}
+
+
+    function filterAndRenderGrid() {
+    const searchTerm = searchInput.value.toLowerCase();
+    emojiGrid.innerHTML = '';
+
+    let filteredEmojis;
+
+    if (currentCategory === 'Favorites') {
+        // البحث في المفضلة فقط
+        filteredEmojis = favoriteEmojis.filter(item =>
+            item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+        );
+    } else if (searchTerm) {
+        // لو في قسم All → البحث في كل الإيموجيز
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+            );
+        } else {
+            // البحث بس في القسم الحالي
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.category === currentCategory &&
+                (item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm))
+            );
+        }
+    } else {
+        // بدون بحث
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.slice(0, 1714);
+        } else {
+            filteredEmojis = EMOJI_COLLECTION.filter(item => item.category === currentCategory);
+        }
+    }
+
+    // إنشاء الكروت
+    filteredEmojis.forEach(item => emojiGrid.appendChild(createEmojiCard(item)));
+
+    // عداد الإيموجيز الظاهرة
+    emojiCounter.textContent = `${filteredEmojis.length} Emojis Displayed`;
+
+    // زر show more
+    const showMoreBtn = document.getElementById("show-more-btn");
+    if (currentCategory !== 'Favorites' && !searchTerm) {
+        showMoreBtn.style.display = 'block';
+        showMoreBtn.onclick = function() {
+            const link = String(currentCategory).toLowerCase().replace(/ /g, '-') + '.html';
+            window.location.href = link;
+        };
+    } else {
+        showMoreBtn.style.display = 'none';
+    }
+}
+
+
+    searchInput.addEventListener('input', filterAndRenderGrid);
+
+    // --- Mobile Menu Toggle ---
+    menuToggle.addEventListener('click', () => {
+        const isOpen = categoryNav.classList.toggle('open');
+        menuToggle.innerHTML = isOpen ? '&times;' : '&#9776;';
+    });
+
+
+    // Initialize
+    renderCategories();
+    filterAndRenderGrid();
+});
+
+// بعد ما تعمل render لكل الإيموجيز
+const loader = document.getElementById('loader');
+
+loader.style.transition = 'opacity 0.5s';
+loader.style.opacity = '0';
+
+setTimeout(() => {
+    loader.style.display = 'none';
+}, 500); // 500ms بعد انتهاء الـ fade-out
+
+const showMoreBtn = document.getElementById("show-more-btn");
+
+showMoreBtn.onclick = function() {
+  window.location.href = "https://example.com/more-emojis"; // ضع هنا الرابط المطلوب
+};
+
+const clearBtn = document.getElementById('clear-search');
+
+// إظهار/إخفاء زر X أثناء الكتابة
+searchInput.addEventListener('input', () => {
+    if (searchInput.value.length > 0) {
+        clearBtn.style.display = 'block';
+    } else {
+        clearBtn.style.display = 'none';
+    }
+    filterAndRenderGrid();
+});
+
+// مسح النص عند الضغط على X
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    clearBtn.style.display = 'none';
+    filterAndRenderGrid();
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("heart-btn")) {
+    e.target.classList.toggle("active");
+    e.target.textContent = e.target.classList.contains("active") ? "❤️" : "♡";
+  }
+});
+
+    </script>
+</body>
+</html>

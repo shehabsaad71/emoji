@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMOGO, Emojis library</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header id="site-header">
+    <a class="logo" href="index.html">EMOGO 😀</a>
+
+    <a class="ascii-link" href="ascii-maker.html">ASCII Maker</a>
+
+    <div class="header-controls">
+        <button id="theme-toggle" aria-label="Toggle dark/light theme">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+        </button>
+        <button id="menu-toggle" class="mobile-only" aria-label="Open menu">
+            <span>&#9776;</span>
+        </button>
+    </div>
+</header>
+
+    <main>
+        <div class="search-container">
+            <input type="text" id="emoji-search" placeholder="🔍 Search for emoji...">
+            <button id="clear-search" title="Clear Search">✖️</button>
+            <span id="emoji-counter">0 Emojis Displayed</span>
+        </div>
+
+        <nav id="category-nav">
+        </nav>
+    <div id="loader" class="loader">
+      <div class="spinner"></div>
+      Loading Emojis...
+    </div>
+        <section id="emoji-grid-container">
+        </section>
+    </main>
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="about-us.html">About Us</a>
+            <a href="blog.html">Blog</a>
+        </div>
+        <p class="copyright">© 2025 Emogo — All Rights Reserved.</p>
+    </footer>
+
+    <script>
+// Data (equivalent to data.js)
+const EMOJI_COLLECTION = [
+    // Faces and Expressions
+    { emoji: '😀', name: 'Grinning Face', category: 'Faces and Expressions' },
+    { emoji: '😃', name: 'Tears of Joy', category: 'Faces and Expressions' },
+    { emoji: '😄', name: 'Heart-Eyes', category: 'Faces and Expressions' },
+    { emoji: '😁', name: 'Grinning Face with smiling eyes', category: 'Faces and Expressions' },
+    { emoji: '😆', name: 'Grinning Squinting Face', category: 'Faces and Expressions' },
+    { emoji: '🥹', name: 'Holding Back Tears', category: 'Faces and Expressions' },
+    { emoji: '😅', name: 'Grinning Face with Sweat', category: 'Faces and Expressions' },
+    { emoji: '😂', name: 'Laughing Face', category: 'Faces and Expressions' },
+    { emoji: '😍', name: 'Smiling Face with heart eyes', category: 'Faces and Expressions' },
+    { emoji: '🤣', name: 'Rolling on the Floor Laughing', category: 'Faces and Expressions' },
+    { emoji: '🥲', name: 'Smiling Face with Tear', category: 'Faces and Expressions' },
+    { emoji: '☺', name: 'Smiling Face', category: 'Faces and Expressions' },
+    { emoji: '😊', name: 'Smiling Face with Smiling Eyes', category: 'Faces and Expressions' },
+    { emoji: '😇', name: 'Smiling Face with Halo', category: 'Faces and Expressions' },
+    { emoji: '🙂', name: 'Slightly Smiling Face', category: 'Faces and Expressions' },
+    { emoji: '🙃', name: 'Upside-Down Face', category: 'Faces and Expressions' },
+    { emoji: '😉', name: 'Winking Face', category: 'Faces and Expressions' },
+    { emoji: '😌', name: 'Relieved Face', category: 'Faces and Expressions' },
+    { emoji: '🥰', name: 'Smiling Face with Hearts', category: 'Faces and Expressions' },
+    { emoji: '😘', name: 'Face Blowing a Kiss', category: 'Faces and Expressions' },
+    { emoji: '😗', name: 'Kissing Face', category: 'Faces and Expressions' },
+    { emoji: '😙', name: 'Kissing Face with Smiling Eyes', category: 'Faces and Expressions' },
+    { emoji: '😚', name: 'Kissing Face with Closed Eyes', category: 'Faces and Expressions' },
+    { emoji: '😋', name: 'Face Savoring Food', category: 'Faces and Expressions' },
+    { emoji: '😛', name: 'Face with Tongue', category: 'Faces and Expressions' },
+    { emoji: '😝', name: 'Squinting Face with Tongue', category: 'Faces and Expressions' },
+    { emoji: '😜', name: 'Winking Face with Tongue', category: 'Faces and Expressions' },
+    { emoji: '🤪', name: 'Zany Face', category: 'Faces and Expressions' },
+    { emoji: '🤨', name: 'Face with Raised Eyebrow', category: 'Faces and Expressions' },
+    { emoji: '🧐', name: 'Face with Monocle', category: 'Faces and Expressions' },
+    { emoji: '🤓', name: 'Nerd Face', category: 'Faces and Expressions' },
+    { emoji: '😎', name: 'Smiling Face with Sunglasses', category: 'Faces and Expressions' },
+    { emoji: '🥸', name: 'Disguised Face', category: 'Faces and Expressions' },
+    { emoji: '🤩', name: 'Star-Struck', category: 'Faces and Expressions' },
+    { emoji: '🥳', name: 'Partying Face', category: 'Faces and Expressions' },
+    { emoji: '🙂‍↕️', name: 'Slightly Smiling Face with Vertical Arrows', category: 'Faces and Expressions' },
+    { emoji: '😏', name: 'Smirking Face', category: 'Faces and Expressions' },
+    { emoji: '😒', name: 'Unamused Face', category: 'Faces and Expressions' },
+    { emoji: '🙂‍↔️', name: 'Slightly Smiling Face with Horizontal Arrows', category: 'Faces and Expressions' },
+    { emoji: '😞', name: 'Disappointed Face', category: 'Faces and Expressions' },
+    { emoji: '😔', name: 'Pensive Face', category: 'Faces and Expressions' },
+    { emoji: '😟', name: 'Worried Face', category: 'Faces and Expressions' },
+    { emoji: '😕', name: 'Confused Face', category: 'Faces and Expressions' },
+    { emoji: '🙁', name: 'Slightly Frowning Face', category: 'Faces and Expressions' },
+    { emoji: '☹', name: 'Frowning Face', category: 'Faces and Expressions' },
+    { emoji: '😣', name: 'Persevering Face', category: 'Faces and Expressions' },
+    { emoji: '😖', name: 'Confounded Face', category: 'Faces and Expressions' },
+    { emoji: '😫', name: 'Tired Face', category: 'Faces and Expressions' },
+    { emoji: '😩', name: 'Weary Face', category: 'Faces and Expressions' },
+    { emoji: '🥺', name: 'Pleading Face', category: 'Faces and Expressions' },
+    { emoji: '😢', name: 'Crying Face', category: 'Faces and Expressions' },
+    { emoji: '😭', name: 'Loudly Crying Face', category: 'Faces and Expressions' },
+    { emoji: '😤', name: 'Face with Steam From Nose', category: 'Faces and Expressions' },
+    { emoji: '😠', name: 'Angry Face', category: 'Faces and Expressions' },
+    { emoji: '😡', name: 'Pouting Face', category: 'Faces and Expressions' },
+    { emoji: '🤬', name: 'Face with Symbols on Mouth', category: 'Faces and Expressions' },
+    { emoji: '🤯', name: 'Exploding Head', category: 'Faces and Expressions' },
+    { emoji: '😳', name: 'Flushed Face', category: 'Faces and Expressions' },
+    { emoji: '🥵', name: 'Hot Face', category: 'Faces and Expressions' },
+    { emoji: '🥶', name: 'Cold Face', category: 'Faces and Expressions' },
+    { emoji: '😶‍🌫', name: 'Face in Clouds', category: 'Faces and Expressions' },
+    { emoji: '😱', name: 'Face Screaming in Fear', category: 'Faces and Expressions' },
+    { emoji: '😨', name: 'Fearful Face', category: 'Faces and Expressions' },
+    { emoji: '😰', name: 'Anxious Face with Sweat', category: 'Faces and Expressions' },
+    { emoji: '😥', name: 'Sad but Relieved Face', category: 'Faces and Expressions' },
+    { emoji: '😓', name: 'Downcast Face with Sweat', category: 'Faces and Expressions' },
+    { emoji: '🤗', name: 'Hugging Face', category: 'Faces and Expressions' },
+    { emoji: '🤔', name: 'Thinking Face', category: 'Faces and Expressions' },
+    { emoji: '🫣', name: 'Face with Peeking Eye', category: 'Faces and Expressions' },
+    { emoji: '🤭', name: 'Face with Hand Over Mouth', category: 'Faces and Expressions' },
+    { emoji: '🫢', name: 'Face with Open Eyes and Hand Over Mouth', category: 'Faces and Expressions' },
+    { emoji: '🫡', name: 'Saluting Face', category: 'Faces and Expressions' },
+    { emoji: '🤫', name: 'Shushing Face', category: 'Faces and Expressions' },
+    { emoji: '🫠', name: 'Melting Face', category: 'Faces and Expressions' },
+    { emoji: '🤥', name: 'Lying Face', category: 'Faces and Expressions' },
+    { emoji: '😶', name: 'Face Without Mouth', category: 'Faces and Expressions' },
+    { emoji: '🫥', name: 'Dotted Line Face', category: 'Faces and Expressions' },
+    { emoji: '😐', name: 'Neutral Face', category: 'Faces and Expressions' },
+    { emoji: '🫤', name: 'Face with Uneven Eyes', category: 'Faces and Expressions' },
+    { emoji: '😑', name: 'Expressionless Face', category: 'Faces and Expressions' },
+    { emoji: '🫨', name: 'Face with Exploding Head', category: 'Faces and Expressions' },
+    { emoji: '😬', name: 'Grimacing Face', category: 'Faces and Expressions' },
+    { emoji: '🙄', name: 'Face with Rolling Eyes', category: 'Faces and Expressions' },
+    { emoji: '😯', name: 'Hushed Face', category: 'Faces and Expressions' },
+    { emoji: '😦', name: 'Frowning Face with Open Mouth', category: 'Faces and Expressions' },
+    { emoji: '😧', name: 'Anguished Face', category: 'Faces and Expressions' },
+    { emoji: '😮', name: 'Face with Open Mouth', category: 'Faces and Expressions' },
+    { emoji: '😲', name: 'Astonished Face', category: 'Faces and Expressions' },
+    { emoji: '🥱', name: 'Yawning Face', category: 'Faces and Expressions' },
+    { emoji: '😴', name: 'Sleeping Face', category: 'Faces and Expressions' },
+    { emoji: '🤤', name: 'Drooling Face', category: 'Faces and Expressions' },
+    { emoji: '😪', name: 'Sleepy Face', category: 'Faces and Expressions' },
+    { emoji: '😮‍💨', name: 'Face Exhaling', category: 'Faces and Expressions' },
+    { emoji: '😵', name: 'Dizzy Face', category: 'Faces and Expressions' },
+    { emoji: '😵‍💫', name: 'Face with Spiral Eyes', category: 'Faces and Expressions' },
+    { emoji: '🤐', name: 'Zipper-Mouth Face', category: 'Faces and Expressions' },
+    { emoji: '🥴', name: 'Woozy Face', category: 'Faces and Expressions' },
+    { emoji: '🤢', name: 'Nauseated Face', category: 'Faces and Expressions' },
+    { emoji: '🤮', name: 'Face Vomiting', category: 'Faces and Expressions' },
+    { emoji: '🤧', name: 'Sneezing Face', category: 'Faces and Expressions' },
+    { emoji: '😷', name: 'Face with Medical Mask', category: 'Faces and Expressions' },
+    { emoji: '🤒', name: 'Face with Thermometer', category: 'Faces and Expressions' },
+    { emoji: '🤕', name: 'Face with Head-Bandage', category: 'Faces and Expressions' },
+    { emoji: '🤑', name: 'Money-Mouth Face', category: 'Faces and Expressions' },
+    { emoji: '🤠', name: 'Cowboy Hat Face', category: 'Faces and Expressions' },
+    { emoji: '😈', name: 'Smiling Face with Horns', category: 'Faces and Expressions' },
+    { emoji: '👿', name: 'Angry Face with Horns', category: 'Faces and Expressions' },
+    { emoji: '👹', name: 'Ogre', category: 'Faces and Expressions' },
+    { emoji: '👺', name: 'Goblin', category: 'Faces and Expressions' },
+    { emoji: '🤡', name: 'Clown Face', category: 'Faces and Expressions' },
+    { emoji: '💩', name: 'Pile of Poo', category: 'Faces and Expressions' },
+    { emoji: '👻', name: 'Ghost', category: 'Faces and Expressions' },
+    { emoji: '💀', name: 'Skull', category: 'Faces and Expressions' },
+    { emoji: '☠️', name: 'Skull and Crossbones', category: 'Faces and Expressions' },
+    { emoji: '👽', name: 'Alien', category: 'Faces and Expressions' },
+    { emoji: '👾', name: 'Alien Monster', category: 'Faces and Expressions' },
+    { emoji: '🤖', name: 'Robot', category: 'Faces and Expressions' },
+    { emoji: '🎃', name: 'Jack-O-Lantern', category: 'Faces and Expressions' },
+    { emoji: '😺', name: 'Grinning Cat', category: 'Faces and Expressions' },
+    { emoji: '😸', name: 'Grinning Cat with Smiling Eyes', category: 'Faces and Expressions' },
+    { emoji: '😹', name: 'Cat with Tears of Joy', category: 'Faces and Expressions' },
+    { emoji: '😻', name: 'Smiling Cat with Heart Eyes', category: 'Faces and Expressions' },
+    { emoji: '😼', name: 'Cat with Wry Smile', category: 'Faces and Expressions' },
+    { emoji: '😽', name: 'Kissing Cat', category: 'Faces and Expressions' },
+    { emoji: '🙀', name: 'Weary Cat', category: 'Faces and Expressions' },
+    { emoji: '😿', name: 'Crying Cat', category: 'Faces and Expressions' },
+    { emoji: '😾', name: 'Pouting Cat', category: 'Faces and Expressions' },
+    { emoji: '🫶', name: 'Heart Hands', category: 'Hands and Gestures' },
+    { emoji: '🤲', name: 'Palms Up Together', category: 'Hands and Gestures' },
+    { emoji: '👐', name: 'Open Hands', category: 'Hands and Gestures' },
+    { emoji: '🙌', name: 'Raising Hands', category: 'Hands and Gestures' },
+    { emoji: '👏', name: 'Clapping Hands', category: 'Hands and Gestures' },
+    { emoji: '🤝', name: 'Handshake', category: 'Hands and Gestures' },
+    { emoji: '👍', name: 'Thumbs Up', category: 'Hands and Gestures' },
+    { emoji: '👎', name: 'Thumbs Down', category: 'Hands and Gestures' },
+    { emoji: '👊', name: 'Oncoming Fist', category: 'Hands and Gestures' },
+    { emoji: '✊', name: 'Raised Fist', category: 'Hands and Gestures' },
+    { emoji: '🤛', name: 'Left-Facing Fist', category: 'Hands and Gestures' },
+    { emoji: '🤜', name: 'Right-Facing Fist', category: 'Hands and Gestures' },
+    { emoji: '🫷', name: 'Leftwards Push', category: 'Hands and Gestures' },
+    { emoji: '🫸', name: 'Rightwards Push', category: 'Hands and Gestures' },
+    { emoji: '🤞', name: 'Crossed Fingers', category: 'Hands and Gestures' },
+    { emoji: '✌️', name: 'Victory Hand', category: 'Hands and Gestures' },
+    { emoji: '🫰', name: 'Pinching Hand', category: 'Hands and Gestures' },
+    { emoji: '🤟', name: 'Love-You Gesture', category: 'Hands and Gestures' },
+    { emoji: '🤘', name: 'Sign of the Horns', category: 'Hands and Gestures' },
+    { emoji: '👌', name: 'OK Hand', category: 'Hands and Gestures' },
+    { emoji: '🤌', name: 'Pinched Fingers', category: 'Hands and Gestures' },
+    { emoji: '🤏', name: 'Pinching Hand Small', category: 'Hands and Gestures' },
+    { emoji: '🫳', name: 'Rightwards Open Hand', category: 'Hands and Gestures' },
+    { emoji: '🫴', name: 'Leftwards Open Hand', category: 'Hands and Gestures' },
+    { emoji: '👈', name: 'Backhand Index Pointing Left', category: 'Hands and Gestures' },
+    { emoji: '👉', name: 'Backhand Index Pointing Right', category: 'Hands and Gestures' },
+    { emoji: '👆', name: 'Backhand Index Pointing Up', category: 'Hands and Gestures' },
+    { emoji: '👇', name: 'Backhand Index Pointing Down', category: 'Hands and Gestures' },
+    { emoji: '☝️', name: 'Index Pointing Up', category: 'Hands and Gestures' },
+    { emoji: '✋', name: 'Raised Hand', category: 'Hands and Gestures' },
+    { emoji: '🤚', name: 'Raised Back of Hand', category: 'Hands and Gestures' },
+    { emoji: '🖐', name: 'Hand with Fingers Splayed', category: 'Hands and Gestures' },
+    { emoji: '🖖', name: 'Vulcan Salute', category: 'Hands and Gestures' },
+    { emoji: '👋', name: 'Waving Hand', category: 'Hands and Gestures' },
+    { emoji: '🤙', name: 'Call Me Hand', category: 'Hands and Gestures' },
+    { emoji: '🫲', name: 'Leftwards Hand', category: 'Hands and Gestures' },
+    { emoji: '🫱', name: 'Rightwards Hand', category: 'Hands and Gestures' },
+    { emoji: '💪', name: 'Flexed Biceps', category: 'Hands and Gestures' },
+    { emoji: '🦾', name: 'Mechanical Arm', category: 'Hands and Body' },
+    { emoji: '✍', name: 'Writing Hand', category: 'Hands and Body' },
+    { emoji: '🙏', name: 'Folded Hands', category: 'Hands and Body' },
+    { emoji: '🫵', name: 'Pointing Finger', category: 'Hands and Body' },
+    { emoji: '🦶', name: 'Foot', category: 'Hands and Body' },
+    { emoji: '🦵', name: 'Leg', category: 'Hands and Body' },
+    { emoji: '🦿', name: 'Mechanical Leg', category: 'Hands and Body' },
+    { emoji: '💄', name: 'Lipstick', category: 'Hands and Body' },
+    { emoji: '💋', name: 'Kiss Mark', category: 'Hands and Body' },
+    { emoji: '👄', name: 'Mouth', category: 'Hands and Body' },
+    { emoji: '🫦', name: 'Biting Lip', category: 'Hands and Body' },
+    { emoji: '🦷', name: 'Tooth', category: 'Hands and Body' },
+    { emoji: '👅', name: 'Tongue', category: 'Hands and Body' },
+    { emoji: '👂', name: 'Ear', category: 'Hands and Body' },
+    { emoji: '🦻', name: 'Ear with Hearing Aid', category: 'Hands and Body' },
+    { emoji: '👃', name: 'Nose', category: 'Hands and Body' },
+    { emoji: '👣', name: 'Footprints', category: 'Hands and Body' },
+    { emoji: '👁', name: 'Eye', category: 'Hands and Body' },
+    { emoji: '👀', name: 'Eyes', category: 'Hands and Body' },
+    { emoji: '🫀', name: 'Anatomical Heart', category: 'Hands and Body' },
+    { emoji: '🫁', name: 'Lungs', category: 'Hands and Body' },
+    { emoji: '🧠', name: 'Brain', category: 'Hands and Body' },
+    { emoji: '🗣', name: 'Speaking Head', category: 'Hands and Body' },
+    { emoji: '👤', name: 'Bust in Silhouette', category: 'People' },
+    { emoji: '👥', name: 'Busts in Silhouette', category: 'People' },
+    { emoji: '🫂', name: 'People Hugging', category: 'People' },
+    { emoji: '👶', name: 'Baby', category: 'People' },
+    { emoji: '👧', name: 'Girl', category: 'People' },
+    { emoji: '🧒', name: 'Child', category: 'People' },
+    { emoji: '👦', name: 'Boy', category: 'People' },
+    { emoji: '👩', name: 'Woman', category: 'People' },
+    { emoji: '🧑', name: 'Person', category: 'People' },
+    { emoji: '👨', name: 'Man', category: 'People' },
+    { emoji: '👩‍🦱', name: 'Woman: Curly Hair', category: 'People' },
+    { emoji: '🧑‍🦱', name: 'Person: Curly Hair', category: 'People' },
+    { emoji: '👨‍🦱', name: 'Man: Curly Hair', category: 'People' },
+    { emoji: '👩‍🦰', name: 'Woman: Red Hair', category: 'People' },
+    { emoji: '🧑‍🦰', name: 'Person: Red Hair', category: 'People' },
+    { emoji: '👨‍🦰', name: 'Man: Red Hair', category: 'People' },
+    { emoji: '👱‍♀', name: 'Woman: Blond Hair', category: 'People' },
+    { emoji: '👱‍♂', name: 'Man: Blond Hair', category: 'People' },
+    { emoji: '👩‍🦳', name: 'Woman: White Hair', category: 'People' },
+    { emoji: '🧑‍🦳', name: 'Person: White Hair', category: 'People' },
+    { emoji: '👨‍🦳', name: 'Man: White Hair', category: 'People' },
+    { emoji: '👩‍🦲', name: 'Woman: Bald', category: 'People' },
+    { emoji: '🧑‍🦲', name: 'Person: Bald', category: 'People' },
+    { emoji: '👨‍🦲', name: 'Man: Bald', category: 'People' },
+    { emoji: '🧔‍♀', name: 'Woman: Beard', category: 'People' },
+    { emoji: '🧔', name: 'Person: Beard', category: 'People' },
+    { emoji: '👵', name: 'Old Woman', category: 'People' },
+    { emoji: '🧓', name: 'Older Person', category: 'People' },
+    { emoji: '👴', name: 'Old Man', category: 'People' },
+    { emoji: '👲', name: 'Man with Chinese Cap', category: 'People' },
+    { emoji: '👲', name: 'Man with Chinese Cap', category: 'People' },
+    { emoji: '👳‍♀️', name: 'Woman Wearing Turban', category: 'Professions' },
+    { emoji: '👳‍♂️', name: 'Man Wearing Turban', category: 'Professions' },
+    { emoji: '🧕', name: 'Woman with Headscarf', category: 'Professions' },
+    { emoji: '👮‍♀️', name: 'Woman Police Officer', category: 'Professions' },
+    { emoji: '👮‍♂️', name: 'Man Police Officer', category: 'Professions' },
+    { emoji: '👷‍♀️', name: 'Woman Construction Worker', category: 'Professions' },
+    { emoji: '👷‍♂️', name: 'Man Construction Worker', category: 'Professions' },
+    { emoji: '💂‍♀️', name: 'Woman Guard', category: 'Professions' },
+    { emoji: '💂‍♂️', name: 'Man Guard', category: 'Professions' },
+    { emoji: '🕵️‍♀️', name: 'Woman Detective', category: 'Professions' },
+    { emoji: '🕵️‍♂️', name: 'Man Detective', category: 'Professions' },
+    { emoji: '👩‍⚕️', name: 'Woman Health Worker', category: 'Professions' },
+    { emoji: '🧑‍⚕️', name: 'Person Health Worker', category: 'Professions' },
+    { emoji: '👨‍⚕️', name: 'Man Health Worker', category: 'Professions' },
+    { emoji: '👩‍🌾', name: 'Woman Farmer', category: 'Professions' },
+    { emoji: '🧑‍🌾', name: 'Person Farmer', category: 'Professions' },
+    { emoji: '👨‍🌾', name: 'Man Farmer', category: 'Professions' },
+    { emoji: '👩‍🍳', name: 'Woman Cook', category: 'Professions' },
+    { emoji: '🧑‍🍳', name: 'Person Cook', category: 'Professions' },
+    { emoji: '👨‍🍳', name: 'Man Cook', category: 'Professions' },
+    { emoji: '👩‍🎓', name: 'Woman Student', category: 'Professions' },
+    { emoji: '🧑‍🎓', name: 'Person Student', category: 'Professions' },
+    { emoji: '👨‍🎓', name: 'Man Student', category: 'Professions' },
+    { emoji: '👩‍🎤', name: 'Woman Singer', category: 'Professions' },
+    { emoji: '🧑‍🎤', name: 'Person Singer', category: 'Professions' },
+    { emoji: '👨‍🎤', name: 'Man Singer', category: 'Professions' },
+    { emoji: '👩‍🏫', name: 'Woman Teacher', category: 'Professions' },
+    { emoji: '🧑‍🏫', name: 'Person Teacher', category: 'Professions' },
+    { emoji: '👨‍🏫', name: 'Man Teacher', category: 'Professions' },
+    { emoji: '👩‍🏭', name: 'Woman Factory Worker', category: 'Professions' },
+    { emoji: '🧑‍🏭', name: 'Person Factory Worker', category: 'Professions' },
+    { emoji: '👨‍🏭', name: 'Man Factory Worker', category: 'Professions' },
+    { emoji: '👩‍💻', name: 'Woman Technologist', category: 'Professions' },
+    { emoji: '🧑‍💻', name: 'Person Technologist', category: 'Professions' },
+    { emoji: '👨‍💻', name: 'Man Technologist', category: 'Professions' },
+    { emoji: '👩‍💼', name: 'Woman Office Worker', category: 'Professions' },
+    { emoji: '🧑‍💼', name: 'Person Office Worker', category: 'Professions' },
+    { emoji: '👨‍💼', name: 'Man Office Worker', category: 'Professions' },
+    { emoji: '👩‍🔧', name: 'Woman Mechanic', category: 'Professions' },
+    { emoji: '🧑‍🔧', name: 'Person Mechanic', category: 'Professions' },
+    { emoji: '👨‍🔧', name: 'Man Mechanic', category: 'Professions' },
+    { emoji: '👩‍🔬', name: 'Woman Scientist', category: 'Professions' },
+    { emoji: '🧑‍🔬', name: 'Person Scientist', category: 'Professions' },
+    { emoji: '👨‍🔬', name: 'Man Scientist', category: 'Professions' },
+    { emoji: '👩‍🎨', name: 'Woman Artist', category: 'Professions' },
+    { emoji: '🧑‍🎨', name: 'Person Artist', category: 'Professions' },
+    { emoji: '👨‍🎨', name: 'Man Artist', category: 'Professions' },
+    { emoji: '👩‍🚒', name: 'Woman Firefighter', category: 'Professions' },
+    { emoji: '🧑‍🚒', name: 'Person Firefighter', category: 'Professions' },
+    { emoji: '👨‍🚒', name: 'Man Firefighter', category: 'Professions' },
+    { emoji: '👩‍✈️', name: 'Woman Pilot', category: 'Professions' },
+    { emoji: '🧑‍✈️', name: 'Person Pilot', category: 'Professions' },
+    { emoji: '👨‍✈️', name: 'Man Pilot', category: 'Professions' },
+    { emoji: '👩‍🚀', name: 'Woman Astronaut', category: 'Professions' },
+    { emoji: '🧑‍🚀', name: 'Person Astronaut', category: 'Professions' },
+    { emoji: '👨‍🚀', name: 'Man Astronaut', category: 'Professions' },
+    { emoji: '👩‍⚖️', name: 'Woman Judge', category: 'Professions & Roles' },
+    { emoji: '🧑‍⚖️', name: 'Person Judge', category: 'Professions & Roles' },
+    { emoji: '👨‍⚖️', name: 'Man Judge', category: 'Professions & Roles' },
+    { emoji: '👰‍♀️', name: 'Woman Bride', category: 'Events' },
+    { emoji: '👰', name: 'Bride', category: 'Events' },
+    { emoji: '👰‍♂️', name: 'Man Bride', category: 'Events' },
+    { emoji: '🤵‍♀️', name: 'Woman Tuxedo', category: 'Events' },
+    { emoji: '🤵', name: 'Tuxedo', category: 'Events' },
+    { emoji: '🤵‍♂️', name: 'Man Tuxedo', category: 'Events' },
+    { emoji: '👸', name: 'Princess', category: 'Royalty' },
+    { emoji: '🫅', name: 'Person with Crown', category: 'Royalty' },
+    { emoji: '🤴', name: 'Prince', category: 'Royalty' },
+    { emoji: '🥷', name: 'Ninja', category: 'Fantasy' },
+    { emoji: '🦸‍♀️', name: 'Woman Superhero', category: 'Fantasy' },
+    { emoji: '🦸‍♂️', name: 'Man Superhero', category: 'Fantasy' },
+    { emoji: '🦹‍♀️', name: 'Woman Supervillain', category: 'Fantasy' },
+    { emoji: '🦹‍♂️', name: 'Man Supervillain', category: 'Fantasy' },
+    { emoji: '🤶', name: 'Mrs. Claus', category: 'Fantasy' },
+    { emoji: '🧑‍🎄', name: 'Person Christmas', category: 'Fantasy' },
+    { emoji: '🎅', name: 'Santa Claus', category: 'Fantasy' },
+    { emoji: '🧙‍♀️', name: 'Woman Mage', category: 'Fantasy' },
+    { emoji: '🧙‍♂️', name: 'Man Mage', category: 'Fantasy' },
+    { emoji: '🧝‍♀️', name: 'Woman Elf', category: 'Fantasy' },
+    { emoji: '🧝‍♂️', name: 'Man Elf', category: 'Fantasy' },
+    { emoji: '🧌', name: 'Troll', category: 'Fantasy' },
+    { emoji: '🧛‍♀️', name: 'Woman Vampire', category: 'Fantasy' },
+    { emoji: '🧛‍♂️', name: 'Man Vampire', category: 'Fantasy' },
+    { emoji: '🧟‍♀️', name: 'Woman Zombie', category: 'Fantasy' },
+    { emoji: '🧟‍♂️', name: 'Man Zombie', category: 'Fantasy' },
+    { emoji: '🧞‍♀️', name: 'Woman Genie', category: 'Fantasy' },
+    { emoji: '🧞‍♂️', name: 'Man Genie', category: 'Fantasy' },
+    { emoji: '🧜‍♀️', name: 'Mermaid', category: 'Fantasy' },
+    { emoji: '🧜‍♂️', name: 'Merman', category: 'Fantasy' },
+    { emoji: '🧚‍♀️', name: 'Woman Fairy', category: 'Fantasy' },
+    { emoji: '🧚‍♂️', name: 'Man Fairy', category: 'Fantasy' },
+    { emoji: '👼', name: 'Baby Angel', category: 'Fantasy' },
+    { emoji: '🤰', name: 'Pregnant Woman', category: 'People' },
+    { emoji: '🤱', name: 'Breastfeeding', category: 'People' },
+    { emoji: '👩‍🍼', name: 'Woman Feeding Baby', category: 'People' },
+    { emoji: '🧑‍🍼', name: 'Person Feeding Baby', category: 'People' },
+    { emoji: '👨‍🍼', name: 'Man Feeding Baby', category: 'People' },
+    { emoji: '🙇‍♀️', name: 'Woman Bowing', category: 'Gestures' },
+    { emoji: '🙇‍♂️', name: 'Man Bowing', category: 'Gestures' },
+    { emoji: '💁‍♀️', name: 'Woman Tipping Hand', category: 'Gestures' },
+    { emoji: '💁‍♂️', name: 'Man Tipping Hand', category: 'Gestures' },
+    { emoji: '🙅‍♀️', name: 'Woman Gesturing No', category: 'Gestures' },
+    { emoji: '🙅‍♂️', name: 'Man Gesturing No', category: 'Gestures' },
+    { emoji: '🙆‍♀️', name: 'Woman Gesturing OK', category: 'Gestures' },
+    { emoji: '🙆‍♂️', name: 'Man Gesturing OK', category: 'Gestures' },
+    { emoji: '🙋‍♀️', name: 'Woman Raising Hand', category: 'Gestures' },
+    { emoji: '🙋‍♂️', name: 'Man Raising Hand', category: 'Gestures' },
+    { emoji: '🧏‍♀️', name: 'Woman Deaf', category: 'Gestures' },
+    { emoji: '🧏', name: 'Deaf Person', category: 'Gestures' },
+    { emoji: '🧏‍♂️', name: 'Man Deaf', category: 'Gestures' },
+    { emoji: '🤦‍♀️', name: 'Woman Facepalm', category: 'Gestures' },
+    { emoji: '🤦‍♂️', name: 'Man Facepalm', category: 'Gestures' },
+    { emoji: '🤷‍♀️', name: 'Woman Shrug', category: 'Gestures' },
+    { emoji: '🤷‍♂️', name: 'Man Shrug', category: 'Gestures' },
+    { emoji: '🙎‍♀️', name: 'Woman Pouting', category: 'Gestures' },
+    { emoji: '🙎‍♂️', name: 'Man Pouting', category: 'Gestures' },
+    { emoji: '🙍‍♀️', name: 'Woman Frowning', category: 'Gestures' },
+    { emoji: '🙍‍♂️', name: 'Man Frowning', category: 'Gestures' },
+    { emoji: '💇‍♀️', name: 'Woman Haircut', category: 'Activities' },
+    { emoji: '💇‍♂️', name: 'Man Haircut', category: 'Activities' },
+    { emoji: '💆‍♀️', name: 'Woman Massage', category: 'Activities' },
+    { emoji: '💆‍♂️', name: 'Man Massage', category: 'Activities' },
+    { emoji: '🧖‍♀️', name: 'Woman Sauna', category: 'Activities' },
+    { emoji: '🧖', name: 'Person Sauna', category: 'Activities' },
+    { emoji: '🧖‍♂️', name: 'Man Sauna', category: 'Activities' },
+    { emoji: '💅', name: 'Nail Polish', category: 'Activities' },
+    { emoji: '🤳', name: 'Selfie', category: 'Activities' },
+    { emoji: '🕺', name: 'Man Dancing', category: 'Activities' },
+    { emoji: '👯‍♀️', name: 'Women Dancing', category: 'Activities' },
+    { emoji: '👯‍♂️', name: 'Men Dancing', category: 'Activities' },
+    { emoji: '🕴️', name: 'Person in Suit Levitating', category: 'Activities' },
+    { emoji: '👩‍🦽', name: 'Woman in Manual Wheelchair', category: 'People' },
+    { emoji: '🧑‍🦽', name: 'Person in Manual Wheelchair', category: 'People' },
+    { emoji: '👨‍🦽', name: 'Man in Manual Wheelchair', category: 'People' },
+    { emoji: '👩‍🦼', name: 'Woman in Motorized Wheelchair', category: 'People' },
+    { emoji: '🧑‍🦼', name: 'Person in Motorized Wheelchair', category: 'People' },
+    { emoji: '👨‍🦼', name: 'Man in Motorized Wheelchair', category: 'People' },
+    { emoji: '🚶‍♀️', name: 'Woman Walking', category: 'Activities' },
+    { emoji: '🚶', name: 'Person Walking', category: 'Activities' },
+    { emoji: '🚶‍♂️', name: 'Man Walking', category: 'Activities' },
+    { emoji: '👩‍🦯', name: 'Woman with White Cane', category: 'People' },
+    { emoji: '🧑‍🦯', name: 'Person with White Cane', category: 'People' },
+    { emoji: '👨‍🦯', name: 'Man with White Cane', category: 'People' },
+    { emoji: '🧎‍♀️', name: 'Woman Kneeling', category: 'Gestures' },
+    { emoji: '🧎', name: 'Person Kneeling', category: 'Gestures' },
+    { emoji: '🧎‍♂️', name: 'Man Kneeling', category: 'Gestures' },
+    { emoji: '🏃‍♀️', name: 'Woman Running', category: 'Activities' },
+    { emoji: '🏃', name: 'Person Running', category: 'Activities' },
+    { emoji: '🏃‍♂️', name: 'Man Running', category: 'Activities' },
+    { emoji: '🧍‍♀️', name: 'Woman Standing', category: 'Gestures' },
+    { emoji: '🧍', name: 'Person Standing', category: 'Gestures' },
+    { emoji: '🧍‍♂️', name: 'Man Standing', category: 'Gestures' },
+    { emoji: '👫', name: 'Woman & Man Holding Hands', category: 'Relationships' },
+    { emoji: '👭', name: 'Women Holding Hands', category: 'Relationships' },
+    { emoji: '👬', name: 'Men Holding Hands', category: 'Relationships' },
+    { emoji: '👩‍❤️‍👨', name: 'Couple Heart Woman & Man', category: 'Relationships' },
+    { emoji: '👩‍❤️‍👩', name: 'Couple Heart Women', category: 'Relationships' },
+    { emoji: '💑', name: 'Couple with Heart', category: 'Relationships' },
+    { emoji: '👨‍❤️‍👨', name: 'Couple Heart Men', category: 'Relationships' },
+    { emoji: '👩‍❤️‍💋‍👨', name: 'Kiss Woman & Man', category: 'Relationships' },
+    { emoji: '👩‍❤️‍💋‍👩', name: 'Kiss Women', category: 'Relationships' },
+    { emoji: '💏', name: 'Kiss Couple', category: 'Relationships' },
+    { emoji: '👨‍❤️‍💋‍👨', name: 'Kiss Men', category: 'Relationships' },
+    { emoji: '🪢', name: 'Knot', category: 'Accessories' },
+    { emoji: '🧶', name: 'Yarn', category: 'Accessories' },
+    { emoji: '🧵', name: 'Thread', category: 'Accessories' },
+    { emoji: '🪡', name: 'Sewing Needle', category: 'Accessories' },
+    { emoji: '🧥', name: 'Coat', category: 'Clothing' },
+    { emoji: '🥼', name: 'Lab Coat', category: 'Clothing' },
+    { emoji: '🦺', name: 'Safety Vest', category: 'Clothing' },
+    { emoji: '👚', name: 'Woman’s Clothes', category: 'Clothing' },
+    { emoji: '👕', name: 'T-Shirt', category: 'Clothing' },
+    { emoji: '👖', name: 'Jeans', category: 'Clothing' },
+    { emoji: '🩲', name: 'Briefs', category: 'Clothing' },
+    { emoji: '🩳', name: 'Shorts', category: 'Clothing' },
+    { emoji: '👔', name: 'Necktie', category: 'Clothing' },
+    { emoji: '👗', name: 'Dress', category: 'Clothing' },
+    { emoji: '👘', name: 'Kimono', category: 'Clothing' },
+    { emoji: '🥻', name: 'Sari', category: 'Clothing' },
+    { emoji: '🩴', name: 'Flip-Flops', category: 'Shoes' },
+    { emoji: '🥿', name: 'Flat Shoe', category: 'Shoes' },
+    { emoji: '👠', name: 'High-Heeled Shoe', category: 'Shoes' },
+    { emoji: '👡', name: 'Sandal', category: 'Shoes' },
+    { emoji: '👢', name: 'Boot', category: 'Shoes' },
+    { emoji: '👞', name: 'Man’s Shoe', category: 'Shoes' },
+    { emoji: '👟', name: 'Running Shoe', category: 'Shoes' },
+    { emoji: '🥾', name: 'Hiking Boot', category: 'Shoes' },
+    { emoji: '🧦', name: 'Socks', category: 'Clothing' },
+    { emoji: '🧤', name: 'Gloves', category: 'Clothing' },
+    { emoji: '🧣', name: 'Scarf', category: 'Clothing' },
+    { emoji: '🎩', name: 'Top Hat', category: 'Accessories' },
+    { emoji: '🧢', name: 'Cap', category: 'Accessories' },
+    { emoji: '👒', name: 'Woman’s Hat', category: 'Accessories' },
+    { emoji: '🎓', name: 'Graduation Cap', category: 'Accessories' },
+    { emoji: '⛑️', name: 'Rescue Helmet', category: 'Accessories' },
+    { emoji: '🪖', name: 'Military Helmet', category: 'Accessories' },
+    { emoji: '👑', name: 'Crown', category: 'Accessories' },
+    { emoji: '💍', name: 'Ring', category: 'Accessories' },
+    { emoji: '👝', name: 'Clutch Bag', category: 'Accessories' },
+    { emoji: '👛', name: 'Purse', category: 'Accessories' },
+    { emoji: '👜', name: 'Handbag', category: 'Accessories' },
+    { emoji: '💼', name: 'Briefcase', category: 'Accessories' },
+    { emoji: '🎒', name: 'Backpack', category: 'Accessories' },
+    { emoji: '🧳', name: 'Luggage', category: 'Accessories' },
+    { emoji: '👓', name: 'Glasses', category: 'Accessories' },
+    { emoji: '🕶️', name: 'Sunglasses', category: 'Accessories' },
+    { emoji: '🥽', name: 'Goggles', category: 'Accessories' },
+    { emoji: '🌂', name: 'Closed Umbrella', category: 'Accessories' },
+];
+
+const CATEGORY_ICONS = {
+    'Favorites': '❤️'
+};
+
+let favoriteEmojis = JSON.parse(localStorage.getItem('favorites')) || [];
+
+const ALL_CATEGORIES = Object.keys(CATEGORY_ICONS);
+
+
+// Main Script (equivalent to script.js)
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+    const searchInput = document.getElementById('emoji-search');
+    const emojiGrid = document.getElementById('emoji-grid-container');
+    const categoryNav = document.getElementById('category-nav');
+    const menuToggle = document.getElementById('menu-toggle');
+    const emojiCounter = document.getElementById('emoji-counter');
+
+    let currentCategory = 'All';
+
+    // --- Theme Toggle Logic ---
+    function toggleTheme() {
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            body.classList.add('dark-theme');
+        }
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    initializeTheme();
+
+    // --- Category Logic ---
+    function renderCategories() {
+        const allBtn = document.createElement('button');
+        allBtn.textContent = 'All Emojis';
+        allBtn.className = 'category-btn active';
+        allBtn.dataset.category = 'All';
+        categoryNav.appendChild(allBtn);
+
+        ALL_CATEGORIES.forEach(category => {
+            const btn = document.createElement('button');
+            const icon = CATEGORY_ICONS[category] || '';
+            btn.textContent = `${icon} ${category}`;
+            btn.className = 'category-btn';
+            btn.dataset.category = category;
+            categoryNav.appendChild(btn);
+        });
+        
+        categoryNav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.category-btn');
+            if (btn) {
+                const category = btn.dataset.category;
+                currentCategory = category;
+                
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Close menu on mobile
+                if (window.innerWidth <= 768) {
+                    categoryNav.classList.remove('open');
+                    menuToggle.innerHTML = '&#9776;';
+                }
+
+                filterAndRenderGrid();
+            }
+        });
+    }
+
+   function createEmojiCard(item) {
+    const card = document.createElement('div');
+    card.className = 'emoji-card';
+
+    // زر القلب
+    const heartBtn = document.createElement('button');
+    heartBtn.className = 'heart-btn';
+    const isFavorite = favoriteEmojis.some(fav => fav.emoji === item.emoji);
+    heartBtn.textContent = isFavorite ? '❤️' : '♡';
+    if (isFavorite) heartBtn.classList.add('active');
+
+    heartBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        heartBtn.classList.toggle('active');
+
+        if (heartBtn.classList.contains('active')) {
+            heartBtn.textContent = '❤️';
+            if (!favoriteEmojis.some(fav => fav.emoji === item.emoji)) {
+                favoriteEmojis.push(item);
+                localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+            }
+        } else {
+            heartBtn.textContent = '♡';
+            favoriteEmojis = favoriteEmojis.filter(fav => fav.emoji !== item.emoji);
+            localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+        }
+
+        // تحديث قسم المفضلة لو هو مفتوح حاليًا
+        if (currentCategory === 'Favorites') filterAndRenderGrid();
+    });
+
+    // باقي الكارد
+    const emojiDiv = document.createElement('div');
+    emojiDiv.className = 'emoji';
+    emojiDiv.textContent = item.emoji;
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'emoji-name';
+    nameDiv.textContent = item.name;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        try {
+            await navigator.clipboard.writeText(item.emoji);
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        } catch (err) {
+            copyBtn.textContent = '❌ Error';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        }
+    });
+
+    card.append(heartBtn, emojiDiv, nameDiv, copyBtn);
+    setTimeout(() => card.classList.add('fade-in'), 10);
+
+    return card;
+}
+
+
+    function filterAndRenderGrid() {
+    const searchTerm = searchInput.value.toLowerCase();
+    emojiGrid.innerHTML = '';
+
+    let filteredEmojis;
+
+    if (currentCategory === 'Favorites') {
+        // البحث في المفضلة فقط
+        filteredEmojis = favoriteEmojis.filter(item =>
+            item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+        );
+    } else if (searchTerm) {
+        // لو في قسم All → البحث في كل الإيموجيز
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+            );
+        } else {
+            // البحث بس في القسم الحالي
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.category === currentCategory &&
+                (item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm))
+            );
+        }
+    } else {
+        // بدون بحث
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.slice(0, 1714);
+        } else {
+            filteredEmojis = EMOJI_COLLECTION.filter(item => item.category === currentCategory);
+        }
+    }
+
+    // إنشاء الكروت
+    filteredEmojis.forEach(item => emojiGrid.appendChild(createEmojiCard(item)));
+
+    // عداد الإيموجيز الظاهرة
+    emojiCounter.textContent = `${filteredEmojis.length} Emojis Displayed`;
+
+    // زر show more
+    const showMoreBtn = document.getElementById("show-more-btn");
+    if (currentCategory !== 'Favorites' && !searchTerm) {
+        showMoreBtn.style.display = 'block';
+        showMoreBtn.onclick = function() {
+            const link = String(currentCategory).toLowerCase().replace(/ /g, '-') + '.html';
+            window.location.href = link;
+        };
+    } else {
+        showMoreBtn.style.display = 'none';
+    }
+}
+
+
+    searchInput.addEventListener('input', filterAndRenderGrid);
+
+    // --- Mobile Menu Toggle ---
+    menuToggle.addEventListener('click', () => {
+        const isOpen = categoryNav.classList.toggle('open');
+        menuToggle.innerHTML = isOpen ? '&times;' : '&#9776;';
+    });
+
+
+    // Initialize
+    renderCategories();
+    filterAndRenderGrid();
+});
+
+// بعد ما تعمل render لكل الإيموجيز
+const loader = document.getElementById('loader');
+
+loader.style.transition = 'opacity 0.5s';
+loader.style.opacity = '0';
+
+setTimeout(() => {
+    loader.style.display = 'none';
+}, 500); // 500ms بعد انتهاء الـ fade-out
+
+const showMoreBtn = document.getElementById("show-more-btn");
+
+showMoreBtn.onclick = function() {
+  window.location.href = "https://example.com/more-emojis"; // ضع هنا الرابط المطلوب
+};
+
+const clearBtn = document.getElementById('clear-search');
+
+// إظهار/إخفاء زر X أثناء الكتابة
+searchInput.addEventListener('input', () => {
+    if (searchInput.value.length > 0) {
+        clearBtn.style.display = 'block';
+    } else {
+        clearBtn.style.display = 'none';
+    }
+    filterAndRenderGrid();
+});
+
+// مسح النص عند الضغط على X
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    clearBtn.style.display = 'none';
+    filterAndRenderGrid();
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("heart-btn")) {
+    e.target.classList.toggle("active");
+    e.target.textContent = e.target.classList.contains("active") ? "❤️" : "♡";
+  }
+});
+
+    </script>
+</body>
+</html>

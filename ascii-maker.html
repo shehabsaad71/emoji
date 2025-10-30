@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMOGO, Emojis/ASCII Maker</title>
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+:root {
+  --accent-color: #007bff;
+}
+
+body {
+  font-family: 'Cairo', sans-serif;
+  margin: 0;
+  color: #111;
+}
+
+main {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-align: center;
+}
+main h1 {
+  margin-bottom: 25px;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#userInput {
+  flex: 1;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1em;
+  transition: 0.3s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+#userInput:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 6px rgba(0,123,255,0.4);
+}
+
+#generateBtn {
+  padding: 12px 18px;
+  border: none;
+  background: var(--accent-color);
+  color: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+#generateBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px 4px var(--accent-color);
+}
+
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <a class="logo" href="index.html">EMOGO 😀</a>
+
+  <div class="header-controls">
+      <button id="theme-toggle" aria-label="Toggle dark/light theme">
+          <span class="icon-moon">🌙</span>
+          <span class="icon-sun">☀️</span>
+      </button>
+      <button id="menu-toggle" class="mobile-only" aria-label="Open menu">
+          <span>&#9776;</span>
+      </button>
+  </div>
+</header>
+
+<main>
+  <h1>ASCII Maker</h1>
+  <div class="input-group">
+    <input type="text" id="userInput" placeholder="Write here...">
+    <button id="generateBtn">Generate</button>
+  </div>
+
+  <!-- Card لعرض النص الناتج -->
+  <div id="outputCard" style="display:none; margin-top:30px; padding:25px; border-radius:16px; background:#f0f0f0; box-shadow:0 4px 12px rgba(0,0,0,0.08); font-size:1.2em; font-family: monospace; white-space: pre; overflow-x: auto;"></div>
+</main>
+
+
+<footer>
+  <div class="footer-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-of-service.html">Terms of Service</a>
+      <a href="contact-us.html">Contact Us</a>
+      <a href="about-us.html">About Us</a>
+      <a href="blog.html">Blog</a>
+  </div>
+  <p class="copyright">© 2025 Emogo — All Rights Reserved.</p>
+</footer>
+
+<script>
+const inputField = document.getElementById("userInput");
+const generateBtn = document.getElementById("generateBtn");
+const outputCard = document.getElementById("outputCard");
+
+// خريطة ASCII لكل حرف انجليزي ورقم
+const asciiMap = {
+  "A": `    _    
+   / \   
+  / _ \  
+ / ___ \ 
+/_/   \_\
+`, // ضع هنا نفس الـ ASCII لكل حرف كما سبق
+  "B": ` ____  
+| __ ) 
+|  _ \ 
+| |_) |
+|____/ `,
+  "C": `  ____ 
+ / ___|
+| |    
+| |___ 
+ \____|`,
+  "D": ` ____  
+|  _ \ 
+| | | |
+| |_| |
+|____/ `,
+  "E": ` _____ 
+| ____|
+|  _|  
+| |___ 
+|_____|`,
+  "F": ` _____ 
+|  ___|
+| |_   
+|  _|  
+|_|    `,
+  "G": `  ____ 
+ / ___|
+| |  _ 
+| |_| |
+ \____|`,
+  "H": ` _   _ 
+| | | |
+| |_| |
+|  _  |
+|_| |_|`,
+  "I": ` ___ 
+|_ _|
+ | | 
+ | | 
+|___|`,
+  "J": `     _ 
+    | |
+ _  | |
+| |_| |
+ \___/ `,
+  "K": ` _  __
+| |/ /
+| ' / 
+| . \ 
+|_|\_\
+`,
+  "L": ` _     
+| |    
+| |    
+| |___ 
+|_____|`,
+  "M": ` __  __ 
+|  \/  |
+| |\/| |
+| |  | |
+|_|  |_|`,
+  "N": ` _   _ 
+| \ | |
+|  \| |
+| |\  |
+|_| \_|`,
+  "O": `  ___  
+ / _ \ 
+| | | |
+| |_| |
+ \___/ `,
+  "P": ` ____  
+|  _ \ 
+| |_) |
+|  __/ 
+|_|    `,
+  "Q": `  ___  
+ / _ \ 
+| | | |
+| |_| |
+ \__\_\
+ `,
+  "R": ` ____  
+|  _ \ 
+| |_) |
+|  _ < 
+|_| \_\
+`,
+  "S": ` ____  
+/ ___| 
+\___ \ 
+ ___) |
+|____/ `,
+  "T": ` _____ 
+|_   _|
+  | |  
+  | |  
+  |_|  `,
+  "U": ` _   _ 
+| | | |
+| | | |
+| |_| |
+ \___/ `,
+  "V": `__     __
+\ \   / /
+ \ \ / / 
+  \ V /  
+   \_/   `,
+  "W": `__        __
+\ \      / /
+ \ \ /\ / / 
+  \ V  V /  
+   \_/\_/   `,
+  "X": `__  __
+\ \/ /
+ \  / 
+ /  \ 
+/_/\_\
+`,
+  "Y": `__   __
+\ \ / /
+ \ V / 
+  | |  
+  |_|  `,
+  "Z": ` _____
+|__  /
+  / / 
+ / /_ 
+/____|`,
+  "0": `  ___  
+ / _ \ 
+| | | |
+| |_| |
+ \___/ `,
+  "1": ` _ 
+/ |
+| |
+| |
+|_|`,
+  "2": ` ____  
+|___ \ 
+  __) |
+ / __/ 
+|_____|`,
+  "3": ` _____ 
+|___ / 
+  |_ \ 
+ ___) |
+|____/ `,
+  "4": ` _  _   
+| || |  
+| || |_ 
+|__   _|
+   |_|  `,
+  "5": ` ____  
+| ___| 
+|___ \ 
+ ___) |
+|____/ `,
+  "6": `  __   
+ / /_  
+| '_ \ 
+| (_) |
+ \___/ `,
+  "7": ` _____ 
+|___  |
+   / / 
+  / /  
+ /_/   `,
+  "8": `  ___  
+ ( _ ) 
+ / _ \ 
+| (_) |
+ \___/ `,
+  "9": `  ___  
+ / _ \ 
+| (_) |
+ \__, |
+   / /
+  /_/`
+};
+
+// وظيفة لتحويل النص ASCII
+function textToASCII(text) {
+  text = text.toUpperCase();
+
+  // تحقق من وجود أي حرف غير معرف
+  for (let char of text) {
+    if (!asciiMap[char]) {
+      return "Invalid character/s";
+    }
+  }
+
+  // نقسم كل حرف لسطوره
+  const asciiLines = [];
+  const linesCount = asciiMap[text[0]].split("\n").length; // عدد الأسطر لكل حرف (نفترض نفس العدد)
+  for (let i = 0; i < linesCount; i++) asciiLines.push("");
+
+  // دمج كل حرف سطر بسطر
+  for (let char of text) {
+    const charLines = asciiMap[char].split("\n");
+    for (let i = 0; i < linesCount; i++) {
+      asciiLines[i] += (charLines[i] || "") + "  "; // مسافة بين الحروف
+    }
+  }
+
+  return asciiLines.join("\n");
+}
+
+// حدث الزر
+generateBtn.addEventListener("click", () => {
+  const input = inputField.value.trim();
+  if (!input) return alert("Please enter text!");
+
+  outputCard.textContent = textToASCII(input);
+  outputCard.style.display = "block";
+});
+</script>
+
+<script src="script.js"></script>
+</body>
+</html>

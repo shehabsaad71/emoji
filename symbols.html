@@ -3,310 +3,619 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emoji & Symbols Library</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>EMOGO, Emojis library</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            transition: background 0.3s, color 0.3s;
-        }
-        .header h1 {
-            font-size: 50px;
-            background-clip: text;
-            background: linear-gradient(to right, #4285f4, #d96570);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .emoji-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-            gap: 10px;
-            padding: 10px;
-        }
-        .emoji-box {
-            padding: 10px;
-            background: white;
-            color: black;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .emoji-box:hover {
-            background: gray;
-        }
-        .toggle-theme {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 30px;
-        }
-        .search-bar {
-            margin: 20px auto;
-            display: flex;
-            justify-content: center;
-        }
-        .search-bar input {
-            width: 80%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid gray;
-            font-size: 16px;
-        }
-    </style>
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <button id="theme-toggle" class="toggle-theme">
-        <span class="material-icons">light_mode</span>
-    </button>
 
-    <div class="container mx-auto p-4">
-        <div class="header text-center">
-            <h1>Discover & Copy The Best Symbols Emojis & Symbols Easily</h1>
-            <P>Explore a collection of the best Symbols Emojis & Symbols ready for instant copy and share on social media or chats.</P>
-        </div>
-        
-        <!-- شريط البحث -->
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="Search emojis..." class="w-full p-2 mb-4 border rounded" style="color: black; background-color: white;">
-        </div>
+    <header id="site-header">
+    <a class="logo" href="index.html">EMOGO 😀</a>
 
-        <h2 class="text-xl font-bold mt-4">Nature</h2>
-        <div id="persons-container" class="emoji-container"></div>
+    <a class="ascii-link" href="ascii-maker.html">ASCII Maker</a>
 
-        <!-- الرموز التعبيرية -->
-        <div id="emojis-container" class="emoji-container"></div>
+    <div class="header-controls">
+        <button id="theme-toggle" aria-label="Toggle dark/light theme">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+        </button>
+        <button id="menu-toggle" class="mobile-only" aria-label="Open menu">
+            <span>&#9776;</span>
+        </button>
     </div>
+</header>
+
+    <main>
+        <div class="search-container">
+            <input type="text" id="emoji-search" placeholder="🔍 Search for emoji...">
+            <button id="clear-search" title="Clear Search">✖️</button>
+            <span id="emoji-counter">0 Emojis Displayed</span>
+        </div>
+
+        <nav id="category-nav">
+        </nav>
+    <div id="loader" class="loader">
+      <div class="spinner"></div>
+      Loading Emojis...
+    </div>
+        <section id="emoji-grid-container">
+        </section>
+    </main>
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="about-us.html">About Us</a>
+            <a href="blog.html">Blog</a>
+        </div>
+        <p class="copyright">© 2025 Emogo — All Rights Reserved.</p>
+    </footer>
 
     <script>
-        const emojis = [
-        { symbol: "🏧", name: "ATM" },
-        { symbol: "🚮", name: "Litter Bin" },
-        { symbol: "🚰", name: "Water Cooler" },
-        { symbol: "♿", name: "Wheelchair Symbol" },
-        { symbol: "🚹", name: "Men's Room" },
-        { symbol: "🚺", name: "Women's Room" },
-        { symbol: "🚻", name: "Restroom" },
-        { symbol: "🚼", name: "Baby Symbol" },
-        { symbol: "🚾", name: "Water Closet" },
-        { symbol: "🛂", name: "Passport Control" },
-        { symbol: "🛃", name: "Customs" },
-        { symbol: "🛄", name: "Baggage Claim" },
-        { symbol: "🔞", name: "18+ Symbol" },
-        { symbol: "📵", name: "No Mobile Phones" },
-        { symbol: "🚷", name: "No Entry" },
-        { symbol: "🚱", name: "No Drinking" },
-        { symbol: "🚯", name: "No Littering" },
-        { symbol: "🚭", name: "No Smoking" },
-        { symbol: "🚳", name: "No Bicycles" },
-        { symbol: "🚫", name: "Prohibited" },
-        { symbol: "⛔", name: "No Entry" },
-        { symbol: "🚸", name: "Children Crossing" },
-        { symbol: "⚠", name: "Warning" },
-        { symbol: "🛅", name: "Left Luggage" },
-        { symbol: "☢", name: "Radioactive" },
-        { symbol: "☣", name: "Biohazard" },
-        { symbol: "⬆", name: "Upwards Arrow" },
-        { symbol: "↗", name: "Upwards Right Arrow" },
-        { symbol: "➡", name: "Rightwards Arrow" },
-        { symbol: "↘", name: "Downwards Right Arrow" },
-        { symbol: "⬇", name: "Downwards Arrow" },
-        { symbol: "↙", name: "Downwards Left Arrow" },
-        { symbol: "⬅", name: "Leftwards Arrow" },
-        { symbol: "↖", name: "Upwards Left Arrow" },
-        { symbol: "↕", name: "Up Down Arrow" },
-        { symbol: "↔", name: "Left Right Arrow" },
-        { symbol: "↩", name: "Rightwards Arrow with Hook" },
-        { symbol: "↪", name: "Leftwards Arrow with Hook" },
-        { symbol: "⤴", name: "Rightwards Arrow with Hook" },
-        { symbol: "⤵", name: "Leftwards Arrow with Hook" },
-        { symbol: "🔃", name: "Clockwise Downwards and Upwards Open Circle Arrows" },
-        { symbol: "🔄", name: "Anticlockwise Downwards and Upwards Open Circle Arrows" },
-        { symbol: "🔙", name: "Back Arrow" },
-        { symbol: "🔚", name: "End Arrow" },
-        { symbol: "🔛", name: "On! Arrow" },
-        { symbol: "🔜", name: "Next Arrow" },
-        { symbol: "🔝", name: "Top Arrow" },
-        { symbol: "🛐", name: "Place of Worship" },
-        { symbol: "♈", name: "Aries" },
-        { symbol: "🔯", name: "Star of David" },
-        { symbol: "🕎", name: "Menorah" },
-        { symbol: "☮", name: "Peace Symbol" },
-        { symbol: "☪", name: "Star and Crescent" },
-        { symbol: "☦", name: "Orthodox Cross" },
-        { symbol: "✝", name: "Latin Cross" },
-        { symbol: "☯", name: "Yin Yang" },
-        { symbol: "☸", name: "Wheel of Dharma" },
-        { symbol: "✡", name: "Star of David" },
-        { symbol: "🕉", name: "Om" },
-        { symbol: "⚛", name: "Atom Symbol" },
-        { symbol: "⛎", name: "Ophiuchus" },
-        { symbol: "♓", name: "Pisces" },
-        { symbol: "♒", name: "Aquarius" },
-        { symbol: "♑", name: "Capricorn" },
-        { symbol: "♐", name: "Sagittarius" },
-        { symbol: "♏", name: "Scorpio" },
-        { symbol: "♎", name: "Libra" },
-        { symbol: "♍", name: "Virgo" },
-        { symbol: "♌", name: "Leo" },
-        { symbol: "♋", name: "Cancer" },
-        { symbol: "♊", name: "Gemini" },
-        { symbol: "♉", name: "Taurus" },
-        { symbol: "🔀", name: "Shuffle Tracks Button" },
-        { symbol: "🔁", name: "Repeat Button" },
-        { symbol: "🔂", name: "Repeat Single Button" },
-        { symbol: "▶", name: "Play Button" },
-        { symbol: "⏩", name: "Fast Forward Button" },
-        { symbol: "⏭", name: "Next Track Button" },
-        { symbol: "⏯", name: "Play or Pause Button" },
-        { symbol: "◀", name: "Previous Track Button" },
-        { symbol: "⏪", name: "Rewind Button" },
-        { symbol: "⏮", name: "Previous Track Button" },
-        { symbol: "🔼", name: "Upwards Button" },
-        { symbol: "⏫", name: "Upwards Button" },
-        { symbol: "🔽", name: "Downwards Button" },
-        { symbol: "⏬", name: "Downwards Button" },
-        { symbol: "⏸", name: "Pause Button" },
-        { symbol: "⏹", name: "Stop Button" },
-        { symbol: "⏺", name: "Record Button" },
-        { symbol: "⏏", name: "Eject Button" },
-        { symbol: "🎦", name: "Cinema" },
-        { symbol: "🔅", name: "Low Brightness" },
-        { symbol: "🔆", name: "High Brightness" },
-        { symbol: "📶", name: "Antenna Bars" },
-        { symbol: "📳", name: "Vibration Mode" },
-        { symbol: "📴", name: "No Signal" },
-        { symbol: "❔", name: "White Question Mark" },
-        { symbol: "❓", name: "Question Mark" },
-        { symbol: "⁉", name: "Exclamation Question Mark" },
-        { symbol: "‼", name: "Double Exclamation Mark" },
-        { symbol: "♾", name: "Infinity" },
-        { symbol: "➗", name: "Division Sign" },
-        { symbol: "➖", name: "Minus Sign" },
-        { symbol: "➕", name: "Plus Sign" },
-        { symbol: "✖", name: "Multiplication Sign" },
-        { symbol: "⚧", name: "Transgender Symbol" },
-        { symbol: "♂", name: "Male Sign" },
-        { symbol: "♀", name: "Female Sign" },
-        { symbol: "⭕", name: "Circle" },
-        { symbol: "🔰", name: "Japanese Symbol for Beginner" },
-        { symbol: "📛", name: "Name Badge" },
-        { symbol: "🔱", name: "Trident Emblem" },
-        { symbol: "⚜", name: "Fleur-de-lis" },
-        { symbol: "♻", name: "Recycling Symbol" },
-        { symbol: "⚕", name: "Medical Symbol" },
-        { symbol: "💲", name: "Dollar Symbol" },
-        { symbol: "💱", name: "Currency Exchange" },
-        { symbol: "〰", name: "Wavy Dash" },
-        { symbol: "❗", name: "Exclamation Mark" },
-        { symbol: "❕", name: "White Exclamation Mark" },
-        { symbol: "©", name: "Copyright Symbol" },
-        { symbol: "❇", name: "Sparkle" },
-        { symbol: "✴", name: "Eight-Spoked Asterisk" },
-        { symbol: "✳", name: "Eight-Pointed Star" },
-        { symbol: "〽", name: "Part Alternation Mark" },
-        { symbol: "➿", name: "Double Curly Loop" },
-        { symbol: "➰", name: "Curly Loop" },
-        { symbol: "❎", name: "Cross Mark Button" },
-        { symbol: "❌", name: "Cross Mark" },
-        { symbol: "✔", name: "Check Mark" },
-        { symbol: "☑", name: "Check Box with Check" },
-        { symbol: "✅", name: "White Check Mark" },
-        { symbol: "®", name: "Registered Trademark" },
-        { symbol: "™", name: "Trademark" },
-        { symbol: "🔴", name: "Red Circle" },
-        { symbol: "🟠", name: "Orange Circle" },
-        { symbol: "🟡", name: "Yellow Circle" },
-        { symbol: "🟢", name: "Green Circle" },
-        { symbol: "🔵", name: "Blue Circle" },
-        { symbol: "🟣", name: "Purple Circle" },
-        { symbol: "🟤", name: "Brown Circle" },
-        { symbol: "⚫", name: "Black Circle" },
-        { symbol: "⚪", name: "White Circle" },
-        { symbol: "🟥", name: "Red Square" },
-        { symbol: "🟧", name: "Orange Square" },
-        { symbol: "🟨", name: "Yellow Square" },
-        { symbol: "🟩", name: "Green Square" },
-        { symbol: "🟦", name: "Blue Square" },
-        { symbol: "🟪", name: "Purple Square" },
-        { symbol: "🟫", name: "Brown Square" },
-        { symbol: "⬛", name: "Black Large Square" },
-        { symbol: "⬜", name: "White Large Square" },
-        { symbol: "◼", name: "Black Medium Square" },
-        { symbol: "◻", name: "White Medium Square" },
-        { symbol: "◾", name: "Black Small Square" },
-        { symbol: "◽", name: "White Small Square" },
-        { symbol: "▪", name: "Black Very Small Square" },
-        { symbol: "▫", name: "White Very Small Square" },
-        { symbol: "🔶", name: "Large Orange Diamond" },
-        { symbol: "🔷", name: "Large Blue Diamond" },
-        { symbol: "🔸", name: "Small Orange Diamond" },
-        { symbol: "🔹", name: "Small Blue Diamond" },
-        { symbol: "🔺", name: "Red Triangle Pointing Up" },
-        { symbol: "🔻", name: "Red Triangle Pointing Down" },
-        { symbol: "💠", name: "Diamond with a Dot" },
-        { symbol: "🔘", name: "Radio Button" },
-        { symbol: "🔳", name: "White Square Button" },
-        { symbol: "🔲", name: "Black Square Button" },
-        { symbol: "🏁", name: "Chequered Flag" },
-        { symbol: "🚩", name: "Triangular Flag" },
-        { symbol: "🎌", name: "Crossed Flags" },
-        { symbol: "🏴", name: "Black Flag" },
-        { symbol: "🏳", name: "White Flag" },
-        { symbol: "🏳‍🌈", name: "Rainbow Flag" },
-        { symbol: "🏳‍⚧", name: "Transgender Flag" },
-        { symbol: "🏴‍☠", name: "Pirate Flag" }
+// Data (equivalent to data.js)
+const EMOJI_COLLECTION = [
+    // Symbols
+    { emoji: '🩷', name: 'Pink Heart', category: 'Symbols' },
+    { emoji: '❤️', name: 'Red Heart', category: 'Symbols' },
+    { emoji: '🧡', name: 'Orange Heart', category: 'Symbols' },
+    { emoji: '💛', name: 'Yellow Heart', category: 'Symbols' },
+    { emoji: '💚', name: 'Green Heart', category: 'Symbols' },
+    { emoji: '🩵', name: 'Light Blue Heart', category: 'Symbols' },
+    { emoji: '💙', name: 'Blue Heart', category: 'Symbols' },
+    { emoji: '💜', name: 'Purple Heart', category: 'Symbols' },
+    { emoji: '🖤', name: 'Black Heart', category: 'Symbols' },
+    { emoji: '🩶', name: 'Gray Heart', category: 'Symbols' },
+    { emoji: '🤍', name: 'White Heart', category: 'Symbols' },
+    { emoji: '🤎', name: 'Brown Heart', category: 'Symbols' },
+    { emoji: '💔', name: 'Broken Heart', category: 'Symbols' },
+    { emoji: '❤️‍🔥', name: 'Heart on Fire', category: 'Symbols' },
+    { emoji: '❤️‍🩹', name: 'Mending Heart', category: 'Symbols' },
+    { emoji: '❣️', name: 'Heart Exclamation', category: 'Symbols' },
+    { emoji: '💕', name: 'Two Hearts', category: 'Symbols' },
+    { emoji: '💞', name: 'Revolving Hearts', category: 'Symbols' },
+    { emoji: '💓', name: 'Beating Heart', category: 'Symbols' },
+    { emoji: '💗', name: 'Growing Heart', category: 'Symbols' },
+    { emoji: '💖', name: 'Sparkling Heart', category: 'Symbols' },
+    { emoji: '💘', name: 'Heart with Arrow', category: 'Symbols' },
+    { emoji: '💝', name: 'Heart with Ribbon', category: 'Symbols' },
+    { emoji: '💟', name: 'Heart Decoration', category: 'Symbols' },
+    { emoji: '☮️', name: 'Peace Symbol', category: 'Symbols' },
+    { emoji: '✝️', name: 'Latin Cross', category: 'Symbols' },
+    { emoji: '☪️', name: 'Star and Crescent', category: 'Symbols' },
+    { emoji: '🕉️', name: 'Om', category: 'Symbols' },
+    { emoji: '☸️', name: 'Wheel of Dharma', category: 'Symbols' },
+    { emoji: '🪯', name: 'Hamsa', category: 'Symbols' },
+    { emoji: '✡️', name: 'Star of David', category: 'Symbols' },
+    { emoji: '🔯', name: 'Six-Pointed Star with Dot', category: 'Symbols' },
+    { emoji: '🕎', name: 'Menorah', category: 'Symbols' },
+    { emoji: '☯️', name: 'Yin Yang', category: 'Symbols' },
+    { emoji: '☦️', name: 'Orthodox Cross', category: 'Symbols' },
+    { emoji: '🛐', name: 'Place of Worship', category: 'Symbols' },
+    { emoji: '⛎', name: 'Ophiuchus', category: 'Symbols' },
+    { emoji: '♈', name: 'Aries', category: 'Symbols' },
+    { emoji: '♉', name: 'Taurus', category: 'Symbols' },
+    { emoji: '♊', name: 'Gemini', category: 'Symbols' },
+    { emoji: '♌', name: 'Leo', category: 'Symbols' },
+    { emoji: '♋', name: 'Cancer', category: 'Symbols' },
+    { emoji: '♌', name: 'Leo', category: 'Symbols' },
+    { emoji: '♍', name: 'Virgo', category: 'Symbols' },
+    { emoji: '♎', name: 'Libra', category: 'Symbols' },
+    { emoji: '♏', name: 'Scorpio', category: 'Symbols' },
+    { emoji: '♐', name: 'Sagittarius', category: 'Symbols' },
+    { emoji: '♑', name: 'Capricorn', category: 'Symbols' },
+    { emoji: '♒', name: 'Aquarius', category: 'Symbols' },
+    { emoji: '♓', name: 'Pisces', category: 'Symbols' },
+    { emoji: '🆔', name: 'ID Button', category: 'Symbols' },
+    { emoji: '⚛️', name: 'Atom Symbol', category: 'Symbols' },
+    { emoji: '🉑', name: 'Accept Button', category: 'Symbols' },
+    { emoji: '☢️', name: 'Radioactive', category: 'Symbols' },
+    { emoji: '☣️', name: 'Biohazard', category: 'Symbols' },
+    { emoji: '📴', name: 'Mobile Phone Off', category: 'Symbols' },
+    { emoji: '📳', name: 'Vibration Mode', category: 'Symbols' },
+    { emoji: '🈶', name: 'Japanese “Reserved” Button', category: 'Symbols' },
+    { emoji: '🈚', name: 'Japanese “Free” Button', category: 'Symbols' },
+    { emoji: '🈸', name: 'Japanese “Application” Button', category: 'Symbols' },
+    { emoji: '🈺', name: 'Japanese “Open for Business” Button', category: 'Symbols' },
+    { emoji: '🈷️', name: 'Japanese “Monthly Amount” Button', category: 'Symbols' },
+    { emoji: '✴️', name: 'Eight-Pointed Star', category: 'Symbols' },
+    { emoji: '🆚', name: 'VS Button', category: 'Symbols' },
+    { emoji: '💮', name: 'White Flower', category: 'Symbols' },
+    { emoji: '🉐', name: 'Japanese “Bargain” Button', category: 'Symbols' },
+    { emoji: '㊙️', name: 'Japanese “Secret” Button', category: 'Symbols' },
+    { emoji: '㊗️', name: 'Japanese “Congratulations” Button', category: 'Symbols' },
+    { emoji: '🈴', name: 'Japanese “Passed” Button', category: 'Symbols' },
+    { emoji: '🈵', name: 'Japanese “Full” Button', category: 'Symbols' },
+    { emoji: '🈹', name: 'Japanese “Discount” Button', category: 'Symbols' },
+    { emoji: '🈲', name: 'Japanese “Prohibited” Button', category: 'Symbols' },
+    { emoji: '🅰️', name: 'A Button', category: 'Symbols' },
+    { emoji: '🅱️', name: 'B Button', category: 'Symbols' },
+    { emoji: '🆎', name: 'AB Button', category: 'Symbols' },
+    { emoji: '🆑', name: 'CL Button', category: 'Symbols' },
+    { emoji: '🅾️', name: 'O Button', category: 'Symbols' },
+    { emoji: '🆘', name: 'SOS Button', category: 'Symbols' },
+    { emoji: '❌', name: 'Cross Mark', category: 'Symbols' },
+    { emoji: '⭕', name: 'Hollow Red Circle', category: 'Symbols' },
+    { emoji: '🛑', name: 'Stop Sign', category: 'Symbols' },
+    { emoji: '⛔', name: 'No Entry', category: 'Symbols' },
+    { emoji: '📛', name: 'Name Badge', category: 'Symbols' },
+    { emoji: '🚫', name: 'Prohibited', category: 'Symbols' },
+    { emoji: '💯', name: 'Hundred Points', category: 'Symbols' },
+    { emoji: '💢', name: 'Anger Symbol', category: 'Symbols' },
+    { emoji: '♨️', name: 'Hot Springs', category: 'Symbols' },
+    { emoji: '🚷', name: 'No Pedestrians', category: 'Symbols' },
+    { emoji: '🚯', name: 'No Littering', category: 'Symbols' },
+    { emoji: '🚳', name: 'No Bicycles', category: 'Symbols' },
+    { emoji: '🚱', name: 'Non-Potable Water', category: 'Symbols' },
+    { emoji: '🔞', name: '18+', category: 'Symbols' },
+    { emoji: '📵', name: 'No Mobile Phones', category: 'Symbols' },
+    { emoji: '🚭', name: 'No Smoking', category: 'Symbols' },
+    { emoji: '❗', name: 'Exclamation Mark', category: 'Symbols' },
+    { emoji: '❕', name: 'White Exclamation Mark', category: 'Symbols' },
+    { emoji: '❓', name: 'Question Mark', category: 'Symbols' },
+    { emoji: '❔', name: 'White Question Mark', category: 'Symbols' },
+    { emoji: '‼️', name: 'Double Exclamation', category: 'Symbols' },
+    { emoji: '⁉️', name: 'Exclamation Question', category: 'Symbols' },
+    { emoji: '🔅', name: 'Dim Button', category: 'Symbols' },
+    { emoji: '🔆', name: 'Bright Button', category: 'Symbols' },
+    { emoji: '〽️', name: 'Part Alternation Mark', category: 'Symbols' },
+    { emoji: '⚠️', name: 'Warning', category: 'Symbols' },
+    { emoji: '🚸', name: 'Children Crossing', category: 'Symbols' },
+    { emoji: '🔱', name: 'Trident Emblem', category: 'Symbols' },
+    { emoji: '⚜️', name: 'Fleur-de-lis', category: 'Symbols' },
+    { emoji: '🔰', name: 'Japanese Beginner', category: 'Symbols' },
+    { emoji: '♻️', name: 'Recycling Symbol', category: 'Symbols' },
+    { emoji: '✅', name: 'Check Mark', category: 'Symbols' },
+    { emoji: '🈯', name: 'Japanese “Reserved” Button', category: 'Symbols' },
+    { emoji: '💹', name: 'Chart Increasing', category: 'Symbols' },
+    { emoji: '❇️', name: 'Sparkle', category: 'Symbols' },
+    { emoji: '✳️', name: 'Eight-Spoked Asterisk', category: 'Symbols' },
+    { emoji: '❎', name: 'Cross Mark Button', category: 'Symbols' },
+    { emoji: '🌐', name: 'Globe with Meridians', category: 'Symbols' },
+    { emoji: '💠', name: 'Diamond with a Dot', category: 'Symbols' },
+    { emoji: 'Ⓜ️', name: 'Circled M', category: 'Symbols' },
+    { emoji: '🌀', name: 'Cyclone', category: 'Symbols' },
+    { emoji: '💤', name: 'Zzz', category: 'Symbols' },
+    { emoji: '🏧', name: 'ATM Sign', category: 'Symbols' },
+    { emoji: '🚾', name: 'Water Closet', category: 'Symbols' },
+    { emoji: '♿', name: 'Wheelchair', category: 'Symbols' },
+    { emoji: '🅿️', name: 'Parking', category: 'Symbols' },
+    { emoji: '🛗', name: 'Elevator', category: 'Symbols' },
+    { emoji: '🈳', name: 'Japanese “Vacancy” Button', category: 'Symbols' },
+    { emoji: '🈂️', name: 'Japanese “Service Charge” Button', category: 'Symbols' },
+    { emoji: '🛂', name: 'Passport Control', category: 'Symbols' },
+    { emoji: '🛃', name: 'Customs', category: 'Symbols' },
+    { emoji: '🛄', name: 'Baggage Claim', category: 'Symbols' },
+    { emoji: '🛅', name: 'Left Luggage', category: 'Symbols' },
+    { emoji: '🛜', name: 'Service Bell', category: 'Symbols' },
+    { emoji: '🚹', name: 'Men’s Room', category: 'Symbols' },
+    { emoji: '🚺', name: 'Women’s Room', category: 'Symbols' },
+    { emoji: '🚼', name: 'Baby Symbol', category: 'Symbols' },
+    { emoji: '🧑‍🧑‍🧒', name: 'Adult with Child', category: 'Symbols' },
+    { emoji: '🧑‍🧑‍🧒‍🧒', name: 'Two Adults with Two Children', category: 'Symbols' },
+    { emoji: '🧑‍🧒', name: 'Adult with One Child', category: 'Symbols' },
+    { emoji: '🧑‍🧒‍🧒', name: 'Adult with Two Children', category: 'Symbols' },
+    { emoji: '⚧', name: 'Transgender Symbol', category: 'Symbols' },
+    { emoji: '🚻', name: 'Restroom', category: 'Symbols' },
+    { emoji: '🚮', name: 'Litter in Bin Sign', category: 'Symbols' },
+    { emoji: '🎦', name: 'Cinema', category: 'Symbols' },
+    { emoji: '📶', name: 'Antenna Bars', category: 'Symbols' },
+    { emoji: '🈁️', name: 'Japanese “Here” Button', category: 'Symbols' },
+    { emoji: '🔣', name: 'Input Symbols', category: 'Symbols' },
+    { emoji: 'ℹ️', name: 'Information', category: 'Symbols' },
+    { emoji: '🔤', name: 'Input Latin Letters', category: 'Symbols' },
+    { emoji: '🔡', name: 'Input Lowercase Latin Letters', category: 'Symbols' },
+    { emoji: '🔠', name: 'Input Uppercase Latin Letters', category: 'Symbols' },
+    { emoji: '🆖', name: 'NG Button', category: 'Symbols' },
+    { emoji: '🆗', name: 'OK Button', category: 'Symbols' },
+    { emoji: '🆙', name: 'Up! Button', category: 'Symbols' },
+    { emoji: '🆒', name: 'Cool Button', category: 'Symbols' },
+    { emoji: '🆕', name: 'New Button', category: 'Symbols' },
+    { emoji: '🆓', name: 'Free Button', category: 'Symbols' },
+    { emoji: '0️⃣', name: 'Digit Zero', category: 'Symbols' },
+    { emoji: '1️⃣', name: 'Digit One', category: 'Symbols' },
+    { emoji: '2️⃣', name: 'Digit Two', category: 'Symbols' },
+    { emoji: '3️⃣', name: 'Digit Three', category: 'Symbols' },
+    { emoji: '4️⃣', name: 'Digit Four', category: 'Symbols' },
+    { emoji: '5️⃣', name: 'Digit Five', category: 'Symbols' },
+    { emoji: '6️⃣', name: 'Digit Six', category: 'Symbols' },
+    { emoji: '7️⃣', name: 'Digit Seven', category: 'Symbols' },
+    { emoji: '8️⃣', name: 'Digit Eight', category: 'Symbols' },
+    { emoji: '9️⃣', name: 'Digit Nine', category: 'Symbols' },
+    { emoji: '🔟', name: 'Keycap Ten', category: 'Symbols' },
+    { emoji: '🔢', name: 'Input Numbers', category: 'Symbols' },
+    { emoji: '#️⃣', name: 'Keycap Hash', category: 'Symbols' },
+    { emoji: '*️⃣', name: 'Keycap Asterisk', category: 'Symbols' },
+    { emoji: '⏏️', name: 'Eject Button', category: 'Symbols' },
+    { emoji: '▶️', name: 'Play Button', category: 'Symbols' },
+    { emoji: '⏸️', name: 'Pause Button', category: 'Symbols' },
+    { emoji: '⏯️', name: 'Play or Pause Button', category: 'Symbols' },
+    { emoji: '⏹️', name: 'Stop Button', category: 'Symbols' },
+    { emoji: '⏺️', name: 'Record Button', category: 'Symbols' },
+    { emoji: '⏭️', name: 'Next Track Button', category: 'Symbols' },
+    { emoji: '⏮️', name: 'Previous Track Button', category: 'Symbols' },
+    { emoji: '⏩', name: 'Fast-Forward Button', category: 'Symbols' },
+    { emoji: '⏪', name: 'Rewind Button', category: 'Symbols' },
+    { emoji: '⏫', name: 'Fast Up Button', category: 'Symbols' },
+    { emoji: '⏬', name: 'Fast Down Button', category: 'Symbols' },
+    { emoji: '◀️', name: 'Reverse Button', category: 'Symbols' },
+    { emoji: '🔼', name: 'Upwards Button', category: 'Symbols' },
+    { emoji: '🔽', name: 'Downwards Button', category: 'Symbols' },
+    { emoji: '➡️', name: 'Rightwards Arrow', category: 'Symbols' },
+    { emoji: '⬅️', name: 'Leftwards Arrow', category: 'Symbols' },
+    { emoji: '⬆️', name: 'Upwards Arrow', category: 'Symbols' },
+    { emoji: '⬇️', name: 'Downwards Arrow', category: 'Symbols' },
+    { emoji: '↗️', name: 'Arrow Up-Right', category: 'Symbols' },
+    { emoji: '↘️', name: 'Arrow Down-Right', category: 'Symbols' },
+    { emoji: '↙️', name: 'Arrow Down-Left', category: 'Symbols' },
+    { emoji: '↖️', name: 'Arrow Up-Left', category: 'Symbols' },
+    { emoji: '↕️', name: 'Arrow Up-Down', category: 'Symbols' },
+    { emoji: '↔️', name: 'Arrow Left-Right', category: 'Symbols' },
+    { emoji: '↪️', name: 'Right Arrow Curving Left', category: 'Symbols' },
+    { emoji: '↩️', name: 'Left Arrow Curving Right', category: 'Symbols' },
+    { emoji: '⤴️', name: 'Arrow Pointing Rightwards Then Curving Upwards', category: 'Symbols' },
+    { emoji: '⤵️', name: 'Arrow Pointing Rightwards Then Curving Downwards', category: 'Symbols' },
+    { emoji: '🔀', name: 'Shuffle Tracks Button', category: 'Symbols' },
+    { emoji: '🔁', name: 'Repeat Button', category: 'Symbols' },
+    { emoji: '🔂', name: 'Repeat Single Button', category: 'Symbols' },
+    { emoji: '🔄', name: 'Counterclockwise Arrows Button', category: 'Symbols' },
+    { emoji: '🔃', name: 'Clockwise Arrows Button', category: 'Symbols' },
+    { emoji: '🎵', name: 'Musical Note', category: 'Symbols' },
+    { emoji: '🎶', name: 'Multiple Musical Notes', category: 'Symbols' },
+    { emoji: '➕', name: 'Plus', category: 'Symbols' },
+    { emoji: '➖', name: 'Minus', category: 'Symbols' },
+    { emoji: '➗', name: 'Division', category: 'Symbols' },
+    { emoji: '✖️', name: 'Multiplication', category: 'Symbols' },
+    { emoji: '🟰', name: 'Equals', category: 'Symbols' },
+    { emoji: '♾️', name: 'Infinity', category: 'Symbols' },
+    { emoji: '💲', name: 'Dollar Sign', category: 'Symbols' },
+    { emoji: '💱', name: 'Currency Exchange', category: 'Symbols' },
+    { emoji: '™️', name: 'Trademark', category: 'Symbols' },
+    { emoji: '©️', name: 'Copyright', category: 'Symbols' },
+    { emoji: '®️', name: 'Registered', category: 'Symbols' },
+    { emoji: '👁️‍🗨️', name: 'Eye in Speech Bubble', category: 'Symbols' },
+    { emoji: '🔚', name: 'End Arrow', category: 'Symbols' },
+    { emoji: '🔙', name: 'Back Arrow', category: 'Symbols' },
+    { emoji: '🔛', name: 'On! Arrow', category: 'Symbols' },
+    { emoji: '🔝', name: 'Top Arrow', category: 'Symbols' },
+    { emoji: '🔜', name: 'Soon Arrow', category: 'Symbols' },
+    { emoji: '〰️', name: 'Wavy Dash', category: 'Symbols' },
+    { emoji: '➰', name: 'Curly Loop', category: 'Symbols' },
+    { emoji: '➿', name: 'Double Curly Loop', category: 'Symbols' },
+    { emoji: '✔️', name: 'Check Mark', category: 'Symbols' },
+    { emoji: '☑️', name: 'Check Box', category: 'Symbols' },
+    { emoji: '🔘', name: 'Radio Button', category: 'Symbols' },
+    { emoji: '🔴', name: 'Red Circle', category: 'Symbols' },
+    { emoji: '🟠', name: 'Orange Circle', category: 'Symbols' },
+    { emoji: '🟡', name: 'Yellow Circle', category: 'Symbols' },
+    { emoji: '🟢', name: 'Green Circle', category: 'Symbols' },
+    { emoji: '🔵', name: 'Blue Circle', category: 'Symbols' },
+    { emoji: '🟣', name: 'Purple Circle', category: 'Symbols' },
+    { emoji: '⚫', name: 'Black Circle', category: 'Symbols' },
+    { emoji: '⚪', name: 'White Circle', category: 'Symbols' },
+    { emoji: '🟤', name: 'Brown Circle', category: 'Symbols' },
+    { emoji: '🔺', name: 'Red Triangle Pointed Up', category: 'Symbols' },
+    { emoji: '🔻', name: 'Red Triangle Pointed Down', category: 'Symbols' },
+    { emoji: '🔸', name: 'Small Orange Diamond', category: 'Symbols' },
+    { emoji: '🔹', name: 'Small Blue Diamond', category: 'Symbols' },
+    { emoji: '🔶', name: 'Large Orange Diamond', category: 'Symbols' },
+    { emoji: '🔷', name: 'Large Blue Diamond', category: 'Symbols' },
+    { emoji: '🔳', name: 'White Square Button', category: 'Symbols' },
+    { emoji: '🔲', name: 'Black Square Button', category: 'Symbols' },
+    { emoji: '▪️', name: 'Black Small Square', category: 'Symbols' },
+    { emoji: '▫️', name: 'White Small Square', category: 'Symbols' },
+    { emoji: '◾', name: 'Black Medium Square', category: 'Symbols' },
+    { emoji: '◽', name: 'White Medium Square', category: 'Symbols' },
+    { emoji: '◼️', name: 'Black Medium-Large Square', category: 'Symbols' },
+    { emoji: '◻️', name: 'White Medium-Large Square', category: 'Symbols' },
+    { emoji: '🟥', name: 'Red Square', category: 'Symbols' },
+    { emoji: '🟧', name: 'Orange Square', category: 'Symbols' },
+    { emoji: '🟨', name: 'Yellow Square', category: 'Symbols' },
+    { emoji: '🟩', name: 'Green Square', category: 'Symbols' },
+    { emoji: '🟦', name: 'Blue Square', category: 'Symbols' },
+    { emoji: '🟪', name: 'Purple Square', category: 'Symbols' },
+    { emoji: '⬛', name: 'Black Large Square', category: 'Symbols' },
+    { emoji: '⬜', name: 'White Large Square', category: 'Symbols' },
+    { emoji: '🟫', name: 'Brown Square', category: 'Symbols' },
+    { emoji: '🔈', name: 'Speaker Low Volume', category: 'Symbols' },
+    { emoji: '🔇', name: 'Muted Speaker', category: 'Symbols' },
+    { emoji: '🔉', name: 'Speaker Medium Volume', category: 'Symbols' },
+    { emoji: '🔊', name: 'Speaker High Volume', category: 'Symbols' },
+    { emoji: '🔔', name: 'Bell', category: 'Symbols' },
+    { emoji: '🔕', name: 'Bell with Slash', category: 'Symbols' },
+    { emoji: '📣', name: 'Megaphone', category: 'Symbols' },
+    { emoji: '📢', name: 'Loudspeaker', category: 'Symbols' },
+    { emoji: '💬', name: 'Speech Balloon', category: 'Symbols' },
+    { emoji: '💭', name: 'Thought Balloon', category: 'Symbols' },
+    { emoji: '🗯️', name: 'Right Anger Bubble', category: 'Symbols' },
+    { emoji: '♠️', name: 'Spade Suit', category: 'Symbols' },
+    { emoji: '♣️', name: 'Club Suit', category: 'Symbols' },
+    { emoji: '♥️', name: 'Heart Suit', category: 'Symbols' },
+    { emoji: '♦️', name: 'Diamond Suit', category: 'Symbols' },
+    { emoji: '🃏', name: 'Joker', category: 'Symbols' },
+    { emoji: '🎴', name: 'Flower Playing Cards', category: 'Symbols' },
+    { emoji: '🀄', name: 'Mahjong Red Dragon', category: 'Symbols' },
+    { emoji: '🕐', name: 'Clock One O’Clock', category: 'Symbols' },
+    { emoji: '🕑', name: 'Clock Two O’Clock', category: 'Symbols' },
+    { emoji: '🕒', name: 'Clock Three O’Clock', category: 'Symbols' },
+    { emoji: '🕓', name: 'Clock Four O’Clock', category: 'Symbols' },
+    { emoji: '🕔', name: 'Clock Five O’Clock', category: 'Symbols' },
+    { emoji: '🕕', name: 'Clock Six O’Clock', category: 'Symbols' },
+    { emoji: '🕖', name: 'Clock Seven O’Clock', category: 'Symbols' },
+    { emoji: '🕗', name: 'Clock Eight O’Clock', category: 'Symbols' },
+    { emoji: '🕘', name: 'Clock Nine O’Clock', category: 'Symbols' },
+    { emoji: '🕙', name: 'Clock Ten O’Clock', category: 'Symbols' },
+    { emoji: '🕚', name: 'Clock Eleven O’Clock', category: 'Symbols' },
+    { emoji: '🕛', name: 'Clock Twelve O’Clock', category: 'Symbols' },
+    { emoji: '🕜', name: 'Clock One-Thirty', category: 'Symbols' },
+    { emoji: '🕝', name: 'Clock Two-Thirty', category: 'Symbols' },
+    { emoji: '🕞', name: 'Clock Three-Thirty', category: 'Symbols' },
+    { emoji: '🕟', name: 'Clock Four-Thirty', category: 'Symbols' },
+    { emoji: '🕠', name: 'Clock Five-Thirty', category: 'Symbols' },
+    { emoji: '🕡', name: 'Clock Six-Thirty', category: 'Symbols' },
+    { emoji: '🕢', name: 'Clock Seven-Thirty', category: 'Symbols' },
+    { emoji: '🕣', name: 'Clock Eight-Thirty', category: 'Symbols' },
+    { emoji: '🕤', name: 'Clock Nine-Thirty', category: 'Symbols' },
+    { emoji: '🕥', name: 'Clock Ten-Thirty', category: 'Symbols' },
+    { emoji: '🕦', name: 'Clock Eleven-Thirty', category: 'Symbols' },
+    { emoji: '🕧', name: 'Clock Twelve-Thirty', category: 'Symbols' },
+];
 
-        ];
+const CATEGORY_ICONS = {
+    'Favorites': '❤️'
+};
 
-        function displayEmojis(emojiList, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = "";
-            emojiList.forEach(emoji => {
-                const div = document.createElement("div");
-                div.className = "emoji-box";
-                div.innerHTML = `<span class="text-2xl">${emoji.symbol}</span><br><small>${emoji.name}</small>`;
-                div.onclick = () => copyToClipboard(emoji.symbol);
-                container.appendChild(div);
-            });
+let favoriteEmojis = JSON.parse(localStorage.getItem('favorites')) || [];
+
+const ALL_CATEGORIES = Object.keys(CATEGORY_ICONS);
+
+
+// Main Script (equivalent to script.js)
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+    const searchInput = document.getElementById('emoji-search');
+    const emojiGrid = document.getElementById('emoji-grid-container');
+    const categoryNav = document.getElementById('category-nav');
+    const menuToggle = document.getElementById('menu-toggle');
+    const emojiCounter = document.getElementById('emoji-counter');
+
+    let currentCategory = 'All';
+
+    // --- Theme Toggle Logic ---
+    function toggleTheme() {
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
         }
+    }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            alert("Copied: " + text);
+    function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            body.classList.add('dark-theme');
         }
+    }
 
-        function toggleTheme() {
-            const body = document.body;
-            const themeButton = document.getElementById("theme-toggle");
-            if (body.style.backgroundColor === "black") {
-                body.style.backgroundColor = "white";
-                body.style.color = "black";
-                themeButton.innerHTML = '<span class="material-icons">dark_mode</span>';
-            } else {
-                body.style.backgroundColor = "black";
-                body.style.color = "white";
-                themeButton.innerHTML = '<span class="material-icons">light_mode</span>';
-            }
-        }
+    themeToggle.addEventListener('click', toggleTheme);
+    initializeTheme();
 
-        document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
+    // --- Category Logic ---
+    function renderCategories() {
+        const allBtn = document.createElement('button');
+        allBtn.textContent = 'All Emojis';
+        allBtn.className = 'category-btn active';
+        allBtn.dataset.category = 'All';
+        categoryNav.appendChild(allBtn);
 
-        displayEmojis(emojis, "emojis-container");
-
-        // إضافة محرك البحث
-        document.getElementById("search").addEventListener("input", function() {
-            const searchTerm = this.value.toLowerCase();
-            const filteredEmojis = emojis.filter(emoji => emoji.name.toLowerCase().includes(searchTerm));
-            displayEmojis(filteredEmojis, "emojis-container");
+        ALL_CATEGORIES.forEach(category => {
+            const btn = document.createElement('button');
+            const icon = CATEGORY_ICONS[category] || '';
+            btn.textContent = `${icon} ${category}`;
+            btn.className = 'category-btn';
+            btn.dataset.category = category;
+            categoryNav.appendChild(btn);
         });
+        
+        categoryNav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.category-btn');
+            if (btn) {
+                const category = btn.dataset.category;
+                currentCategory = category;
+                
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Close menu on mobile
+                if (window.innerWidth <= 768) {
+                    categoryNav.classList.remove('open');
+                    menuToggle.innerHTML = '&#9776;';
+                }
+
+                filterAndRenderGrid();
+            }
+        });
+    }
+
+   function createEmojiCard(item) {
+    const card = document.createElement('div');
+    card.className = 'emoji-card';
+
+    // زر القلب
+    const heartBtn = document.createElement('button');
+    heartBtn.className = 'heart-btn';
+    const isFavorite = favoriteEmojis.some(fav => fav.emoji === item.emoji);
+    heartBtn.textContent = isFavorite ? '❤️' : '♡';
+    if (isFavorite) heartBtn.classList.add('active');
+
+    heartBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        heartBtn.classList.toggle('active');
+
+        if (heartBtn.classList.contains('active')) {
+            heartBtn.textContent = '❤️';
+            if (!favoriteEmojis.some(fav => fav.emoji === item.emoji)) {
+                favoriteEmojis.push(item);
+                localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+            }
+        } else {
+            heartBtn.textContent = '♡';
+            favoriteEmojis = favoriteEmojis.filter(fav => fav.emoji !== item.emoji);
+            localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+        }
+
+        // تحديث قسم المفضلة لو هو مفتوح حاليًا
+        if (currentCategory === 'Favorites') filterAndRenderGrid();
+    });
+
+    // باقي الكارد
+    const emojiDiv = document.createElement('div');
+    emojiDiv.className = 'emoji';
+    emojiDiv.textContent = item.emoji;
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'emoji-name';
+    nameDiv.textContent = item.name;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        try {
+            await navigator.clipboard.writeText(item.emoji);
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        } catch (err) {
+            copyBtn.textContent = '❌ Error';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        }
+    });
+
+    card.append(heartBtn, emojiDiv, nameDiv, copyBtn);
+    setTimeout(() => card.classList.add('fade-in'), 10);
+
+    return card;
+}
+
+
+    function filterAndRenderGrid() {
+    const searchTerm = searchInput.value.toLowerCase();
+    emojiGrid.innerHTML = '';
+
+    let filteredEmojis;
+
+    if (currentCategory === 'Favorites') {
+        // البحث في المفضلة فقط
+        filteredEmojis = favoriteEmojis.filter(item =>
+            item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+        );
+    } else if (searchTerm) {
+        // لو في قسم All → البحث في كل الإيموجيز
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+            );
+        } else {
+            // البحث بس في القسم الحالي
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.category === currentCategory &&
+                (item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm))
+            );
+        }
+    } else {
+        // بدون بحث
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.slice(0, 1714);
+        } else {
+            filteredEmojis = EMOJI_COLLECTION.filter(item => item.category === currentCategory);
+        }
+    }
+
+    // إنشاء الكروت
+    filteredEmojis.forEach(item => emojiGrid.appendChild(createEmojiCard(item)));
+
+    // عداد الإيموجيز الظاهرة
+    emojiCounter.textContent = `${filteredEmojis.length} Emojis Displayed`;
+
+    // زر show more
+    const showMoreBtn = document.getElementById("show-more-btn");
+    if (currentCategory !== 'Favorites' && !searchTerm) {
+        showMoreBtn.style.display = 'block';
+        showMoreBtn.onclick = function() {
+            const link = String(currentCategory).toLowerCase().replace(/ /g, '-') + '.html';
+            window.location.href = link;
+        };
+    } else {
+        showMoreBtn.style.display = 'none';
+    }
+}
+
+
+    searchInput.addEventListener('input', filterAndRenderGrid);
+
+    // --- Mobile Menu Toggle ---
+    menuToggle.addEventListener('click', () => {
+        const isOpen = categoryNav.classList.toggle('open');
+        menuToggle.innerHTML = isOpen ? '&times;' : '&#9776;';
+    });
+
+
+    // Initialize
+    renderCategories();
+    filterAndRenderGrid();
+});
+
+// بعد ما تعمل render لكل الإيموجيز
+const loader = document.getElementById('loader');
+
+loader.style.transition = 'opacity 0.5s';
+loader.style.opacity = '0';
+
+setTimeout(() => {
+    loader.style.display = 'none';
+}, 500); // 500ms بعد انتهاء الـ fade-out
+
+const showMoreBtn = document.getElementById("show-more-btn");
+
+showMoreBtn.onclick = function() {
+  window.location.href = "https://example.com/more-emojis"; // ضع هنا الرابط المطلوب
+};
+
+const clearBtn = document.getElementById('clear-search');
+
+// إظهار/إخفاء زر X أثناء الكتابة
+searchInput.addEventListener('input', () => {
+    if (searchInput.value.length > 0) {
+        clearBtn.style.display = 'block';
+    } else {
+        clearBtn.style.display = 'none';
+    }
+    filterAndRenderGrid();
+});
+
+// مسح النص عند الضغط على X
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    clearBtn.style.display = 'none';
+    filterAndRenderGrid();
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("heart-btn")) {
+    e.target.classList.toggle("active");
+    e.target.textContent = e.target.classList.contains("active") ? "❤️" : "♡";
+  }
+});
+
     </script>
 </body>
 </html>

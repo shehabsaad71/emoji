@@ -3,387 +3,562 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emoji & Symbols Library</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>EMOGO, Emojis library</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            transition: background 0.3s, color 0.3s;
-        }
-        .header h1 {
-            font-size: 50px;
-            background-clip: text;
-            background: linear-gradient(to right, #4285f4, #d96570);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .emoji-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-            gap: 10px;
-            padding: 10px;
-        }
-        .emoji-box {
-            padding: 10px;
-            background: white;
-            color: black;
-            text-align: center;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .emoji-box:hover {
-            background: gray;
-        }
-        .toggle-theme {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 30px;
-        }
-        .search-bar {
-            margin: 20px auto;
-            display: flex;
-            justify-content: center;
-        }
-        .search-bar input {
-            width: 80%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid gray;
-            font-size: 16px;
-        }
-    </style>
+    
+    <link rel="stylesheet" href="styles.css"> 
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <button id="theme-toggle" class="toggle-theme">
-        <span class="material-icons">light_mode</span>
-    </button>
 
-    <div class="container mx-auto p-4">
-        <div class="header text-center">
-            <h1>Discover & Copy The Best Objects Emojis & Symbols Easily</h1>
-            <P>Explore a collection of the best Objects Emojis & Symbols ready for instant copy and share on social media or chats.</P>
-        </div>
-        
-        <!-- شريط البحث -->
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="Search emojis..." class="w-full p-2 mb-4 border rounded" style="color: black; background-color: white;">
-        </div>
+<header id="site-header">
+    <a class="logo" href="index.html">EMOGO 😀</a>
 
-        <h2 class="text-xl font-bold mt-4">Objects</h2>
-        <div id="persons-container" class="emoji-container"></div>
+    <a class="ascii-link" href="ascii-maker.html">ASCII Maker</a>
 
-        <!-- الرموز التعبيرية -->
-        <div id="emojis-container" class="emoji-container"></div>
+    <div class="header-controls">
+        <button id="theme-toggle" aria-label="Toggle dark/light theme">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+        </button>
+        <button id="menu-toggle" class="mobile-only" aria-label="Open menu">
+            <span>&#9776;</span>
+        </button>
     </div>
+</header>
+
+    <main>
+        <div class="search-container">
+            <input type="text" id="emoji-search" placeholder="🔍 Search for emoji...">
+            <button id="clear-search" title="Clear Search">✖️</button>
+            <span id="emoji-counter">0 Emojis Displayed</span>
+        </div>
+
+        <nav id="category-nav">
+        </nav>
+    <div id="loader" class="loader">
+      <div class="spinner"></div>
+      Loading Emojis...
+    </div>
+        <section id="emoji-grid-container">
+        </section>
+    </main>
+    <footer>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="terms-of-service.html">Terms of Service</a>
+            <a href="contact-us.html">Contact Us</a>
+            <a href="about-us.html">About Us</a>
+            <a href="blog.html">Blog</a>
+        </div>
+        <p class="copyright">© 2025 Emogo — All Rights Reserved.</p>
+    </footer>
 
     <script>
-        const emojis = [
-        { symbol: "👓", name: "Glasses" },
-    { symbol: "🕶", name: "Sunglasses" },
-    { symbol: "🥽", name: "Goggles" },
-    { symbol: "🥼", name: "Lab Coat" },
-    { symbol: "🦺", name: "Safety Vest" },
-    { symbol: "👔", name: "Necktie" },
-    { symbol: "👕", name: "Shirt" },
-    { symbol: "👖", name: "Jeans" },
-    { symbol: "🧣", name: "Scarf" },
-    { symbol: "🧤", name: "Gloves" },
-    { symbol: "🧥", name: "Coat" },
-    { symbol: "🧦", name: "Socks" },
-    { symbol: "🛍", name: "Shopping Bags" },
-    { symbol: "👝", name: "Clutch Bag" },
-    { symbol: "👜", name: "Handbag" },
-    { symbol: "👛", name: "Purse" },
-    { symbol: "👚", name: "Blouse" },
-    { symbol: "👙", name: "Bikini" },
-    { symbol: "🩳", name: "Shorts" },
-    { symbol: "🩲", name: "Boxers" },
-    { symbol: "🩱", name: "One-Piece Swimsuit" },
-    { symbol: "🥻", name: "Sari" },
-    { symbol: "👘", name: "Kimono" },
-    { symbol: "👗", name: "Dress" },
-    { symbol: "👒", name: "Hat" },
-    { symbol: "👑", name: "Crown" },
-    { symbol: "👢", name: "Boots" },
-    { symbol: "🩰", name: "Ballet Shoes" },
-    { symbol: "👡", name: "Sandal" },
-    { symbol: "👠", name: "High Heel" },
-    { symbol: "🥿", name: "Flat Shoe" },
-    { symbol: "🥾", name: "Hiking Boot" },
-    { symbol: "👟", name: "Sneaker" },
-    { symbol: "👞", name: "Moccasin" },
-    { symbol: "🩴", name: "Flip-Flop" },
-    { symbol: "🎒", name: "Backpack" },
-    { symbol: "🔉", name: "Speaker High Volume" },
-    { symbol: "🔈", name: "Speaker Medium Volume" },
-    { symbol: "🔇", name: "Speaker Mute" },
-    { symbol: "💎", name: "Gem Stone" },
-    { symbol: "💍", name: "Ring" },
-    { symbol: "💄", name: "Lipstick" },
-    { symbol: "📿", name: "Prayer Beads" },
-    { symbol: "⛑", name: "Helmet with White Cross" },
-    { symbol: "🪖", name: "Military Helmet" },
-    { symbol: "🧢", name: "Cap" },
-    { symbol: "🎓", name: "Graduation Cap" },
-    { symbol: "🎩", name: "Top Hat" },
-    { symbol: "🔊", name: "Speaker Low Volume" },
-    { symbol: "📢", name: "Loudspeaker" },
-    { symbol: "📣", name: "Megaphone" },
-    { symbol: "📯", name: "Postal Horn" },
-    { symbol: "🔔", name: "Bell" },
-    { symbol: "🔕", name: "Bell with Slash" },
-    { symbol: "🎼", name: "Musical Score" },
-    { symbol: "🎵", name: "Musical Note" },
-    { symbol: "🎶", name: "Multiple Musical Notes" },
-    { symbol: "🎙", name: "Studio Microphone" },
-    { symbol: "🎚", name: "Level Slider" },
-    { symbol: "🎛", name: "Control Knobs" },
-    { symbol: "🪘", name: "Drum" },
-    { symbol: "🥁", name: "Drum with Drumsticks" },
-    { symbol: "🪕", name: "Banjo" },
-    { symbol: "🎻", name: "Violin" },
-    { symbol: "🎺", name: "Trumpet" },
-    { symbol: "🎹", name: "Piano" },
-    { symbol: "🎸", name: "Guitar" },
-    { symbol: "🪗", name: "Accordion" },
-    { symbol: "🎷", name: "Saxophone" },
-    { symbol: "📻", name: "Radio" },
-    { symbol: "🎧", name: "Headphones" },
-    { symbol: "🎤", name: "Microphone" },
-    { symbol: "📱", name: "Mobile Phone" },
-    { symbol: "📲", name: "Mobile Phone with Arrow" },
-    { symbol: "☎", name: "Telephone" },
-    { symbol: "📞", name: "Telephone Receiver" },
-    { symbol: "📟", name: "Pager" },
-    { symbol: "📠", name: "Fax Machine" },
-    { symbol: "🔋", name: "Battery" },
-    { symbol: "🔌", name: "Electric Plug" },
-    { symbol: "💻", name: "Laptop" },
-    { symbol: "🖥", name: "Desktop Computer" },
-    { symbol: "🖨", name: "Printer" },
-    { symbol: "⌨", name: "Keyboard" },
-    { symbol: "🖱", name: "Computer Mouse" },
-    { symbol: "🖲", name: "Trackball" },
-    { symbol: "💽", name: "Computer Disk" },
-    { symbol: "💾", name: "Floppy Disk" },
-    { symbol: "💿", name: "Optical Disk" },
-    { symbol: "📀", name: "DVD" },
-    { symbol: "🧮", name: "Abacus" },
-    { symbol: "🎥", name: "Movie Camera" },
-    { symbol: "🎞", name: "Film Frames" },
-    { symbol: "📽", name: "Film Projector" },
-    { symbol: "🎬", name: "Clapper Board" },
-    { symbol: "📺", name: "Television" },
-    { symbol: "📔", name: "Notebook with Decorative Cover" },
-    { symbol: "🪔", name: "Candle" },
-    { symbol: "🏮", name: "Red Lantern" },
-    { symbol: "🔦", name: "Flashlight" },
-    { symbol: "💡", name: "Light Bulb" },
-    { symbol: "🕯", name: "Candle" },
-    { symbol: "🔎", name: "Magnifying Glass Tilted Left" },
-    { symbol: "🔍", name: "Magnifying Glass Tilted Right" },
-    { symbol: "📼", name: "Videocassette" },
-    { symbol: "📹", name: "Video Camera" },
-    { symbol: "📸", name: "Camera with Flash" },
-    { symbol: "📷", name: "Camera" },
-    { symbol: "📕", name: "Closed Book" },
-    { symbol: "📖", name: "Open Book" },
-    { symbol: "📗", name: "Green Book" },
-    { symbol: "📘", name: "Blue Book" },
-    { symbol: "📙", name: "Orange Book" },
-    { symbol: "📚", name: "Books" },
-    { symbol: "📓", name: "Notebook" },
-    { symbol: "📒", name: "Ledger" },
-    { symbol: "📃", name: "Page with Curl" },
-    { symbol: "📜", name: "Scroll" },
-    { symbol: "📄", name: "Document" },
-    { symbol: "📰", name: "Newspaper" },
-    { symbol: "💳", name: "Credit Card" },
-    { symbol: "💸", name: "Money with Wings" },
-    { symbol: "💷", name: "Pound Banknote" },
-    { symbol: "💶", name: "Euro Banknote" },
-    { symbol: "💵", name: "Dollar Banknote" },
-    { symbol: "💴", name: "Yen Banknote" },
-    { symbol: "🪙", name: "Coin" },
-    { symbol: "💰", name: "Money Bag" },
-    { symbol: "🏷", name: "Label" },
-    { symbol: "🔖", name: "Bookmark" },
-    { symbol: "📑", name: "Bookmark Tabs" },
-    { symbol: "🗞", name: "Rolled-Up Newspaper" },
-    { symbol: "🧾", name: "Receipt" },
-    { symbol: "💹", name: "Chart Increasing with Yen" },
-    { symbol: "✉", name: "Envelope" },
-    { symbol: "📧", name: "E-Mail" },
-    { symbol: "📨", name: "Envelope with Arrow" },
-    { symbol: "📩", name: "Envelope with Downward Arrow" },
-    { symbol: "📤", name: "Outbox Tray" },
-    { symbol: "📥", name: "Inbox Tray" },
-    { symbol: "📦", name: "Package" },
-    { symbol: "📫", name: "Mailbox with Raised Flag" },
-    { symbol: "📪", name: "Mailbox with Lowered Flag" },
-    { symbol: "📬", name: "Open Mailbox with Raised Flag" },
-    { symbol: "📭", name: "Open Mailbox with Lowered Flag" },
-    { symbol: "📮", name: "Postbox" },
-    { symbol: "🗳", name: "Ballot Box" },
-    { symbol: "✏", name: "Pencil" },
-    { symbol: "✒", name: "Black Nib" },
-    { symbol: "🖋", name: "Fountain Pen" },
-    { symbol: "🖊", name: "Pen" },
-    { symbol: "🖌", name: "Paintbrush" },
-    { symbol: "🖍", name: "Crayon" },
-    { symbol: "📝", name: "Memo" },
-    { symbol: "💼", name: "Briefcase" },
-    { symbol: "📁", name: "File Folder" },
-    { symbol: "📌", name: "Pushpin" },
-    { symbol: "📋", name: "Clipboard" },
-    { symbol: "📊", name: "Bar Chart" },
-    { symbol: "📉", name: "Chart Decreasing" },
-    { symbol: "📈", name: "Chart Increasing" },
-    { symbol: "📇", name: "Card Index" },
-    { symbol: "🗓", name: "Spiral Calendar" },
-    { symbol: "🗒", name: "Spiral Notepad" },
-    { symbol: "📆", name: "Calendar" },
-    { symbol: "📅", name: "Tear-Off Calendar" },
-    { symbol: "🗂", name: "Card Index Dividers" },
-    { symbol: "📂", name: "Open File Folder" },
-    { symbol: "📍", name: "Round Pushpin" },
-    { symbol: "📎", name: "Paperclip" },
-    { symbol: "🖇", name: "Linked Paperclips" },
-    { symbol: "📏", name: "Straight Ruler" },
-    { symbol: "📐", name: "Triangle Ruler" },
-    { symbol: "✂", name: "Scissors" },
-    { symbol: "🗃", name: "File Cabinet" },
-    { symbol: "🗄", name: "File Cabinet" },
-    { symbol: "🗑", name: "Wastebasket" },
-    { symbol: "🔒", name: "Lock" },
-    { symbol: "🔓", name: "Unlocked" },
-    { symbol: "🔏", name: "Locked with Key" },
-    { symbol: "🔐", name: "Locked with Key" },
-    { symbol: "🔑", name: "Key" },
-    { symbol: "🗝", name: "Old Key" },
-    { symbol: "🔨", name: "Hammer" },
-    { symbol: "🪓", name: "Axe" },
-    { symbol: "⛏", name: "Pick" },
-    { symbol: "⚒", name: "Hammer and Pick" },
-    { symbol: "🛠", name: "Hammer and Wrench" },
-    { symbol: "🗡", name: "Dagger" },
-    { symbol: "⚔", name: "Crossed Swords" },
-    { symbol: "🔫", name: "Pistol" },
-    { symbol: "🪃", name: "Syringe" },
-    { symbol: "⛓", name: "Chains" },
-    { symbol: "🔗", name: "Link" },
-    { symbol: "🦯", name: "White Cane" },
-    { symbol: "⚖", name: "Balance Scale" },
-    { symbol: "🗜", name: "Clamp" },
-    { symbol: "⚙", name: "Gear" },
-    { symbol: "🔩", name: "Bolt" },
-    { symbol: "🪛", name: "Screwdriver" },
-    { symbol: "🔧", name: "Wrench" },
-    { symbol: "🪚", name: "Saw" },
-    { symbol: "🛡", name: "Shield" },
-    { symbol: "🏹", name: "Bow and Arrow" },
-    { symbol: "🪝", name: "Hook" },
-    { symbol: "🧰", name: "Toolbox" },
-    { symbol: "🧲", name: "Magnet" },
-    { symbol: "🪜", name: "Ladder" },
-    { symbol: "⚗", name: "Alembic" },
-    { symbol: "🧪", name: "Test Tube" },
-    { symbol: "🧫", name: "Petri Dish" },
-    { symbol: "🧬", name: "DNA" },
-    { symbol: "🔬", name: "Microscope" },
-    { symbol: "🔭", name: "Telescope" },
-    { symbol: "📡", name: "Satellite Antenna" },
-    { symbol: "💉", name: "Syringe" },
-    { symbol: "🚽", name: "Toilet" },
-    { symbol: "🪑", name: "Chair" },
-    { symbol: "🛋", name: "Couch and Lamp" },
-    { symbol: "🛏", name: "Bed" },
-    { symbol: "🪟", name: "Window" },
-    { symbol: "🪞", name: "Mirror" },
-    { symbol: "🛗", name: "Lift" },
-    { symbol: "🚪", name: "Door" },
-    { symbol: "🩺", name: "Stethoscope" },
-    { symbol: "🩹", name: "Adhesive Bandage" },
-    { symbol: "💊", name: "Pill" },
-    { symbol: "🩸", name: "Drop of Blood" },
-    { symbol: "🪠", name: "Plunger" },
-    { symbol: "🚿", name: "Shower" },
-    { symbol: "🛁", name: "Bathtub" },
-    { symbol: "🪤", name: "Mouse Trap" },
-    { symbol: "🪒", name: "Razor" },
-    { symbol: "🧴", name: "Lotion Bottle" },
-    { symbol: "🧷", name: "Safety Pin" },
-    { symbol: "🧹", name: "Broom" },
-    { symbol: "🧺", name: "Basket" },
-    { symbol: "🧻", name: "Toilet Paper" },
-    { symbol: "🪣", name: "Bucket" },
-    { symbol: "🧼", name: "Soap" },
-    { symbol: "🪥", name: "Toothbrush" },
-    { symbol: "🧽", name: "Sponge" },
-    { symbol: "🧯", name: "Fire Extinguisher" },
-    { symbol: "🛒", name: "Shopping Cart" },
-    { symbol: "🚬", name: "Cigarette" },
-    { symbol: "⚰", name: "Coffin" },
-    { symbol: "🪦", name: "Headstone" },
-    { symbol: "⚱", name: "Funeral Urn" },
-    { symbol: "🗿", name: "Moai" },
-    { symbol: "🪧", name: "Placard" }
+// Data (equivalent to data.js)
+const EMOJI_COLLECTION = [
+    // Objects
+    { emoji: '⌚', name: 'Watch', category: 'Objects' },
+    { emoji: '📱', name: 'Mobile Phone', category: 'Objects' },
+    { emoji: '📲', name: 'Mobile Phone with Arrow', category: 'Objects' },
+    { emoji: '💻', name: 'Laptop', category: 'Objects' },
+    { emoji: '⌨️', name: 'Keyboard', category: 'Objects' },
+    { emoji: '🖥️', name: 'Desktop Computer', category: 'Objects' },
+    { emoji: '🖨️', name: 'Printer', category: 'Objects' },
+    { emoji: '🖱️', name: 'Computer Mouse', category: 'Objects' },
+    { emoji: '🖲️', name: 'Trackball', category: 'Objects' },
+    { emoji: '🕹️', name: 'Joystick', category: 'Objects' },
+    { emoji: '🗜️', name: 'Clamp', category: 'Objects' },
+    { emoji: '💽', name: 'Computer Disk', category: 'Objects' },
+    { emoji: '💾', name: 'Floppy Disk', category: 'Objects' },
+    { emoji: '💿', name: 'Optical Disk', category: 'Objects' },
+    { emoji: '📀', name: 'DVD', category: 'Objects' },
+    { emoji: '📼', name: 'Videocassette', category: 'Objects' },
+    { emoji: '📷', name: 'Camera', category: 'Objects' },
+    { emoji: '📸', name: 'Camera with Flash', category: 'Objects' },
+    { emoji: '📹', name: 'Video Camera', category: 'Objects' },
+    { emoji: '🎥', name: 'Movie Camera', category: 'Objects' },
+    { emoji: '📽️', name: 'Film Projector', category: 'Objects' },
+    { emoji: '🎞️', name: 'Film Frames', category: 'Objects' },
+    { emoji: '📞', name: 'Telephone Receiver', category: 'Objects' },
+    { emoji: '☎️', name: 'Telephone', category: 'Objects' },
+    { emoji: '📟', name: 'Pager', category: 'Objects' },
+    { emoji: '📠', name: 'Fax Machine', category: 'Objects' },
+    { emoji: '📺', name: 'Television', category: 'Objects' },
+    { emoji: '📻', name: 'Radio', category: 'Objects' },
+    { emoji: '🎙️', name: 'Studio Microphone', category: 'Objects' },
+    { emoji: '🎚️', name: 'Level Slider', category: 'Objects' },
+    { emoji: '🎛️', name: 'Control Knobs', category: 'Objects' },
+    { emoji: '🧭', name: 'Compass', category: 'Objects' },
+    { emoji: '⏱️', name: 'Stopwatch', category: 'Objects' },
+    { emoji: '⏲️', name: 'Timer Clock', category: 'Objects' },
+    { emoji: '⏰', name: 'Alarm Clock', category: 'Objects' },
+    { emoji: '🕰️', name: 'Mantelpiece Clock', category: 'Objects' },
+    { emoji: '⌛', name: 'Hourglass Done', category: 'Objects' },
+    { emoji: '⏳', name: 'Hourglass Not Done', category: 'Objects' },
+    { emoji: '📡', name: 'Satellite Antenna', category: 'Objects' },
+    { emoji: '🔋', name: 'Battery', category: 'Objects' },
+    { emoji: '🪫', name: 'Low Battery', category: 'Objects' },
+    { emoji: '🔌', name: 'Electric Plug', category: 'Objects' },
+    { emoji: '💡', name: 'Light Bulb', category: 'Objects' },
+    { emoji: '🔦', name: 'Flashlight', category: 'Objects' },
+    { emoji: '🕯️', name: 'Candle', category: 'Objects' },
+    { emoji: '🪔', name: 'Diya Lamp', category: 'Objects' },
+    { emoji: '🧯', name: 'Fire Extinguisher', category: 'Objects' },
+    { emoji: '🛢️', name: 'Oil Drum', category: 'Objects' },
+    { emoji: '💸', name: 'Money with Wings', category: 'Objects' },
+    { emoji: '💵', name: 'Dollar Banknote', category: 'Objects' },
+    { emoji: '💴', name: 'Yen Banknote', category: 'Objects' },
+    { emoji: '💶', name: 'Euro Banknote', category: 'Objects' },
+    { emoji: '💷', name: 'Pound Banknote', category: 'Objects' },
+    { emoji: '🪙', name: 'Coin', category: 'Objects' },
+    { emoji: '💰', name: 'Money Bag', category: 'Objects' },
+    { emoji: '💳', name: 'Credit Card', category: 'Objects' },
+    { emoji: '🪪', name: 'Identification Card', category: 'Objects' },
+    { emoji: '💎', name: 'Gem Stone', category: 'Objects' },
+    { emoji: '⚖️', name: 'Balance Scale', category: 'Objects' },
+    { emoji: '🪜', name: 'Ladder', category: 'Objects' },
+    { emoji: '🧰', name: 'Toolbox', category: 'Objects' },
+    { emoji: '🪛', name: 'Screwdriver', category: 'Objects' },
+    { emoji: '🔧', name: 'Wrench', category: 'Objects' },
+    { emoji: '🔨', name: 'Hammer', category: 'Objects' },
+    { emoji: '⚒️', name: 'Hammer and Pick', category: 'Objects' },
+    { emoji: '🛠️', name: 'Hammer and Wrench', category: 'Objects' },
+    { emoji: '⛏️', name: 'Pick', category: 'Objects' },
+    { emoji: '🪚', name: 'Saw', category: 'Objects' },
+    { emoji: '🔩', name: 'Bolt and Nut', category: 'Objects' },
+    { emoji: '⚙️', name: 'Gear', category: 'Objects' },
+    { emoji: '🪤', name: 'Mouse Trap', category: 'Objects' },
+    { emoji: '🧱', name: 'Brick', category: 'Objects' },
+    { emoji: '⛓️', name: 'Chains', category: 'Objects' },
+    { emoji: '⛓️‍💥', name: 'Broken Chain', category: 'Objects' },
+    { emoji: '🧲', name: 'Magnet', category: 'Objects' },
+    { emoji: '🔫', name: 'Water Pistol', category: 'Objects' },
+    { emoji: '💣', name: 'Bomb', category: 'Objects' },
+    { emoji: '🧨', name: 'Firecracker', category: 'Objects' },
+    { emoji: '🪓', name: 'Axe', category: 'Objects' },
+    { emoji: '🔪', name: 'Kitchen Knife', category: 'Objects' },
+    { emoji: '🗡️', name: 'Dagger', category: 'Objects' },
+    { emoji: '⚔️', name: 'Crossed Swords', category: 'Objects' },
+    { emoji: '🛡️', name: 'Shield', category: 'Objects' },
+    { emoji: '🚬', name: 'Cigarette', category: 'Objects' },
+    { emoji: '⚰️', name: 'Coffin', category: 'Objects' },
+    { emoji: '🪦', name: 'Headstone', category: 'Objects' },
+    { emoji: '⚱️', name: 'Funeral Urn', category: 'Objects' },
+    { emoji: '🏺', name: 'Amphora', category: 'Objects' },
+    { emoji: '🔮', name: 'Crystal Ball', category: 'Objects' },
+    { emoji: '📿', name: 'Prayer Beads', category: 'Objects' },
+    { emoji: '🧿', name: 'Nazar Amulet', category: 'Objects' },
+    { emoji: '🪬', name: 'Hamsa', category: 'Objects' },
+    { emoji: '💈', name: 'Barber Pole', category: 'Objects' },
+    { emoji: '⚗️', name: 'Alembic', category: 'Objects' },
+    { emoji: '🔭', name: 'Telescope', category: 'Objects' },
+    { emoji: '🔬', name: 'Microscope', category: 'Objects' },
+    { emoji: '🕳️', name: 'Hole', category: 'Objects' },
+    { emoji: '🩻', name: 'X-Ray', category: 'Objects' },
+    { emoji: '🩹', name: 'Adhesive Bandage', category: 'Objects' },
+    { emoji: '🩺', name: 'Stethoscope', category: 'Objects' },
+    { emoji: '💊', name: 'Pill', category: 'Objects' },
+    { emoji: '💉', name: 'Syringe', category: 'Objects' },
+    { emoji: '🩸', name: 'Drop of Blood', category: 'Objects' },
+    { emoji: '🧬', name: 'DNA', category: 'Objects' },
+    { emoji: '🦠', name: 'Microbe', category: 'Objects' },
+    { emoji: '🧫', name: 'Petri Dish', category: 'Objects' },
+    { emoji: '🧪', name: 'Test Tube', category: 'Objects' },
+    { emoji: '🌡️', name: 'Thermometer', category: 'Objects' },
+    { emoji: '🧹', name: 'Broom', category: 'Objects' },
+    { emoji: '🪠', name: 'Plunger', category: 'Objects' },
+    { emoji: '🧺', name: 'Basket', category: 'Objects' },
+    { emoji: '🧻', name: 'Roll of Paper', category: 'Objects' },
+    { emoji: '🚽', name: 'Toilet', category: 'Objects' },
+    { emoji: '🚰', name: 'Potable Water', category: 'Objects' },
+    { emoji: '🚿', name: 'Shower', category: 'Objects' },
+    { emoji: '🛁', name: 'Bathtub', category: 'Objects' },
+    { emoji: '🧼', name: 'Soap', category: 'Objects' },
+    { emoji: '🪥', name: 'Toothbrush', category: 'Objects' },
+    { emoji: '🪒', name: 'Razor', category: 'Objects' },
+    { emoji: '🪮', name: 'Comb', category: 'Objects' },
+    { emoji: '🧽', name: 'Sponge', category: 'Objects' },
+    { emoji: '🪣', name: 'Bucket', category: 'Objects' },
+    { emoji: '🧴', name: 'Lotion Bottle', category: 'Objects' },
+    { emoji: '🛎️', name: 'Bellhop Bell', category: 'Objects' },
+    { emoji: '🔑', name: 'Key', category: 'Objects' },
+    { emoji: '🗝️', name: 'Old Key', category: 'Objects' },
+    { emoji: '🚪', name: 'Door', category: 'Objects' },
+    { emoji: '🪑', name: 'Chair', category: 'Objects' },
+    { emoji: '🛋️', name: 'Couch and Lamp', category: 'Objects' },
+    { emoji: '🛏️', name: 'Bed', category: 'Objects' },
+    { emoji: '🛌', name: 'Person in Bed', category: 'Objects' },
+    { emoji: '🧸', name: 'Teddy Bear', category: 'Objects' },
+    { emoji: '🪆', name: 'Nesting Dolls', category: 'Objects' },
+    { emoji: '🖼️', name: 'Framed Picture', category: 'Objects' },
+    { emoji: '🪞', name: 'Mirror', category: 'Objects' },
+    { emoji: '🪟', name: 'Window', category: 'Objects' },
+    { emoji: '🛍️', name: 'Shopping Bags', category: 'Objects' },
+    { emoji: '🛒', name: 'Shopping Cart', category: 'Objects' },
+    { emoji: '🎁', name: 'Wrapped Gift', category: 'Objects' },
+    { emoji: '🎈', name: 'Balloon', category: 'Objects' },
+    { emoji: '🎏', name: 'Carp Streamer', category: 'Objects' },
+    { emoji: '🎀', name: 'Ribbon', category: 'Objects' },
+    { emoji: '🪄', name: 'Magic Wand', category: 'Objects' },
+    { emoji: '🪅', name: 'Piñata', category: 'Objects' },
+    { emoji: '🎊', name: 'Confetti Ball', category: 'Objects' },
+    { emoji: '🎉', name: 'Party Popper', category: 'Objects' },
+    { emoji: '🎎', name: 'Japanese Dolls', category: 'Objects' },
+    { emoji: '🪭', name: 'Folding Hand Fan', category: 'Objects' },
+    { emoji: '🏮', name: 'Red Paper Lantern', category: 'Objects' },
+    { emoji: '🎐', name: 'Wind Chime', category: 'Objects' },
+    { emoji: '🪩', name: 'Mirror Ball', category: 'Objects' },
+    { emoji: '🧧', name: 'Red Envelope', category: 'Objects' },
+    { emoji: '✉️', name: 'Envelope', category: 'Objects' },
+    { emoji: '📧', name: 'E-Mail', category: 'Objects' },
+    { emoji: '📨', name: 'Incoming Envelope', category: 'Objects' },
+    { emoji: '📩', name: 'Envelope with Arrow', category: 'Objects' },
+    { emoji: '📤', name: 'Outbox Tray', category: 'Objects' },
+    { emoji: '📥', name: 'Inbox Tray', category: 'Objects' },
+    { emoji: '📦', name: 'Package', category: 'Objects' },
+    { emoji: '📫', name: 'Closed Mailbox with Raised Flag', category: 'Objects' },
+    { emoji: '📪', name: 'Closed Mailbox with Lowered Flag', category: 'Objects' },
+    { emoji: '📬', name: 'Open Mailbox with Raised Flag', category: 'Objects' },
+    { emoji: '📭', name: 'Open Mailbox with Lowered Flag', category: 'Objects' },
+    { emoji: '📮', name: 'Postbox', category: 'Objects' },
+    { emoji: '🗳️', name: 'Ballot Box with Ballot', category: 'Objects' },
+    { emoji: '✏️', name: 'Pencil', category: 'Objects' },
+    { emoji: '🖊️', name: 'Pen', category: 'Objects' },
+    { emoji: '🖋️', name: 'Fountain Pen', category: 'Objects' },
+    { emoji: '🖌️', name: 'Paintbrush', category: 'Objects' },
+    { emoji: '🖍️', name: 'Crayon', category: 'Objects' },
+    { emoji: '📝', name: 'Memo', category: 'Objects' },
+    { emoji: '📁', name: 'File Folder', category: 'Objects' },
+    { emoji: '📂', name: 'Open File Folder', category: 'Objects' },
+    { emoji: '🗂️', name: 'Card Index Dividers', category: 'Objects' },
+    { emoji: '📅', name: 'Calendar', category: 'Objects' },
+    { emoji: '📆', name: 'Tear-Off Calendar', category: 'Objects' },
+    { emoji: '📩', name: 'Envelope with Arrow', category: 'Objects' },
+    { emoji: '📨', name: 'Incoming Envelope', category: 'Objects' },
+    { emoji: '📧', name: 'E-Mail', category: 'Objects' },
+    { emoji: '💌', name: 'Love Letter', category: 'Objects' },
+    { emoji: '📥', name: 'Inbox Tray', category: 'Objects' },
+    { emoji: '📤', name: 'Outbox Tray', category: 'Objects' },
+    { emoji: '📦', name: 'Package', category: 'Objects' },
+    { emoji: '🏷️', name: 'Label', category: 'Objects' },
+    { emoji: '🪧', name: 'Placard', category: 'Objects' },
+    { emoji: '📪', name: 'Closed Mailbox with Lowered Flag', category: 'Objects' },
+    { emoji: '📫', name: 'Closed Mailbox with Raised Flag', category: 'Objects' },
+    { emoji: '📬', name: 'Open Mailbox with Raised Flag', category: 'Objects' },
+    { emoji: '📭', name: 'Open Mailbox with Lowered Flag', category: 'Objects' },
+    { emoji: '📮', name: 'Postbox', category: 'Objects' },
+    { emoji: '📯', name: 'Postal Horn', category: 'Objects' },
+    { emoji: '📜', name: 'Scroll', category: 'Objects' },
+    { emoji: '📃', name: 'Page with Curl', category: 'Objects' },
+    { emoji: '📄', name: 'Page Facing Up', category: 'Objects' },
+    { emoji: '📑', name: 'Bookmark Tabs', category: 'Objects' },
+    { emoji: '🧾', name: 'Receipt', category: 'Objects' },
+    { emoji: '📊', name: 'Bar Chart', category: 'Objects' },
+    { emoji: '📈', name: 'Chart Increasing', category: 'Objects' },
+    { emoji: '📉', name: 'Chart Decreasing', category: 'Objects' },
+    { emoji: '🗒️', name: 'Spiral Note Pad', category: 'Objects' },
+    { emoji: '🗓️', name: 'Spiral Calendar', category: 'Objects' },
+    { emoji: '📆', name: 'Tear-Off Calendar', category: 'Objects' },
+    { emoji: '📅', name: 'Calendar', category: 'Objects' },
+    { emoji: '🗑️', name: 'Trash Can', category: 'Objects' },
+    { emoji: '📇', name: 'Card Index', category: 'Objects' },
+    { emoji: '🗃️', name: 'Card File Box', category: 'Objects' },
+    { emoji: '🗳️', name: 'Ballot Box with Ballot', category: 'Objects' },
+    { emoji: '🗄️', name: 'File Cabinet', category: 'Objects' },
+    { emoji: '📋', name: 'Clipboard', category: 'Objects' },
+    { emoji: '📁', name: 'File Folder', category: 'Objects' },
+    { emoji: '📂', name: 'Open File Folder', category: 'Objects' },
+    { emoji: '🗂️', name: 'Card Index Dividers', category: 'Objects' },
+    { emoji: '🗞️', name: 'Rolled-Up Newspaper', category: 'Objects' },
+    { emoji: '📰', name: 'Newspaper', category: 'Objects' },
+    { emoji: '📓', name: 'Notebook', category: 'Objects' },
+    { emoji: '📔', name: 'Notebook with Decorative Cover', category: 'Objects' },
+    { emoji: '📒', name: 'Ledger', category: 'Objects' },
+    { emoji: '📕', name: 'Closed Book', category: 'Objects' },
+    { emoji: '📗', name: 'Green Book', category: 'Objects' },
+    { emoji: '📘', name: 'Blue Book', category: 'Objects' },
+    { emoji: '📙', name: 'Orange Book', category: 'Objects' },
+    { emoji: '📚', name: 'Books', category: 'Objects' },
+    { emoji: '📖', name: 'Open Book', category: 'Objects' },
+    { emoji: '🔖', name: 'Bookmark', category: 'Objects' },
+    { emoji: '🧷', name: 'Safety Pin', category: 'Objects' },
+    { emoji: '🔗', name: 'Link', category: 'Objects' },
+    { emoji: '📎', name: 'Paperclip', category: 'Objects' },
+    { emoji: '🖇️', name: 'Linked Paperclips', category: 'Objects' },
+    { emoji: '📐', name: 'Triangular Ruler', category: 'Objects' },
+    { emoji: '📏', name: 'Straight Ruler', category: 'Objects' },
+    { emoji: '📌', name: 'Pushpin', category: 'Objects' },
+    { emoji: '📍', name: 'Round Pushpin', category: 'Objects' },
+    { emoji: '✂️', name: 'Scissors', category: 'Objects' },
+    { emoji: '🖊️', name: 'Pen', category: 'Objects' },
+    { emoji: '🖋️', name: 'Fountain Pen', category: 'Objects' },
+    { emoji: '✒️', name: 'Black Nib', category: 'Objects' },
+    { emoji: '🖌️', name: 'Paintbrush', category: 'Objects' },
+    { emoji: '🖍️', name: 'Crayon', category: 'Objects' },
+    { emoji: '📝', name: 'Memo', category: 'Objects' },
+    { emoji: '✏️', name: 'Pencil', category: 'Objects' },
+    { emoji: '🔍', name: 'Magnifying Glass Tilted Left', category: 'Objects' },
+    { emoji: '🔎', name: 'Magnifying Glass Tilted Right', category: 'Objects' },
+    { emoji: '🔏', name: 'Locked with Pen', category: 'Objects' },
+    { emoji: '🔐', name: 'Locked with Key', category: 'Objects' },
+    { emoji: '🔓', name: 'Unlocked', category: 'Objects' },
+    { emoji: '🔒', name: 'Locked', category: 'Objects' },
+];
+
+const CATEGORY_ICONS = {
+    'Favorites': '❤️'
+};
+
+let favoriteEmojis = JSON.parse(localStorage.getItem('favorites')) || [];
+
+const ALL_CATEGORIES = Object.keys(CATEGORY_ICONS);
 
 
+// Main Script (equivalent to script.js)
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const themeToggle = document.getElementById('theme-toggle');
+    const searchInput = document.getElementById('emoji-search');
+    const emojiGrid = document.getElementById('emoji-grid-container');
+    const categoryNav = document.getElementById('category-nav');
+    const menuToggle = document.getElementById('menu-toggle');
+    const emojiCounter = document.getElementById('emoji-counter');
 
+    let currentCategory = 'All';
 
-        ];
-
-        function displayEmojis(emojiList, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = "";
-            emojiList.forEach(emoji => {
-                const div = document.createElement("div");
-                div.className = "emoji-box";
-                div.innerHTML = `<span class="text-2xl">${emoji.symbol}</span><br><small>${emoji.name}</small>`;
-                div.onclick = () => copyToClipboard(emoji.symbol);
-                container.appendChild(div);
-            });
+    // --- Theme Toggle Logic ---
+    function toggleTheme() {
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            localStorage.setItem('theme', 'light');
+        } else {
+            body.classList.add('dark-theme');
+            localStorage.setItem('theme', 'dark');
         }
+    }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            alert("Copied: " + text);
+    function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            body.classList.add('dark-theme');
         }
+    }
 
-        function toggleTheme() {
-            const body = document.body;
-            const themeButton = document.getElementById("theme-toggle");
-            if (body.style.backgroundColor === "black") {
-                body.style.backgroundColor = "white";
-                body.style.color = "black";
-                themeButton.innerHTML = '<span class="material-icons">dark_mode</span>';
-            } else {
-                body.style.backgroundColor = "black";
-                body.style.color = "white";
-                themeButton.innerHTML = '<span class="material-icons">light_mode</span>';
-            }
-        }
+    themeToggle.addEventListener('click', toggleTheme);
+    initializeTheme();
 
-        document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
+    // --- Category Logic ---
+    function renderCategories() {
+        const allBtn = document.createElement('button');
+        allBtn.textContent = 'All Emojis';
+        allBtn.className = 'category-btn active';
+        allBtn.dataset.category = 'All';
+        categoryNav.appendChild(allBtn);
 
-        displayEmojis(emojis, "emojis-container");
-
-        // إضافة محرك البحث
-        document.getElementById("search").addEventListener("input", function() {
-            const searchTerm = this.value.toLowerCase();
-            const filteredEmojis = emojis.filter(emoji => emoji.name.toLowerCase().includes(searchTerm));
-            displayEmojis(filteredEmojis, "emojis-container");
+        ALL_CATEGORIES.forEach(category => {
+            const btn = document.createElement('button');
+            const icon = CATEGORY_ICONS[category] || '';
+            btn.textContent = `${icon} ${category}`;
+            btn.className = 'category-btn';
+            btn.dataset.category = category;
+            categoryNav.appendChild(btn);
         });
+        
+        categoryNav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.category-btn');
+            if (btn) {
+                const category = btn.dataset.category;
+                currentCategory = category;
+                
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Close menu on mobile
+                if (window.innerWidth <= 768) {
+                    categoryNav.classList.remove('open');
+                    menuToggle.innerHTML = '&#9776;';
+                }
+
+                filterAndRenderGrid();
+            }
+        });
+    }
+
+   function createEmojiCard(item) {
+    const card = document.createElement('div');
+    card.className = 'emoji-card';
+
+    // زر القلب
+    const heartBtn = document.createElement('button');
+    heartBtn.className = 'heart-btn';
+    const isFavorite = favoriteEmojis.some(fav => fav.emoji === item.emoji);
+    heartBtn.textContent = isFavorite ? '❤️' : '♡';
+    if (isFavorite) heartBtn.classList.add('active');
+
+    heartBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        heartBtn.classList.toggle('active');
+
+        if (heartBtn.classList.contains('active')) {
+            heartBtn.textContent = '❤️';
+            if (!favoriteEmojis.some(fav => fav.emoji === item.emoji)) {
+                favoriteEmojis.push(item);
+                localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+            }
+        } else {
+            heartBtn.textContent = '♡';
+            favoriteEmojis = favoriteEmojis.filter(fav => fav.emoji !== item.emoji);
+            localStorage.setItem('favorites', JSON.stringify(favoriteEmojis));
+        }
+
+        // تحديث قسم المفضلة لو هو مفتوح حاليًا
+        if (currentCategory === 'Favorites') filterAndRenderGrid();
+    });
+
+    // باقي الكارد
+    const emojiDiv = document.createElement('div');
+    emojiDiv.className = 'emoji';
+    emojiDiv.textContent = item.emoji;
+
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'emoji-name';
+    nameDiv.textContent = item.name;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = '📋 Copy';
+    copyBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        try {
+            await navigator.clipboard.writeText(item.emoji);
+            copyBtn.textContent = '✅ Copied!';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        } catch (err) {
+            copyBtn.textContent = '❌ Error';
+            setTimeout(() => copyBtn.textContent = '📋 Copy', 800);
+        }
+    });
+
+    card.append(heartBtn, emojiDiv, nameDiv, copyBtn);
+    setTimeout(() => card.classList.add('fade-in'), 10);
+
+    return card;
+}
+
+
+    function filterAndRenderGrid() {
+    const searchTerm = searchInput.value.toLowerCase();
+    emojiGrid.innerHTML = '';
+
+    let filteredEmojis;
+
+    if (currentCategory === 'Favorites') {
+        // البحث في المفضلة فقط
+        filteredEmojis = favoriteEmojis.filter(item =>
+            item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+        );
+    } else if (searchTerm) {
+        // لو في قسم All → البحث في كل الإيموجيز
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm)
+            );
+        } else {
+            // البحث بس في القسم الحالي
+            filteredEmojis = EMOJI_COLLECTION.filter(item =>
+                item.category === currentCategory &&
+                (item.name.toLowerCase().includes(searchTerm) || item.emoji.includes(searchTerm))
+            );
+        }
+    } else {
+        // بدون بحث
+        if (currentCategory === 'All') {
+            filteredEmojis = EMOJI_COLLECTION.slice(0, 1714);
+        } else {
+            filteredEmojis = EMOJI_COLLECTION.filter(item => item.category === currentCategory);
+        }
+    }
+
+    // إنشاء الكروت
+    filteredEmojis.forEach(item => emojiGrid.appendChild(createEmojiCard(item)));
+
+    // عداد الإيموجيز الظاهرة
+    emojiCounter.textContent = `${filteredEmojis.length} Emojis Displayed`;
+
+    // زر show more
+    const showMoreBtn = document.getElementById("show-more-btn");
+    if (currentCategory !== 'Favorites' && !searchTerm) {
+        showMoreBtn.style.display = 'block';
+        showMoreBtn.onclick = function() {
+            const link = String(currentCategory).toLowerCase().replace(/ /g, '-') + '.html';
+            window.location.href = link;
+        };
+    } else {
+        showMoreBtn.style.display = 'none';
+    }
+}
+
+
+    searchInput.addEventListener('input', filterAndRenderGrid);
+
+    // --- Mobile Menu Toggle ---
+    menuToggle.addEventListener('click', () => {
+        const isOpen = categoryNav.classList.toggle('open');
+        menuToggle.innerHTML = isOpen ? '&times;' : '&#9776;';
+    });
+
+
+    // Initialize
+    renderCategories();
+    filterAndRenderGrid();
+});
+
+// بعد ما تعمل render لكل الإيموجيز
+const loader = document.getElementById('loader');
+
+loader.style.transition = 'opacity 0.5s';
+loader.style.opacity = '0';
+
+setTimeout(() => {
+    loader.style.display = 'none';
+}, 500); // 500ms بعد انتهاء الـ fade-out
+
+const showMoreBtn = document.getElementById("show-more-btn");
+
+showMoreBtn.onclick = function() {
+  window.location.href = "https://example.com/more-emojis"; // ضع هنا الرابط المطلوب
+};
+
+const clearBtn = document.getElementById('clear-search');
+
+// إظهار/إخفاء زر X أثناء الكتابة
+searchInput.addEventListener('input', () => {
+    if (searchInput.value.length > 0) {
+        clearBtn.style.display = 'block';
+    } else {
+        clearBtn.style.display = 'none';
+    }
+    filterAndRenderGrid();
+});
+
+// مسح النص عند الضغط على X
+clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    clearBtn.style.display = 'none';
+    filterAndRenderGrid();
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("heart-btn")) {
+    e.target.classList.toggle("active");
+    e.target.textContent = e.target.classList.contains("active") ? "❤️" : "♡";
+  }
+});
+
     </script>
 </body>
 </html>
